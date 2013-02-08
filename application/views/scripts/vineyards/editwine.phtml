@@ -1,0 +1,51 @@
+<div id="view-content">
+	<h2><?php echo $this->message ?></h2>
+	<form id="add_wine" action="" method="post">
+		<div class="control">
+			<?php echo $this->form->name ?>
+		</div>
+		<div class="control">
+			<label>Grapes:</label>
+			<?php echo $this->form->grapes ?>
+		</div>
+		<label>Wine Type</label>
+		<div class="control">
+			<select name="type" id="type">
+				<option value="" label="Select Wine Type">Select Wine Type</option>
+				<option value="Wine" label="Wine" disabled="disabled">Wine</option>
+				<option value="Wine red" label="red" <?php echo $this->type == 'Wine red' ? 'selected' : ''?>>red</option>
+				<option value="Wine rose" label="rose" <?php echo $this->type == 'Wine rose' ? 'selected' : ''?>>rose</option>
+				<option value="Wine white" label="white" <?php echo $this->type == 'Wine white' ? 'selected' : ''?>>white</option>
+				<option value="Fortified" label="Fortified" disabled="disabled">Fortified</option>
+				<option value="Fortified dessert wine" label="dessert wine" <?php echo $this->type == 'Fortified dessert wine' ? 'selected' : ''?>>dessert wine</option>
+				<option value="Fortified Port" label="Port" <?php echo $this->type == 'Fortified Port' ? 'selected' : ''?>>Port</option>
+				<option value="Fortified sherry" label="sherry" <?php echo $this->type == 'Fortified sherry' ? 'selected' : ''?>>sherry</option>
+				<option value="Fortified sherry-style" label="sherry-style" <?php echo $this->type == 'Fortified sherry-style' ? 'selected' : ''?>>sherry-style</option>
+				<option value="Fortified vin doux naturel" label="vin doux naturel" <?php echo $this->type == 'Fortified vin doux naturel' ? 'selected' : ''?>>vin doux naturel</option>
+				<option value="Champange/Sparkling" label="Champange/Sparkling" disabled="disabled">Champange/Sparkling</option>
+				<option value="Champange red" label="red" <?php echo $this->type == 'Champange red' ? 'selected' : ''?>>red</option>
+				<option value="Champange rose" label="rose" <?php echo $this->type == 'Champange rose' ? 'selected' : ''?>>rose</option>
+				<option value="Champange white" label="white" <?php echo $this->type == 'Champange white' ? 'selected' : ''?>>white</option>
+			</select>
+		</div>		
+		<div class="control">
+			<?php echo $this->form->vintage ?>
+		</div>
+		<div class="control">
+			<label for="image">Add Wine Label:</label>
+			<div id="wine_image">
+				<?php echo !empty($this->image) ? '<img src="' . $this->baseUrl() . '/images/wine/' . $this->image . '"></img><input type="hidden" name="image" value="' . $this->image . '">' : ''?>
+			</div>
+			<span class="btn btn-success fileinput-button">
+				<i class="icon-plus icon-white"></i>
+				<span>Change the image...</span>
+				<input id="root" type="file" name="image">
+				<div id="image"></div>
+			</span>
+		</div>
+		<div class="control">
+			<?php echo $this->form->notes ?>
+		</div>
+		<?php echo $this->form->submit ?>
+	</form>	
+</div>

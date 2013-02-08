@@ -1,0 +1,474 @@
+<script>
+	var lang = '<?php echo $_SESSION['lang']?>';
+	var loc_y = <?php echo !empty($this->vineyard->loc_y) ? $this->vineyard->loc_y : '""'?>;
+	var loc_z = <?php echo !empty($this->vineyard->loc_z) ? $this->vineyard->loc_z : '""'?>;
+	var correct = '<?php echo !empty($this->correct) ? $this->correct : 'a'?>';
+</script>
+<div class="articleWrapper">
+	<div class="content">
+		<ul class="breadcrumbs">
+			<?php $reg_mod = new Application_Model_Assregions();?>
+			<?php $par_alias = Main::getAliasParent($this->vineyard->reg_alias);?>
+			<li><a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-country/<?php echo $this->vineyard->country_alias?>"><?php echo $this->vineyard->country?></a></li>
+			<?php echo !empty($par_alias) ? '<li class="sep"></li>' : ''?> 
+			<li><a href="<?php echo !empty($par_alias) ? $this->baseUrl() . '/' . $_SESSION['lang'] . '/main/view-region/' . $reg_mod ->getRegionByAlias($par_alias['alias'])->country_alias . '/' . main::getParent1($par_alias['alias']) : ''?>"><?php echo !empty($par_alias) ? $par_alias['name'] : ''?></a></li>
+			<li class="sep"></li>
+			<li><a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-region/<?php echo $reg_mod ->getRegionByAlias($this->vineyard->reg_alias)->country_alias?>/<?php echo main::getParent1($this->vineyard->reg_alias) ?>"><?php echo $this->vineyard->ass_region ?></a></li>
+			<li class="sep"></li>
+			<li><?php echo $this->vineyard->name?></li>
+		</ul>
+		<div class="borderBottom flw">
+			<h2 class="title noBg"><?php echo $this->vineyard->name?></h2>
+		</div>
+		<div class="aboutVineyard">
+			<form name="correct" id="correct" action="/vineyards/correct" method="post" class="jNice tabPage">
+			<?php if(!empty($this->photos[0])) :?>
+				<div id="coin-slider">
+					<?php foreach($this->photos as $photo) :?>
+						<a href="#">
+							<img src="<?php echo $this->baseUrl()?>/images/vineyard/photos/big/big_<?php echo $photo->name?>" alt="<?php echo trim($this->vineyard->name) . $this->alt?>"  title="<?php echo trim($this->vineyard->name) . $this->img?>" class="vineyardimg" />
+						</a>
+					<?php endforeach;?>
+				</div>
+			<?php endif;?>
+			<ul class="tab">
+					<li class="tab-top active"><a href="#visiting"><?php echo $this->translate('Visiting')?></a></li>
+					<li class="tab-top"><a href="#stay"><?php echo $this->translate('Stay/Eat')?></a></li>
+					<li class="tab-top"><a href="#facilities"><?php echo $this->translate('Other Facilities')?></a></li>
+					<li class="tab-top"><a href="#wines"><?php echo $this->translate('Vines &amp; Wines')?></a></li>
+			</ul>			
+			<div id="tab-content">
+				<input type="hidden" value="<?php echo !empty($this->correct) ? $this->correct['loc_y'] : $this->vineyard->loc_y?>" name="loc_y" id="loc_y">
+				<input type="hidden" value="<?php echo !empty($this->correct) ? $this->correct['loc_z'] : $this->vineyard->loc_z?>" name="loc_z" id="loc_z">
+				<input type="hidden" value="<?php echo $this->vineyard->id?>" name="listing" id="listing">
+				<input type="hidden" value="<?php echo $this->vineyard->ass_id?>" name="region" id="region">
+				<input type="hidden" value="<?php echo $this->vineyard->name?>" name="list_name" id="list_name">
+				<div class="tab-pane active" id="visiting1">
+					<div class="vineyardWelcomesBox borderBottom marginBottomNone">
+						<h5 class="tabTitle"><?php echo $this->translate('This Vineyard Welcomes Visits')?></h5>
+						<div class="oneLine">
+							<label class="greenText"><?php echo $this->translate('Welcomes Visits')?>:</label>
+							<div class="oneLineRightSide">
+								<div class="info">
+									<div class="radiobox"><?php echo $this->translate($this->vineyard->visits == 1 ? 'Yes' : ($this->vineyard->visits == 0 ? 'No' : "Don't know"))?></div>
+								</div>
+								<div class="info-edit">
+									<div class="radiobox"><input type="radio" id="visits1" name="visits" <?php echo $this->vineyard->visits == 1 ?'checked="checked"' : '' ?> value="1"/><label for="visits1" class="radioLabel"><?php echo $this->translate('Yes')?></label></div>
+									<div class="radiobox"><input type="radio" id="visits2" name="visits" <?php echo $this->vineyard->visits == 0 ?'checked="checked"' : '' ?> value="0"/><label for="visits2" class="radioLabel"><?php echo $this->translate('No')?></label></div>
+									<div class="radiobox"><input type="radio" id="visits3" name="visits" <?php echo $this->vineyard->visits == 2 ?'checked="checked"' : '' ?> value="2"/><label for="visits3" class="radioLabel"><?php echo $this->translate('Don`t know')?></label></div>
+									<div class="editBlock"><span class="editBlockHelp"><?php echo $this->translate('Information has been edited')?></span></div>
+								</div>
+							</div>
+						</div>						
+						<div class="oneLine">
+							<label class="greenText"><?php echo $this->translate('From Individuals')?>:</label>
+							<div class="oneLineRightSide">
+								<div class="info">
+									<div class="radiobox"><?php echo $this->translate($this->vineyard->individuals == 1 ? 'Yes' : ($this->vineyard->individuals == 0 ? 'No' : "Don't know"))?></div>
+								</div>
+								<div class="info-edit">
+									<div class="radiobox"><input type="radio" id="individuals1" name="individuals" <?php echo $this->vineyard->individuals == 1 ?'checked="checked"' : '' ?> value="1"/><label for="individuals1" class="radioLabel"><?php echo $this->translate('Yes')?></label></div>
+									<div class="radiobox"><input type="radio" id="individuals2" name="individuals" <?php echo $this->vineyard->individuals == 0 ?'checked="checked"' : '' ?> value="0"/><label for="individuals2" class="radioLabel"><?php echo $this->translate('No')?></label></div>
+									<div class="radiobox"><input type="radio" id="individuals3" name="individuals" <?php echo $this->vineyard->individuals == 2 ?'checked="checked"' : '' ?> value="2"/><label for="individuals3" class="radioLabel"><?php echo $this->translate('Don`t know')?></label></div>
+									<div class="editBlock"><span class="editBlockHelp"><?php echo $this->translate('Information has been edited')?></span></div>
+								</div>
+							</div>
+						</div>
+						<div class="oneLine">
+							<label class="greenText"><?php echo $this->translate('From Groups')?>:</label>
+							<div class="oneLineRightSide">
+								<div class="info">
+									<div class="radiobox"><?php echo $this->translate($this->vineyard->groups == 1 ? 'Yes' : ($this->vineyard->groups == 0 ? 'No' : "Don't know"))?></div>
+								</div>
+								<div class="info-edit">
+									<div class="radiobox"><input type="radio" id="groups1" name="groups" <?php echo $this->vineyard->groups == 1 ?'checked="checked"' : '' ?> value="1"/><label for="groups1" class="radioLabel"><?php echo $this->translate('Yes')?></label></div>
+									<div class="radiobox"><input type="radio" id="groups2" name="groups" <?php echo $this->vineyard->groups == 0 ?'checked="checked"' : '' ?> value="0"/><label for="groups2" class="radioLabel"><?php echo $this->translate('No')?></label></div>
+									<div class="radiobox"><input type="radio" id="groups3" name="groups" <?php echo $this->vineyard->groups == 2 ?'checked="checked"' : '' ?> value="2"/><label for="groups3" class="radioLabel"><?php echo $this->translate('Don`t know')?></label></div>
+									<div class="editBlock"><span class="editBlockHelp"><?php echo $this->translate('Information has been edited')?></span></div>
+								</div>
+							</div>
+						</div>
+					</div>					
+					<div class="vineyardWelcomesBox borderBottom topWelcomes">
+						<h5 class="tabTitle"><?php echo $this->translate('Wine Tasting, Tours &amp; Sales')?></h5>
+						<?php if(!empty($this->spokens[0])) :?>
+							<div class="oneLine">
+								<label class="greenText"><?php echo $this->translate('Languages Spoken')?>:</label>
+								<div class="oneLineRightSide checkbox">
+									<div class="info-edit">
+										<?php foreach($this->spokens as $key=>$spoken) :?>
+											<div class="radiobox"><input id="spoken<?php echo $key ?>" type="checkbox" name="spoken[]" checked="checked" value="<?php echo $spoken->id ?>"><label for="spoken<?php echo $key ?>" class="radioLabel"><?php echo $spoken->name ?></label></div>
+										<?php endforeach;?>
+										<div class="editBlock leftIndent"><span class="editBlockHelp"><?php echo $this->translate('Information has been edited')?></span></div>	
+									</div>
+									<div class="info">
+										<?php $i= 0;?>
+										<?php foreach($this->spokens as $spoken) :?>
+											<div class="edit-lang"><?php echo $i != count($this->spokens) - 1 ? $spoken->name . ',&nbsp' : $spoken->name ?></div>
+											<?php $i++;?>
+										<?php endforeach;?>										
+									</div>
+								</div>
+							</div>
+						<?php endif;?>
+						<div class="oneLine">
+							<label class="greenText"><?php echo $this->translate('Wine Tasting')?>:</label>
+							<div class="oneLineRightSide">
+								<div class="info">
+									<div class="radiobox"><?php echo $this->translate($this->vineyard->tasting == 0 ? 'Free' : ($this->vineyard->tasting == 1 ? 'Charged' : ($this->vineyard->tasting == 2 ? 'Not available' : "Don't know")))?></div>
+								</div>
+								<div class="info-edit">
+									<div class="radiobox"><input type="radio" id="tasting1" name="tasting" <?php echo $this->vineyard->tasting == 0 ?'checked="checked"' : '' ?> value="0"/><label for="tasting1" class="radioLabel"><?php echo $this->translate('Free')?></label></div>
+									<div class="radiobox"><input type="radio" id="tasting2" name="tasting" <?php echo $this->vineyard->tasting == 1 ?'checked="checked"' : '' ?> value="1"/><label for="tasting2" class="radioLabel"><?php echo $this->translate('Charged')?></label></div>
+									<div class="radiobox long"><input type="radio" id="tasting3" name="tasting" <?php echo $this->vineyard->tasting == 2 ?'checked="checked"' : '' ?> value="2"/><label for="tasting3" class="radioLabel"><?php echo $this->translate('Not available')?></label></div>
+									<div class="radiobox"><input type="radio" id="tasting4" name="tasting" <?php echo $this->vineyard->tasting == 3 ?'checked="checked"' : '' ?> value="3"/><label for="tasting4" class="radioLabel"><?php echo $this->translate('Don`t know')?></label></div>
+									<div class="editBlock leftIndent"><span class="editBlockHelp"><?php echo $this->translate('Information has been edited')?></span></div>
+								</div>
+							</div>
+						</div>
+						<div class="oneLine">
+							<label class="greenText">Wine Tour:</label>
+							<div class="oneLineRightSide">
+								<div class="info">
+									<div class="radiobox"><?php echo $this->translate($this->vineyard->tour == 0 ? 'Free' : ($this->vineyard->tour == 1 ? 'Charged' : ($this->vineyard->tour == 2 ? 'Not available' : "Don't know")))?></div>
+								</div>
+								<div class="info-edit">
+									<div class="radiobox"><input type="radio" id="tour1" name="tour" <?php echo $this->vineyard->tour == 0 ?'checked="checked"' : '' ?> value="0"/><label for="tour1" class="radioLabel"><?php echo $this->translate('Free')?></label></div>
+									<div class="radiobox"><input type="radio" id="tour2" name="tour" <?php echo $this->vineyard->tour == 1 ?'checked="checked"' : '' ?> value="1"/><label for="tour2" class="radioLabel"><?php echo $this->translate('Charged')?></label></div>
+									<div class="radiobox long"><input type="radio" id="tour3" name="tour" <?php echo $this->vineyard->tour == 2 ?'checked="checked"' : '' ?> value="2"/><label for="tour3" class="radioLabel"><?php echo $this->translate('Not available')?></label></div>
+									<div class="radiobox"><input type="radio" id="tour4" name="tour" <?php echo $this->vineyard->tour == 3 ?'checked="checked"' : '' ?> value="3"/><label for="tour4" class="radioLabel"><?php echo $this->translate('Don`t know')?></label></div>
+									<div class="editBlock leftIndent"><span class="editBlockHelp"><?php echo $this->translate('Information has been edited')?></span></div>
+								</div>
+							</div>
+						</div>
+						<div class="oneLine">
+							<label class="greenText"><?php echo $this->translate('Wine Sales')?>:</label>
+							<div class="oneLineRightSide">
+								<div class="info">
+									<div class="radiobox"><?php echo $this->translate($this->vineyard->sales == 1 ? 'Yes' : ($this->vineyard->sales == 0 ? 'No' : "Don't know"))?></div>
+								</div>
+								<div class="info-edit">
+									<div class="radiobox"><input type="radio" id="sales1" name="sales" <?php echo $this->vineyard->sales == 1 ?'checked="checked"' : '' ?> value="1"/><label for="sales1" class="radioLabel"><?php echo $this->translate('Yes')?></label></div>
+									<div class="radiobox"><input type="radio" id="sales2" name="sales" <?php echo $this->vineyard->sales == 0 ?'checked="checked"' : '' ?> value="0"/><label for="sales2" class="radioLabel"><?php echo $this->translate('No')?></label></div>
+									<div class="radiobox"><input type="radio" id="sales3" name="sales" <?php echo $this->vineyard->sales == 2 ?'checked="checked"' : '' ?> value="2"/><label for="sales3" class="radioLabel"><?php echo $this->translate('Don`t know')?></label></div>
+									<div class="editBlock"><span class="editBlockHelp"><?php echo $this->translate('Information has been edited')?></span></div>
+								</div>
+							</div>
+						</div>
+						<div class="oneLine">
+							<label class="greenText"><?php echo $this->translate('Wine Workshops')?>:</label>
+							<div class="oneLineRightSide">
+								<div class="info">
+									<div class="radiobox"><?php echo $this->translate($this->vineyard->workshops == 1 ? 'Yes' : ($this->vineyard->workshops == 0 ? 'No' : "Don't know"))?></div>
+								</div>
+								<div class="info-edit">
+									<div class="radiobox"><input type="radio" id="workshops1" name="workshops" <?php echo $this->vineyard->workshops == 1 ?'checked="checked"' : '' ?> value="1"/><label for="workshops1" class="radioLabel"><?php echo $this->translate('Yes')?></label></div>
+									<div class="radiobox"><input type="radio" id="workshops2" name="workshops" <?php echo $this->vineyard->workshops == 0 ?'checked="checked"' : '' ?> value="0"/><label for="workshops2" class="radioLabel"><?php echo $this->translate('No')?></label></div>
+									<div class="radiobox"><input type="radio" id="workshops3" name="workshops" <?php echo $this->vineyard->workshops == 2 ?'checked="checked"' : '' ?> value="2"/><label for="workshops3" class="radioLabel"><?php echo $this->translate('Don`t know')?></label></div>
+									<div class="editBlock"><span class="editBlockHelp"><?php echo $this->translate('Information has been edited')?></span></div>
+								</div>
+							</div>
+						</div>
+					</div>					
+					<div class="vineyardWelcomesBox borderBottom">
+						<h5 class="tabTitle"><?php echo $this->translate('Opening Hours &amp; Seasons')?></h5>
+						<ul class="mode">
+							<?php if(!empty($this->seasons[0])) :?>
+								<?php $i = 0; ?>
+								<?php foreach($this->seasons as $season) :?>
+									<?php $i++ ?>
+									<li><span class="season-name"><span class="greenText"><?php echo $this->translate('Season')?> <?php echo $i?>:</span> <?php echo $season->name ?></span><span class="greenText"><?php echo $this->translate('Need a appointment?')?></span> <?php echo $season->appointment != 1 ? ($season->appointment == 0 ? $this->translate('No') : $this->translate("Don't know")) : $this->translate('Yes')?></li>
+									<li><?php echo !empty($season->date1) && !empty($season->date2) ? date('j F', $season->date1) . ' - ' . date('j F', $season->date2) : '' ?></li>
+									<?php $weeks = unserialize($season->weeks) ?>
+									<?php $week = is_array($weeks) ? $weeks[0] . ' to '. $weeks[count($weeks)-1]. ' - ' : ''?>
+									<li><?php echo !empty($season->time1) && !empty($season->time2) ? $week  . $season->time1 . ' to ' . $season->time2 :  $week . '' ?></li>
+									<?php if(!empty($season->notes)):?>	
+										<li><span class="greenText"><?php echo $this->translate('Notes')?>:</span> <?php echo $season->notes ?></li>
+									<?php endif;?>
+									<li class="li-season"></li>
+								<?php endforeach;?>
+							<?php else:?>
+								<li><?php echo $this->translate('Seasons not specified')?></li>
+							<?php endif;?>							
+						</ul>
+					</div>		
+				</div>
+				<div class="tab-pane inactive" id="stay1">
+					<div class="stayEat borderBottom">
+						<h5 class="tabTitle"><?php echo $this->translate('Stay/Eat')?></h5>
+						<div class="oneLine">
+							<label class="greenText"><?php echo $this->translate('Restaurant')?>:</label>
+							<div class="oneLineRightSide">
+								<div class="info">
+									<div class="radiobox"><?php echo $this->translate($this->vineyard->restaurant == 1 ? 'Yes' : ($this->vineyard->restaurant == 0 ? 'No' : "Don't know"))?></div>
+								</div>
+								<div class="info-edit">
+									<div class="radiobox"><input type="radio" id="restaurant1" name="restaurant" <?php echo $this->vineyard->restaurant == 1 ?'checked="checked"' : '' ?> value="1" /><label for="restaurant1" class="radioLabel"><?php echo $this->translate('Yes')?></label></div>
+									<div class="radiobox"><input type="radio" id="restaurant2" name="restaurant" <?php echo $this->vineyard->restaurant == 0 ?'checked="checked"' : '' ?> value="0" /><label for="restaurant2" class="radioLabel"><?php echo $this->translate('No')?></label></div>
+									<div class="radiobox"><input type="radio" id="restaurant3" name="restaurant" <?php echo $this->vineyard->restaurant == 2 ?'checked="checked"' : '' ?> value="2"/><label for="restaurant3" class="radioLabel"><?php echo $this->translate('Don`t know')?></label></div>
+									<div class="editBlock leftIndent"><span class="editBlockHelp"><?php echo $this->translate('Information has been edited')?></span></div>
+								</div>
+							</div>
+						</div>
+						<div class="oneLine">
+							<label class="greenText"><?php echo $this->translate('Accommodation Available On Site')?>:</label>
+							<div class="oneLineRightSide">
+								<div class="info">
+									<div class="radiobox"><?php echo $this->translate($this->vineyard->accommodation == 1 ? 'Yes' : ($this->vineyard->accommodation == 0 ? 'No' : "Don't know"))?></div>
+								</div>
+								<div class="info-edit">
+									<div class="radiobox"><input type="radio" id="accommodation1" name="accommodation" <?php echo $this->vineyard->accommodation == 1 ?'checked="checked"' : '' ?> value="1"/><label for="accommodation1" class="radioLabel"><?php echo $this->translate('Yes')?></label></div>
+									<div class="radiobox"><input type="radio" id="accommodation2" name="accommodation" <?php echo $this->vineyard->accommodation == 0 ?'checked="checked"' : '' ?> value="0"/><label for="accommodation2" class="radioLabel"><?php echo $this->translate('No')?></label></div>
+									<div class="radiobox"><input type="radio" id="accommodation3" name="accommodation" <?php echo $this->vineyard->accommodation == 2 ?'checked="checked"' : '' ?> value="2"/><label for="accommodation3" class="radioLabel"><?php echo $this->translate('Don`t know')?></label></div>
+									<div class="editBlock leftIndent"><span class="editBlockHelp"><?php echo $this->translate('Information has been edited')?></span></div>
+								</div>
+							</div>
+						</div>
+					</div>					
+				</div>
+				<div class="tab-pane inactive" id="facilities1">
+					<div class="otherFacilities borderBottom">
+						<h5 class="tabTitle"><?php echo $this->translate('Other Facilities')?></h5>
+						<div class="oneLine">
+							<label class="greenText"><?php echo $this->translate('Weddings')?>:</label>
+							<div class="oneLineRightSide">
+								<div class="info">
+									<div class="radiobox"><?php echo $this->translate($this->vineyard->weddings == 1 ? 'Yes' : ($this->vineyard->weddings == 0 ? 'No' : "Don't know"))?></div>
+								</div>
+								<div class="info-edit">
+									<div class="radiobox"><input type="radio" id="weddings1" name="weddings" <?php echo $this->vineyard->weddings == 1 ?'checked="checked"' : '' ?> value="1"/><label for="weddings1" class="radioLabel"><?php echo $this->translate('Yes')?></label></div>
+									<div class="radiobox"><input type="radio" id="weddings2" name="weddings" <?php echo $this->vineyard->weddings == 0 ?'checked="checked"' : '' ?> value="0"/><label for="weddings2" class="radioLabel"><?php echo $this->translate('No')?></label></div>
+									<div class="radiobox"><input type="radio" id="weddings3" name="weddings" <?php echo $this->vineyard->weddings == 2 ?'checked="checked"' : '' ?> value="2"/><label for="weddings3" class="radioLabel"><?php echo $this->translate('Don`t know')?></label></div>
+									<div class="editBlock leftIndent"><span class="editBlockHelp"><?php echo $this->translate('Information has been edited')?></span></div>
+								</div>
+							</div>
+						</div>
+						<div class="oneLine">
+							<label class="greenText"><?php echo $this->translate('Corporate Seminars')?>:</label>
+							<div class="oneLineRightSide">
+								<div class="info">
+									<div class="radiobox"><?php echo $this->translate($this->vineyard->seminars == 1 ? 'Yes' : ($this->vineyard->seminars == 0 ? 'No' : "Don't know"))?></div>
+								</div>
+								<div class="info-edit">
+									<div class="radiobox"><input type="radio" id="seminars1" name="seminars" <?php echo $this->vineyard->seminars == 1 ?'checked="checked"' : '' ?> value="1"/><label for="seminars1" class="radioLabel"><?php echo $this->translate('Yes')?></label></div>
+									<div class="radiobox"><input type="radio" id="seminars2" name="seminars" <?php echo $this->vineyard->seminars == 0 ?'checked="checked"' : '' ?> value="0"/><label for="seminars2" class="radioLabel"><?php echo $this->translate('No')?></label></div>
+									<div class="radiobox"><input type="radio" id="seminars3" name="seminars" <?php echo $this->vineyard->seminars == 2 ?'checked="checked"' : '' ?> value="2"/><label for="seminars3" class="radioLabel"><?php echo $this->translate('Don`t know')?></label></div>
+									<div class="editBlock leftIndent"><span class="editBlockHelp"><?php echo $this->translate('Information has been edited')?></span></div>
+								</div>
+							</div>
+						</div>
+					</div>				
+				</div>
+				<div class="tab-pane inactive" id="wines1">
+					<div class="vinesWines borderBottom">
+						<h5 class="tabTitle floatLeft"><?php echo $this->translate('Vines &amp; Wines')?></h5>
+						<?php if(!empty($this->wines[0])) :?>
+							<table class="vinesWinesTable grayBox">
+								<tr class="vinesWinesTableTitle">
+									<td class="name"><?php echo $this->translate('Wine Name')?></td>
+									<td class="wineType"><?php echo $this->translate('Wine Type')?></td>
+									<td class="grapeType"><?php echo $this->translate('Grape Type')?></td>
+<!--									<td class="vintage"><?php // echo $this->translate('Vintage')?></td>-->
+									<td class="label"><?php echo $this->translate('Label')?></td>
+								</tr>
+								<?php foreach($this->wines as $wine) :?>
+									<tr >
+										<td class="grayBox"><?php echo $wine['name']?></td>
+										<td class="wineType"><?php echo $wine['type']?></td>
+										<td class="grapeType"><?php echo $wine['grapes']?></td>
+<!--										<td class="vintage">
+											<div class="info">
+												<?php // for($i = 1900; $i <= date('Y'); $i++) :?>
+													<?php // echo $wine['vintage'] == $i ? $i : ''?>
+												<?php // endfor;?>											
+											</div>	
+											<div class="info-edit">
+												<select style="width: 62px;" name="vintage[<?php // echo $wine['id']?>]" id="">
+													<option value="" <?php // echo $wine['vintage'] == '' ? 'selected' : ''?>></option>
+													<?php // for($i = 1900; $i <= date('Y'); $i++) :?>
+														<option value="<?php // echo $i?>" <?php // echo $wine['vintage'] == $i ? 'selected' : ''?>><?php // echo $i?></option>
+													<?php // endfor;?>
+												</select>
+											</div>
+										</td>-->
+										<td class="label"><img src="/images/wine/<?php echo !empty($wine['image']) ? $wine['image'] : 'default_wine.png'?>" width="70" alt="<?php echo $wine['name'] . $this->alt?>"  title="<?php echo $wine['name'] . $this->img?>" ></td>
+									</tr>
+								<?php endforeach;?>
+							</table>
+						<?php else :?>
+							<div class="wines-vin"><?php echo $this->translate('No Wines')?></div>
+						<?php endif;?>
+					</div>					
+				</div>
+			</div>
+			<?php if(Zend_Auth::getInstance()->hasIdentity()) :?>
+				<div class="textAlignCenter"><a href="#myCorrect" class="correct grayLink"><?php echo $this->translate('Information Correct?')?> - <span class="greyBold"><?php echo $this->translate('Mark an edit')?></span></a></div>
+			<?php else:?>
+				<div class="textAlignCenter"><a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/correctinfo" class="correctNoLogin grayLink"><?php echo $this->translate('Information Correct?')?> - <span class="greyBold"><?php echo $this->translate('Mark an edit')?></span></a></div>			
+			<?php endif;?>
+			</form>	
+		</div>
+	</div>
+	<aside>
+		<div class="likeButton">
+			<div class="floatLeft facebook"><div class="fb-like" data-send="false" data-layout="button_count" data-width="450" data-show-faces="true"></div></div>
+			<div class="floatLeft twitter"><a href="https://twitter.com/share" class="twitter-share-button"  data-lang="<?php echo $_SESSION['lang']?>">Tweet</a>
+			<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></div>
+			<div class="g-plusone" data-size="medium" data-href="http://vintlas.com"></div>
+		</div>
+		<div class="grayBox adress">
+			<h3 class="title"><?php echo $this->vineyard->name?></h3>
+			<?php if(!empty($this->vineyard->logo)):?>
+				<img src="<?php echo $this->baseUrl()?>/images/vineyard/logo/<?php echo $this->vineyard->logo?>" alt="<?php echo trim($this->vineyard->name) . $this->alt?>"  title="<?php echo trim($this->vineyard->name) . $this->img?>">
+			<?php else:?>
+				<img src="<?php echo $this->baseUrl()?>/images/vineyard/logo/default.jpg" alt="<?php echo trim($this->vineyard->name) . $this->alt?>"  title="<?php echo trim($this->vineyard->name) . $this->img?>">
+			<?php endif;?>
+<!--			<div class="<?php // echo !empty($this->vineyard->logo) ? 'floatRight' : 'contact-vineyard'?>">-->
+			<div class="floatRight">	
+				<div class="adressBox">
+					<?php // echo !empty($this->vineyard->city) ? '<span>City/Town: ' . $this->vineyard->city . '</span>' : ''?>
+					<?php // echo !empty($this->vineyard->region) ? '<span>Province/Region/State: ' . $this->vineyard->region . '</span>' : ''?>
+				</div>
+				<div class="adressBox">
+					<?php echo !empty($this->vineyard->address1) ? '<span>' . $this->vineyard->address1 . '</span>' : ''?>
+					<span><?php echo !empty($this->vineyard->city) ? $this->vineyard->city . ', ' : ''?><?php echo !empty($this->vineyard->region) ? $this->vineyard->region . ' ' : ''?><?php echo !empty($this->vineyard->zip) ? $this->vineyard->zip : ''?><?php echo !empty($this->vineyard->country) ? ' ' . $this->vineyard->country : ''?></span>
+					<?php // echo !empty($this->vineyard->zip) ? '<span>Postal code: ' . $this->vineyard->zip . '</span>' : ''?>
+				</div>
+				<?php // if(!empty($this->vineyard->telephone) && !empty($this->vineyard->fax) && !empty($this->vineyard->email)) :?>
+					<div class="adressBox">
+						<?php $telephone = !empty($this->vineyard->telephone) ? unserialize($this->vineyard->telephone) : ''?>
+						<?php echo is_array($telephone) ? '<span>Tel: +' . $telephone['country_code'] . ' ' . $telephone['city_code'] . ' ' . $telephone['telephone'] . '</span>' : ''?>
+						<?php // echo !empty($this->vineyard->fax) ? '<span>Fax: '. $this->vineyard->fax . '</span>' : ''?>
+						<?php echo !empty($this->vineyard->email) ? '<a href="mailto:' . $this->vineyard->email . '">' . $this->vineyard->email . '</a>' : ''?>
+					</div>
+				<?php // endif;?>
+				<?php if(!empty($this->vineyard->proprietor)) :?>
+					<div class="adressBox">
+						<span><?php echo $this->translate('Proprietor/Owner')?>: </span>
+						<span><?php echo $this->vineyard->proprietor?></span>
+					</div>
+				<?php endif;?>
+				<div class="adressBox">
+					<span><?php echo $this->translate('Date last update')?>: </span>
+					<span><?php echo date("j F Y",$this->vineyard->update)?></span>
+				</div>
+				<?php if(!empty($this->vineyard->web)):?>
+					<?php $url = $this->vineyard->web;?>
+					<?php if(substr($url, -1) == '/'):?>
+						<?php $url = substr($url, 0, -1);?>
+					<?php endif;?>
+				<?php $web = str_ireplace('http://', '', $url);?>
+				<?php $web = str_ireplace('www.', '', $web)?>
+				<?php $web = 'www.' . $web?>
+					<div class="adressBox">
+						<?php echo !empty($this->vineyard->web) ? '<p><a href="' . $url . '" target="_blank">' . $web . '</a></p>' : ''?>
+					</div>
+				<?php endif;?>
+				<?php if($this->vineyard->claim == 0):?>
+					<?php if(Zend_Auth::getInstance()->hasIdentity()):?>
+						<a href="#myModal" class="various_claim claimListing button_claim"><?php echo $this->translate("Claim this Listing")?></a>
+					<?php else:?>	
+						<a class="button_claim" href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/auth/login"><?php echo $this->translate("Claim this Listing")?></a>
+					<?php endif;?>
+				<?php else:?>
+					<p>Listing Managed by Owner</p>
+				<?php endif;?>
+			</div>
+			<div class="shadow"></div>
+		</div>	
+		<?php echo $this->render('holiday_organization/holiday_box.phtml');?>
+		<div class="mapBox">
+			<h3 class="title noBg">Map of Location</h3>
+			<div id="correct_vineyard" style="height: 256px; width: 368px;"></div>
+			<?php if(Zend_Auth::getInstance()->hasIdentity()) :?>
+				<div class="textAlignCenter"><a href="#myCorrect" class="correct grayLink"><?php echo $this->translate('Information Correct?')?> - <span class="greyBold"><?php echo $this->translate('Mark an edit')?></span></a></div>
+			<?php else:?>
+				<div class="textAlignCenter"><a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/correctinfo" class="correctNoLogin grayLink"><?php echo $this->translate('Information Correct?')?> - <span class="greyBold"><?php echo $this->translate('Mark an edit')?></span></a></div>			
+			<?php endif;?>
+			<div class="shadow"></div>
+		</div>
+		<?php if(!empty($this->vineyards)) :?>
+			<div class="grayBox neighbordhood">
+				<h3 class="title">
+					<img src="/images/neighbordhoodTitleIcon.png" alt="neighbordhoodTitleIcon" />	<?php echo $this->translate('Close to this listing')?>
+				</h3>
+				<?php $reg_mod = new Application_Model_Assregions()?>
+				<?php foreach ($this->vineyards as $vineyard) :?>			
+					<ul class="list">
+						<li class="listItem">
+							<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/view-vineyard/<?php echo $vineyard['country_alias']?>/<?php echo main::getParent1($vineyard['reg_alias'])?>/<?php echo $vineyard['alias'] ?>"><img src="<?php echo $this->baseUrl()?>/images/vineyard/logo/<?php echo !empty($vineyard['logo']) ? $vineyard['logo'] : 'default.jpg'?>" alt="<?php echo trim($vineyard['name']) . $this->alt ?>"  title="<?php echo trim($vineyard['name']) . $this->img?>"/></a>
+							<div class="floatRight">
+								<a class="titleNeighbordhood" href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/view-vineyard/<?php echo $vineyard['country_alias']?>/<?php echo main::getParent1($vineyard['reg_alias'])?>/<?php echo $vineyard['alias'] ?>"><?php echo $vineyard['name'] ?></a>
+								<ul>
+									<?php $par_alias = Main::getAliasParent($vineyard['reg_alias']);?>
+									<li><a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-country/<?php echo $vineyard['country_alias']?>"><?php echo $vineyard['country']?></a></li>
+									<?php echo !empty($par_alias) ? '<li class="sep"></li>' : ''?> 
+									<li><a href="<?php echo !empty($par_alias) ? $this->baseUrl() . '/' . $_SESSION['lang'] . '/main/view-region/' . $reg_mod ->getRegionByAlias($par_alias['alias'])->country_alias . '/' . main::getParent1($par_alias['alias']) : ''?>"><?php echo !empty($par_alias) ? $par_alias['name'] : ''?></a></li>
+									<li class="sep"></li>
+									<li><a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-region/<?php echo $reg_mod ->getRegionByAlias($vineyard['reg_alias'])->country_alias?>/<?php echo main::getParent1($vineyard['reg_alias']) ?>"><?php echo $vineyard['ass_region'] ?></a></li>
+								</ul>
+								<span><span class="greenText"><?php echo $this->translate('Distance from current listing')?>:</span> <?php  echo $vineyard['dist'] ?> <?php echo $this->translate('km')?></span>
+							</div>
+						</li>
+					</ul>
+				<?php endforeach;?>
+				<div class="shadow"></div>
+			</div>
+		<?php endif;?>
+	</aside>
+</div>
+<div id="myCorrect" style="display: none">
+	<div class="popUpWrapper">
+		<div class="popUp orgHoliday popUpCor">
+			<h3 class="title"><?php echo $this->translate('Correct Listing')?></h3>
+				<label><?php echo $this->translate('Correct Comment')?>:</label>
+				<div class="oneLine">
+					<div class="wrapperInput mod_input texarea">
+						<textarea name="comment" id="correct_comment" cols="30" rows="10" class="inputBox"></textarea>
+					</div>
+				</div>				
+				<div class="errors_cor" id="com_error" style="display: none;"><?php echo $this->translate('Please enter a comment')?></div>
+				<br>
+				<input type="button" id="correct_ok" class="redSubmitBg" value="OK">
+		</div>
+	</div>
+</div>
+<?php echo $this->render('holiday_organization/holiday_form.phtml');?>
+<div class="popUpWrapper" id="myModal" style="display: none">
+	<div class="popUp">
+		<form name="claim" action="#" method="post" id="form_claim" class="jNice form">
+			<input type="hidden" name="listing" id="claim_list" value="<?php echo $this->vineyard->id?>">
+			<h3 class="title"><?php echo $this->translate('Claim Listing')?></h3>
+			<div class="flw borderBottom formSection">
+				<div class="oneLine">
+					<?php if(Zend_Auth::getInstance()->hasIdentity()):?>
+						<?php $user_mod = new Application_Model_Users();?>
+						<?php $user = $user_mod->getUserById(Zend_Auth::getInstance()->getIdentity()->id)?>
+						<?php $full_name = $user->name?>
+					<?php else:?>
+						<?php $full_name = ''?>
+					<?php endif;?>
+					<label for="name"><?php echo $this->translate('Full Name')?>*:</label>
+					<div class="wrapperInput"><?php echo $this->form1->getElement('name')->setValue($full_name)?></div>
+					<span id="name_error" class="error error_claim"><?php echo $this->translate('This information is required')?></span>
+				</div>
+				<div class="oneLine">
+					<label for="number"><?php echo $this->translate('Contact Number')?>*:</label>
+					<div class="wrapperInput"><?php echo $this->form1->number?></div>
+					<span id="number_error" class="error error_claim"><?php echo $this->translate('This information is required')?></span>
+				</div>
+				<div class="oneLine">
+					<label for="position"><?php echo $this->translate('Position in Business')?>*:</label>
+					<div class="wrapperInput"><?php echo $this->form1->position?></div>
+					<span id="position_error" class="error error_claim"><?php echo $this->translate('This information is required')?></span>
+				</div>
+				<div class="oneLine">
+					<label for="comment"><?php echo $this->translate('Comments')?>*:</label>
+					<div class="wrapperInput texarea"><?php echo $this->form1->comment?></div>
+					<div id="comment_error" class="error error_claim error_claim_comment"><?php echo $this->translate('This information is required')?></div>
+				</div>
+			</div>
+			<div class="textAlignCenter"><input type="submit" class="redSubmitBg" value="<?php echo $this->translate('Send Claim')?>" id="send_claim"/></div>
+		</form>
+	</div>
+</div>

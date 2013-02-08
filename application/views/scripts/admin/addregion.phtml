@@ -1,0 +1,93 @@
+<div id="view-content">
+	<h2><?php echo $this->message ?></h2>
+	<form id="add_region" action="" method="post">
+		<div class="control">
+			<?php echo $this->form->name ?>
+		</div>
+		<div class="control">
+			<?php echo $this->form->local_name ?>
+		</div>
+		<div class="control">
+			<?php echo $this->form->country ?>
+		</div>
+		<div class="control associated">
+			<input type="hidden" id="pid" name="pid" value="0">
+			<a data-toggle="modal" id="ass_region" href="#tree" class="btn btn-danger">Associated with the region...</a>
+		</div>
+		<div class="control textarea-redactor">
+			<?php echo $this->form->description ?>
+		</div>		
+		<div class="control">
+			<label>Principle Grapes:</label>
+			<?php echo $this->form->grapes ?>
+		</div>
+		<label>Google Map Showing Center of Region:</label>
+		<div id="map_canvas" style="width: 500px; height: 400px;"></div>
+		<input type="hidden" name="loc_y" id="loc_y">
+		<input type="hidden" name="loc_z" id="loc_z">
+		<br>
+		<div class="control">
+			<?php $url = parse_url($this->image);?>
+			<label for="image">Map Showing - Region within Region:</label>
+			<div id="country_image">
+				<?php echo !empty($this->image) && empty($url['scheme']) ? '<img src="' . $this->baseUrl() . '/images/region/' . $this->image . '"></img><input type="hidden" name="image" id="count_image" value="' . $this->image . '">' : (!empty($this->image) &&!empty($url['scheme']) ? '<img src="' . $this->image . '"></img><input type="hidden" name="image" id="count_image" value="">': '<input type="hidden" name="image" id="count_image" value="">')?>
+			</div>
+			<span class="btn btn-success fileinput-button">
+				<i class="icon-plus icon-white"></i>
+				<span>Change the image...</span>
+				<input id="root" type="file" name="image">
+				<div id="image">
+				</div>
+			</span>
+			<br>
+			<br>
+			<label>or specify the link to an image:</label>
+			<div class="input">
+				<input id="link" type="text" name="link" value="<?php echo !empty($url['scheme']) ? $this->image : 'http://'?>">
+			</div>	
+		</div>
+		<div class="links">
+			<div class="control">
+				<div class="links-region"style="float: left">
+					<label>Useful links:</label>
+					<div class="link-region" style="margin-bottom: 5px;">
+						<label>Link:</label>
+						<input type="text" name="link[]" value="http://">
+						<label>Text:</label>
+						<input type="text" name="text[]" value="">
+					</div>
+					<div class="link-region-tmp" style="margin-bottom: 5px; display: none;">
+						<label>Link:</label>
+						<input type="text" name="links[]" class="link_reg" value="http://">
+						<label>Text:</label>
+						<input type="text" name="texts[]" class="text_reg" value="">
+					</div>					
+				</div>	
+				<div style="margin: 22px;">
+					<a href="#" class="add_link"><img src="<?php echo $this->baseUrl()?>/images/+.png"></a>
+				</div>
+				<div class="clear"></div>	
+			</div>
+		</div>
+		<div class="control textarea-redactor">
+			<?php echo $this->form->acknowledgements ?>
+		</div>
+		<div class="control">
+			<label>Partner Manager:</label>
+			<?php echo $this->form->partners ?>
+		</div>		
+		<div class="control">
+			<?php echo $this->form->notes ?>
+		</div>
+		<?php echo $this->form->submit ?>
+	</form>	
+</div>
+<div id="tree" class="modal hide fade">
+	<div class="modal-header">
+		<a class="close" data-dismiss="modal">×</a>
+		<h3>Country Tree Regions</h3>
+	</div>
+	<div class="modal-body popup">
+		<div class="tree_body"></div>
+	</div>
+</div>

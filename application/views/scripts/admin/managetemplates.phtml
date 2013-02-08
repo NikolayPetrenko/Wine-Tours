@@ -1,0 +1,29 @@
+<div id="view-content">
+	<h2><?php echo $this->message ?></h2>
+	<?php if(!empty($this->templates[0])) :?>
+		<table class="table table-bordered table-striped">
+			<thead>
+				<tr>
+					<th class="span2">Name</th>
+					<th class="span1">Code Name</th>
+					<th class="">Content</th>
+					<th class="span2">Options</th>
+				</tr>
+			</thead>
+			<tbody>
+			<?php foreach($this->templates as $contact):?>
+				<tr>
+					<td><?php echo $this->escape($contact->name) ?></td>
+					<td><?php echo $this->escape($contact->code) ?></td>
+					<td><?php echo $this->escape($contact->content) ?></td>
+					<td class="span2">
+						<a href="<?php echo $this->baseUrl()?>/<?php echo $_SESSION['lang']?>/admin/edittemplate/templ/<?php echo $contact->id?>">Edit Content</a>
+					</td>
+				</tr>
+			<?php endforeach;?>
+			</tbody>
+		</table>
+	<?php else:?>
+		<p>No Templates</p>
+	<?php endif;?>
+</div>

@@ -1,0 +1,110 @@
+<div id="view-content">
+	<h2><?php echo $this->message ?></h2>
+	<form enctype="multipart/form-data" action="<?php echo $this->form->getAction()?>" method="post" id="edit_user">
+		<input type="hidden" name="id" value="<?php echo $this->id?>">
+		<div class="control">
+			<label for="name" class="label-user-edit">User Name:</label>
+			<?php echo $this->form->name ?>
+		</div>
+		<div class="control">
+			<label for="name" class="label-user-edit">First Name:</label>
+			<?php echo $this->form->firstname ?>
+		</div>
+		<div class="control">
+			<label for="name" class="label-user-edit">Surname:</label>
+			<?php echo $this->form->surname ?>
+		</div>
+		<div class="control">
+			<label for="name" class="label-user-edit">Email:</label>
+			<?php echo $this->form->email ?>
+		</div>
+		<div class="control">
+			<label for="name" class="label-user-edit">Company:</label>
+			<?php echo $this->form->company ?>
+		</div>
+<!--		<div class="control">
+			<label for="image">Photo/avatar:</label>
+			<div id="user_image">
+				<?php // echo !empty($this->avatar) ? '<img src="' . $this->baseUrl() . '/images/user/' . $this->avatar . '"></img><input type="hidden" name="image" value="' . $this->avatar . '">' : ''?>
+			</div>
+			<span class="btn btn-success fileinput-button">
+				<i class="icon-plus icon-white"></i>
+				<span>Change the avatar...</span>
+				<input id="root" type="file" name="image">
+				<div id="image"></div>
+			</span>
+		</div>
+		<br>
+		<br>-->
+		<div class="control">
+			<label for="name" class="label-user-edit">Country:</label>
+			<?php echo $this->form->country ?>
+		</div>
+		<div class="control">
+			<label for="name" class="label-user-edit">Zone:</label>
+			<?php echo $this->form->zone ?>
+		</div>		
+	<div class="flw borderBottom formSection privacyContacting">
+		<h5 class="sectionTitle"><?php echo $this->translate('Your Privacy Controls &amp; Contacting You')?></h5>
+		<span class="bold"><?php echo $this->translate('New Features &amp; Updates from Vintlas')?></span>
+		<div class="oneLine">
+			<div class="radioBox">
+				<input type="radio" name="email_update" value="1" <?php echo $this->user['email_update'] == 1 ? 'checked="checked"' : ''?>/>
+				<span class="radoiLabel"><?php echo $this->translate('Yes')?></span>
+			</div>
+			<div class="radioBox">
+				<input type="radio" name="email_update" value="0" <?php echo $this->user['email_update'] == 0 ? 'checked="checked"' : ''?>/>
+				<span class="radoiLabel"><?php echo $this->translate('No')?></span>
+			</div>
+		</div>
+		<span class="bold"><?php echo $this->translate('Sponsor Offers')?></span>
+		<div class="oneLine">
+			<div class="radioBox">
+				<input type="radio" name="email_ofers" value="1" <?php echo $this->user['email_ofers'] == 1 ? 'checked="checked"' : ''?>/>
+				<span class="radoiLabel"><?php echo $this->translate('Yes')?></span>
+			</div>
+			<div class="radioBox">
+				<input type="radio" name="email_ofers" value="0" <?php echo $this->user['email_ofers'] == 0 ? 'checked="checked"' : ''?>/>
+				<span class="radoiLabel"><?php echo $this->translate('No')?></span>
+			</div>
+		</div>
+		<div class="control">
+			<label for="name" class="label-user-edit">User is involved:</label>
+			<?php echo $this->form->getElement('involve')->setLabel('User is involved') ?>
+		</div>
+		<div class="control inv_select">
+			<?php echo $this->form->inv_select;?>
+		</div>
+		<div class="control">
+			<?php echo $this->form->other ?>
+		</div>
+		<div class="control">
+			<label for="name" class="label-user-edit">Status:</label>
+			<?php echo $this->form->status ?>
+		</div>
+		<div class="control">
+			<label for="role" class="label1 optional">Role:</label>
+			<div class="input">
+				<select name="role" id="role">
+					<option value="user" label="User"<?php echo $this->role == 'user' ? 'selected' : ''?>>User</option>
+					<option value="admin" label="Admin"<?php echo $this->role == 'admin' ? 'selected' : ''?>>Admin</option>
+				</select>
+			</div>
+		</div>
+<!--		<div class="control">
+			<label>Partner Regions</label>
+			<div class="input">
+				<select name="regions[]" id="regions" multiple="multiple">
+					<?php // foreach($this->regions as $region) :?>
+					<?php // if($region['user'] == '' || $region['user'] == Zend_Auth::getInstance()->getIdentity()->id) :?>
+						<option value="<?php // echo $region['id']?>" label="<?php // echo $region['name']?>" <?php // echo $region['user'] == Zend_Auth::getInstance()->getIdentity()->id ? 'selected' : ''?>><?php // echo $region['name']?></option>
+					<?php // endif;?>	
+					<?php // endforeach;?>
+				</select>
+			</div>	
+		</div>-->
+		<br>
+		<a href="<?php echo $this->baseUrl()?>/users/manageuser" class="btn pull-left">Cancel</a>
+		<input type="submit" class="btn btn-danger" value="Edit user">
+	</form>	
+</div>

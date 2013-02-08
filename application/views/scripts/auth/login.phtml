@@ -1,0 +1,37 @@
+<h2 class="title borderBottom noBg"><?php echo $this->translate('Log In')?></h2>	
+<form action="<?php echo $this->form->getAction()?>" method="post" id="login"  class="jNice form">
+	<?php if(!empty($this->errMessage)) :?>
+		<div class="error-login">
+			<?php echo $this->translate($this->errMessage);?>
+		</div>
+	<?php endif;?>
+	<div class="formSection">
+		<div class="oneLine">
+			<label for="name/username"><?php echo $this->translate('E-mail')?>*:</label>
+			<div class="wrapperInput">
+				<div class="rounded tl"></div>
+				<div class="rounded tr"></div>
+				<div class="rounded br"></div>
+				<div class="rounded bl"></div>	
+				<?php echo $this->form->getElement('email')->setLabel('');?>
+			</div>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please enter your email address which you registered')?></span></div>
+		</div>
+		<div class="oneLine">
+			<label for="name/username"><?php echo $this->translate('Password')?>*:</label>
+			<div class="wrapperInput">
+				<div class="rounded tl"></div>
+				<div class="rounded tr"></div>
+				<div class="rounded br"></div>
+				<div class="rounded bl"></div>	
+				<?php echo $this->form->getElement('password')->setLabel('');?>
+			</div>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please enter you password')?></span></div>
+		</div>
+		<div class="oneLine">
+			<?php echo $this->form->getElement('rememberMe')->setLabel('');?>
+			<label for="rememberMe" id="label-rememberMe"><?php echo $this->translate('Remember Me')?></label>
+		</div>
+		<?php echo $this->form->login->setAttrib('class', 'redSubmitBg');?>
+	</div>
+</form>

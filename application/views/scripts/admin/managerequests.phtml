@@ -1,0 +1,59 @@
+<div id="view-content">
+	<h2><?php echo $this->message ?></h2>
+	<form style="float: left;" name="type_filter" action="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/admin/managerequests" id="type_filter" method="post">
+		<h4>Filter By Type:</h4>
+		<select name="types" id="types">
+			<option value="new" <?php echo $this->type == 'new' ? 'selected' : ''?>>New</option>
+			<option value="actioned" <?php echo $this->type == 'actioned' ? 'selected' : ''?>>Actioned</option>
+			<option value="all" <?php echo $this->type == 'all' ? 'selected' : ''?>>All</option>
+		</select>
+	</form>
+	<form style="float: left; margin-left: 50px;" name="date_filter" action="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/admin/managerequests" id="date_filter" method="post">
+		<h4>Filter By Date:</h4>
+		<select name="dates" id="dates">
+			<option value="asc" <?php echo $this->date == 'asc' ? 'selected' : ''?>>Ascending</option>
+			<option value="desc" <?php echo $this->date == 'desc' ? 'selected' : ''?>>Descending</option>
+		</select>
+	</form>		
+	<?php if(count($this->paginator)) :?>
+		<table class="table table-bordered table-striped">
+			<thead>
+				<tr>
+					<th class="span1">User Name</th>
+					<th class="span1">User Email</th>
+					<th class="">Telephone</th>
+					<th class="span1">Number of People Travelling</th>
+					<th class="">Country</th>
+					<th class="">Region</th>
+					<th class="">Message to Tour Operator</th>
+					<th class="">Data last change</th>
+					<th class="span1">Options</th>
+				</tr>
+			</thead>
+			<tbody>
+			<?php $country_mod = new Application_Model_Countries();?>
+			<?php $reg_mod = new Application_Model_Assregions();?>
+			<?php foreach($this->paginator as $request):?>
+				<tr>
+					<td><?php echo $this->escape($request['name']) ?></td>
+					<td><?php echo $this->escape($request['email']) ?></td>
+					<td><?php echo $this->escape($request['telephone']) ?></td>
+					<td><?php echo $this->escape($request['peoples']) ?></td>
+					<td><?php echo $country_mod->getCountryByCode($request['country'])->name_en ?></td>
+					<td><?php echo !empty($request['region']) ? $reg_mod->getRegionById($request['region'])->name : '' ?></td>
+					<td><?php echo $this->escape($request['message']) ?></td>
+					<td><?php echo $this->escape(date("d.m.Y H:i:s",$request['date'])) ?></td>
+					<td class="options-td">
+						<?php if($request['type'] == 0) :?>
+							<a class="remove" href="#" rel="request_<?php echo $request['id']?>">Accept</a>
+						<?php endif;?>
+					</td>
+				</tr>
+			<?php endforeach;?>
+			</tbody>
+		</table>
+	<?php echo $this->paginationControl($this->paginator, 'Sliding', 'admin/pagination_requests.phtml', array('date' => $this->date, 'type'=>$this->type)); ?>
+	<?php else:?>
+		<p>No Requests</p>
+	<?php endif;?>
+</div>

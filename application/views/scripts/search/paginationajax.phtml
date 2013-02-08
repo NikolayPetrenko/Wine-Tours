@@ -1,0 +1,445 @@
+var map;
+var geocoder = new google.maps.Geocoder();
+var infowindow;
+$(document).ready(
+	function initial() {
+		var latlng = new google.maps.LatLng(0, 0);
+		var myOptions = {
+			zoom: 2,
+			center: latlng,
+			mapTypeId: google.maps.MapTypeId.ROADMAP,
+			overviewMapControl: true
+		};
+		var map = new google.maps.Map(document.getElementById("map_show"), myOptions);
+		
+		/////////////////////Events for the checkbox All Listing\\\\\\\\\\\\\\\\\\\\\\\
+		if($('#all').attr("checked") == "checked"){
+			$('#vin').attr('checked', 'checked');
+			$('#vin').attr('disabled', 'disabled');
+			$('#win').attr('checked', 'checked');
+			$('#win').attr('disabled', 'disabled');
+			<?php $i=0;?>
+			if($('#verif').attr("checked") == "checked") {
+				<?php $vineyards = $this->vin_mod->getVineyards()->addFilterByStatus('2');?>
+				<?php $wines = $this->win_mod->getWines()->addFilterByStatus('2');?>		
+			} else {
+				<?php $vineyards = $this->vin_mod->getVineyards(true);?>
+				<?php $wines = $this->win_mod->getWines(true);?>	
+			}
+			<?php foreach($vineyards as $vineyard) :?>
+				<?php $i++?>
+				var center = new google.maps.LatLng(<?php echo $vineyard->loc_y ?>, <?php echo $vineyard->loc_z ?>);
+				marker<?php echo $i?> = new google.maps.Marker({
+											position: center,
+											map: map, 
+											icon: '/images/vineyard.gif', 
+											title: '<?php echo $vineyard->name?>'
+										});
+				var contentString<?php echo $i?> = 
+					'<div class="map_vineyard" style="width: 300px; height: 200px;">'+
+					'<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/viewvineyard/vineyard/<?php echo $vineyard->alias ?>"><img src="<?php echo $this->baseUrl()?>/images/vineyard/logo/<?php echo $vineyard['logo']?>" width="100px"  style="float: left; margin-right: 15px; margin-bottom: 15px;">'+
+					'<h4><?php echo $vineyard->name?></h4></a>'+
+					'<a href=""><?php echo $vineyard['country']?></a> > <a href=""><?php echo $vineyard['ass_region'] ?></a> > <a href=""><?php echo $vineyard['city']?></a>'+
+					'<p><?php echo $vineyard['tasting'] != 2 ? $vineyard['tasting'] == 1 ? $this->translate('Free Wine Tasting') : $this->translate('Changed Wine Tasting') : ''; echo $vineyard['tasting'] != 2 && $vineyard['tour'] != 2 ? ', ' : ''; echo $vineyard['tour'] != 2 ? $vineyard['tour'] == 1 ? $this->translate('Free Wine Tours') : $this->translate('Changed Wine Tours') : ''?></p>'+
+					'</div>';
+
+
+				google.maps.event.addListener(marker<?php echo $i?>, 'click', function() {
+					if(infowindow) {
+						infowindow.setContent(contentString<?php echo $i?>);
+						infowindow.open(map,marker<?php echo $i?>);
+					} else {
+						infowindow = new google.maps.InfoWindow({content: contentString<?php echo $i?>});
+						infowindow.open(map,marker<?php echo $i?>);
+					}
+				});
+			<?php endforeach;?>
+
+			<?php foreach($wines as $wine) :?>
+				<?php $i++?>
+					var center = new google.maps.LatLng(<?php echo $wine->loc_y + 0.00002;?>, <?php echo $wine->loc_z + 0.00002 ?>);
+				marker<?php echo $i?> = new google.maps.Marker({
+											position: center,
+											map: map, 
+											icon: '/images/wine/wine_logo.png', 
+											title: '<?php echo $wine->name?>'
+										});
+				var contentString<?php echo $i?> = 
+					'<div class="map_wine" style="width: 300px; height: 200px;">'+
+					'<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/viewvineyard/vineyard/<?php echo $wine->alias ?>"><img src="<?php echo $this->baseUrl()?>/images/wine/<?php echo !empty($wine->image) ? $wine->image : 'default_wine.png'?>" width="100px"  style="float: left; margin-right: 15px; margin-bottom: 15px;">'+
+					'<h4><?php echo $wine->name?></h4></a>'+
+					'<p><?php echo $wine->notes?></p>'+
+					'<p>Vintage:<?php echo $wine->vintage?></p>'+
+					'</div>';
+
+
+				google.maps.event.addListener(marker<?php echo $i?>, 'click', function() {
+					if(infowindow) {
+						infowindow.setContent(contentString<?php echo $i?>);
+						infowindow.open(map,marker<?php echo $i?>);
+					} else {
+						infowindow = new google.maps.InfoWindow({content: contentString<?php echo $i?>});
+						infowindow.open(map,marker<?php echo $i?>);
+					}
+				});
+			<?php endforeach;?>
+		}			
+		/////////////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+
+		/////////////////////Events for the click checkbox All\\\\\\\\\\\\\\\\\\\\\\\
+		$('#all').click(function(){
+			map = new google.maps.Map(document.getElementById("map_show"), myOptions);
+			if($('#all').attr("checked") == "checked"){
+				$('#vin').attr('checked', 'checked');
+				$('#vin').attr('disabled', 'disabled');
+				$('#win').attr('checked', 'checked');
+				$('#win').attr('disabled', 'disabled');
+				<?php $i=0;?>
+				<?php foreach($vineyards as $vineyard) :?>
+					<?php $i++?>
+					var center = new google.maps.LatLng(<?php echo $vineyard->loc_y ?>, <?php echo $vineyard->loc_z ?>);
+					marker<?php echo $i?> = new google.maps.Marker({
+												position: center,
+												map: map, 
+												icon: '/images/vineyard.gif', 
+												title: '<?php echo $vineyard->name?>'
+											});
+					var contentString<?php echo $i?> = 
+						'<div class="map_vineyard" style="width: 300px; height: 200px;">'+
+						'<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/viewvineyard/vineyard/<?php echo $vineyard->alias ?>"><img src="<?php echo $this->baseUrl()?>/images/vineyard/logo/<?php echo $vineyard['logo']?>" width="100px"  style="float: left; margin-right: 15px; margin-bottom: 15px;">'+
+						'<h4><?php echo $vineyard->name?></h4></a>'+
+						'<a href=""><?php echo $vineyard['country']?></a> > <a href=""><?php echo $vineyard['ass_region'] ?></a> > <a href=""><?php echo $vineyard['city']?></a>'+
+						'<p><?php echo $vineyard['tasting'] != 2 ? $vineyard['tasting'] == 1 ? $this->translate('Free Wine Tasting') : $this->translate('Changed Wine Tasting') : ''; echo $vineyard['tasting'] != 2 && $vineyard['tour'] != 2 ? ', ' : ''; echo $vineyard['tour'] != 2 ? $vineyard['tour'] == 1 ? $this->translate('Free Wine Tours') : $this->translate('Changed Wine Tours') : ''?></p>'+
+						'</div>';
+
+
+					google.maps.event.addListener(marker<?php echo $i?>, 'click', function() {
+						if(infowindow) {
+							infowindow.setContent(contentString<?php echo $i?>);
+							infowindow.open(map,marker<?php echo $i?>);
+						} else {
+							infowindow = new google.maps.InfoWindow({content: contentString<?php echo $i?>});
+							infowindow.open(map,marker<?php echo $i?>);
+						}
+					});
+				<?php endforeach;?>
+
+			<?php foreach($wines as $wine) :?>
+				<?php $i++?>
+					var center = new google.maps.LatLng(<?php echo $wine->loc_y + 0.00002;?>, <?php echo $wine->loc_z + 0.00002 ?>);
+				marker<?php echo $i?> = new google.maps.Marker({
+											position: center,
+											map: map, 
+											icon: '/images/wine/wine_logo.png',  
+											title: '<?php echo $wine->name?>'
+										});
+				var contentString<?php echo $i?> = 
+					'<div class="map_wine" style="width: 300px; height: 200px;">'+
+					'<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/viewvineyard/vineyard/<?php echo $wine->alias ?>"><img src="<?php echo $this->baseUrl()?>/images/wine/<?php echo !empty($wine->image) ? $wine->image : 'default_wine.png'?>" width="100px"  style="float: left; margin-right: 15px; margin-bottom: 15px;">'+
+					'<h4><?php echo $wine->name?></h4></a>'+
+					'<p><?php echo $wine->notes?></p>'+
+					'<p>Vintage:<?php echo $wine->vintage?></p>'+
+					'</div>';
+
+
+				google.maps.event.addListener(marker<?php echo $i?>, 'click', function() {
+					if(infowindow) {
+						infowindow.setContent(contentString<?php echo $i?>);
+						infowindow.open(map,marker<?php echo $i?>);
+					} else {
+						infowindow = new google.maps.InfoWindow({content: contentString<?php echo $i?>});
+						infowindow.open(map,marker<?php echo $i?>);
+					}
+				});
+			<?php endforeach;?>
+			} else {
+				$('#vin').attr('checked', false);
+				$('#vin').attr('disabled', false);
+				$('#win').attr('checked', false);
+				$('#win').attr('disabled', false);
+			}
+		})
+		/////////////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+		
+
+		/////////////////////Events for the click checkbox Regions\\\\\\\\\\\\\\\\\\\\\\\
+		$('#win').click(function(){
+			map = new google.maps.Map(document.getElementById("map_show"), myOptions);
+			<?php $i=0;?>
+			if($('#win').attr("checked") == "checked"){
+			<?php foreach($wines as $wine) :?>
+				<?php $i++?>
+					var center = new google.maps.LatLng(<?php echo $wine->loc_y + 0.00002;?>, <?php echo $wine->loc_z + 0.00002 ?>);
+				marker<?php echo $i?> = new google.maps.Marker({
+											position: center,
+											map: map, 
+											icon: '/images/wine/wine_logo.png',  
+											title: '<?php echo $wine->name?>'
+										});
+				var contentString<?php echo $i?> = 
+					'<div class="map_wine" style="width: 300px; height: 200px;">'+
+					'<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/viewvineyard/vineyard/<?php echo $wine->alias ?>"><img src="<?php echo $this->baseUrl()?>/images/wine/<?php echo !empty($wine->image) ? $wine->image : 'default_wine.png'?>" width="100px"  style="float: left; margin-right: 15px; margin-bottom: 15px;">'+
+					'<h4><?php echo $wine->name?></h4></a>'+
+					'<p><?php echo $wine->notes?></p>'+
+					'<p>Vintage:<?php echo $wine->vintage?></p>'+
+					'</div>';
+
+
+				google.maps.event.addListener(marker<?php echo $i?>, 'click', function() {
+					if(infowindow) {
+						infowindow.setContent(contentString<?php echo $i?>);
+						infowindow.open(map,marker<?php echo $i?>);
+					} else {
+						infowindow = new google.maps.InfoWindow({content: contentString<?php echo $i?>});
+						infowindow.open(map,marker<?php echo $i?>);
+					}
+				});
+			<?php endforeach;?>
+			}
+			if($('#vin').attr("checked") == "checked"){
+				<?php $i=0;?>
+				<?php foreach($vineyards as $vineyard) :?>
+					<?php $i++?>
+					var center = new google.maps.LatLng(<?php echo $vineyard->loc_y ?>, <?php echo $vineyard->loc_z ?>);
+					marker<?php echo $i?> = new google.maps.Marker({
+												position: center,
+												map: map, 
+												icon: '/images/vineyard.gif', 
+												title: '<?php echo $vineyard->name?>'
+											});
+					var contentString<?php echo $i?> = 
+						'<div class="map_vineyard" style="width: 300px; height: 200px;">'+
+						'<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/viewvineyard/vineyard/<?php echo $vineyard->alias ?>"><img src="<?php echo $this->baseUrl()?>/images/vineyard/logo/<?php echo $vineyard['logo']?>" width="100px"  style="float: left; margin-right: 15px; margin-bottom: 15px;">'+
+						'<h4><?php echo $vineyard->name?></h4></a>'+
+						'<a href=""><?php echo $vineyard['country']?></a> > <a href=""><?php echo $vineyard['ass_region'] ?></a> > <a href=""><?php echo $vineyard['city']?></a>'+
+						'<p><?php echo $vineyard['tasting'] != 2 ? $vineyard['tasting'] == 1 ? $this->translate('Free Wine Tasting') : $this->translate('Changed Wine Tasting') : ''; echo $vineyard['tasting'] != 2 && $vineyard['tour'] != 2 ? ', ' : ''; echo $vineyard['tour'] != 2 ? $vineyard['tour'] == 1 ? $this->translate('Free Wine Tours') : $this->translate('Changed Wine Tours') : ''?></p>'+
+						'</div>';
+
+
+					google.maps.event.addListener(marker<?php echo $i?>, 'click', function() {
+						if(infowindow) {
+							infowindow.setContent(contentString<?php echo $i?>);
+							infowindow.open(map,marker<?php echo $i?>);
+						} else {
+							infowindow = new google.maps.InfoWindow({content: contentString<?php echo $i?>});
+							infowindow.open(map,marker<?php echo $i?>);
+						}
+					});
+				<?php endforeach;?>
+			}
+		})
+		/////////////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+		
+
+		/////////////////////Events for the click checkbox Vineyards\\\\\\\\\\\\\\\\\\\\\\\
+		$('#vin').click(function(){
+			map = new google.maps.Map(document.getElementById("map_show"), myOptions);
+			<?php $i=0;?>
+			if($('#vin').attr("checked") == "checked"){
+				<?php foreach($vineyards as $vineyard) :?>
+					<?php $i++?>
+					var center = new google.maps.LatLng(<?php echo $vineyard->loc_y ?>, <?php echo $vineyard->loc_z ?>);
+					marker<?php echo $i?> = new google.maps.Marker({
+												position: center,
+												map: map, 
+												icon: '/images/vineyard.gif', 
+												title: '<?php echo $vineyard->name?>'
+											});
+					var contentString<?php echo $i?> = 
+						'<div class="map_vineyard" style="width: 300px; height: 200px;">'+
+						'<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/viewvineyard/vineyard/<?php echo $vineyard->alias ?>"><img src="<?php echo $this->baseUrl()?>/images/vineyard/logo/<?php echo $vineyard['logo']?>" width="100px"  style="float: left; margin-right: 15px; margin-bottom: 15px;">'+
+						'<h4><?php echo $vineyard->name?></h4></a>'+
+						'<a href=""><?php echo $vineyard['country']?></a> > <a href=""><?php echo $vineyard['ass_region'] ?></a> > <a href=""><?php echo $vineyard['city']?></a>'+
+						'<p><?php echo $vineyard['tasting'] != 2 ? $vineyard['tasting'] == 1 ? $this->translate('Free Wine Tasting') : $this->translate('Changed Wine Tasting') : ''; echo $vineyard['tasting'] != 2 && $vineyard['tour'] != 2 ? ', ' : ''; echo $vineyard['tour'] != 2 ? $vineyard['tour'] == 1 ? $this->translate('Free Wine Tours') : $this->translate('Changed Wine Tours') : ''?></p>'+
+						'</div>';
+
+
+					google.maps.event.addListener(marker<?php echo $i?>, 'click', function() {
+						if(infowindow) {
+							infowindow.setContent(contentString<?php echo $i?>);
+							infowindow.open(map,marker<?php echo $i?>);
+						} else {
+							infowindow = new google.maps.InfoWindow({content: contentString<?php echo $i?>});
+							infowindow.open(map,marker<?php echo $i?>);
+						}
+					});
+				<?php endforeach;?>
+			}
+			if($('#win').attr("checked") == "checked"){
+			<?php foreach($wines as $wine) :?>
+				<?php $i++?>
+					var center = new google.maps.LatLng(<?php echo $wine->loc_y + 0.00002;?>, <?php echo $wine->loc_z + 0.00002 ?>);
+				marker<?php echo $i?> = new google.maps.Marker({
+											position: center,
+											map: map, 
+											icon: '/images/wine/wine_logo.png',  
+											title: '<?php echo $wine->name?>'
+										});
+				var contentString<?php echo $i?> = 
+					'<div class="map_wine" style="width: 300px; height: 200px;">'+
+					'<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/viewvineyard/vineyard/<?php echo $wine->alias ?>"><img src="<?php echo $this->baseUrl()?>/images/wine/<?php echo !empty($wine->image) ? $wine->image : 'default_wine.png'?>" width="100px"  style="float: left; margin-right: 15px; margin-bottom: 15px;">'+
+					'<h4><?php echo $wine->name?></h4></a>'+
+					'<p><?php echo $wine->notes?></p>'+
+					'<p>Vintage:<?php echo $wine->vintage?></p>'+
+					'</div>';
+
+
+				google.maps.event.addListener(marker<?php echo $i?>, 'click', function() {
+					if(infowindow) {
+						infowindow.setContent(contentString<?php echo $i?>);
+						infowindow.open(map,marker<?php echo $i?>);
+					} else {
+						infowindow = new google.maps.InfoWindow({content: contentString<?php echo $i?>});
+						infowindow.open(map,marker<?php echo $i?>);
+					}
+				});
+			<?php endforeach;?>
+			}
+		})
+		/////////////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+		/////////////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+
+
+		/////////////////////Events for the click checkbox Verifield\\\\\\\\\\\\\\\\\\\\\\\
+		$('#verif').click(function(){
+			map = new google.maps.Map(document.getElementById("map_show"), myOptions);
+			<?php $i=0;?>
+			if($('#verif').attr("checked") == "checked"){
+				<?php foreach($vineyards as $vineyard) :?>
+					<?php $i++?>
+					var center = new google.maps.LatLng(<?php echo $vineyard->loc_y ?>, <?php echo $vineyard->loc_z ?>);
+					marker<?php echo $i?> = new google.maps.Marker({
+												position: center,
+												map: map, 
+												icon: '/images/vineyard.gif', 
+												title: '<?php echo $vineyard->name?>'
+											});
+					var contentString<?php echo $i?> = 
+						'<div class="map_vineyard" style="width: 300px; height: 200px;">'+
+						'<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/viewvineyard/vineyard/<?php echo $vineyard->alias ?>"><img src="<?php echo $this->baseUrl()?>/images/vineyard/logo/<?php echo $vineyard['logo']?>" width="100px"  style="float: left; margin-right: 15px; margin-bottom: 15px;">'+
+						'<h4><?php echo $vineyard->name?></h4></a>'+
+						'<a href=""><?php echo $vineyard['country']?></a> > <a href=""><?php echo $vineyard['ass_region'] ?></a> > <a href=""><?php echo $vineyard['city']?></a>'+
+						'<p><?php echo $vineyard['tasting'] != 2 ? $vineyard['tasting'] == 1 ? $this->translate('Free Wine Tasting') : $this->translate('Changed Wine Tasting') : ''; echo $vineyard['tasting'] != 2 && $vineyard['tour'] != 2 ? ', ' : ''; echo $vineyard['tour'] != 2 ? $vineyard['tour'] == 1 ? $this->translate('Free Wine Tours') : $this->translate('Changed Wine Tours') : ''?></p>'+
+						'</div>';
+
+
+					google.maps.event.addListener(marker<?php echo $i?>, 'click', function() {
+						if(infowindow) {
+							infowindow.setContent(contentString<?php echo $i?>);
+							infowindow.open(map,marker<?php echo $i?>);
+						} else {
+							infowindow = new google.maps.InfoWindow({content: contentString<?php echo $i?>});
+							infowindow.open(map,marker<?php echo $i?>);
+						}
+					});
+				<?php endforeach;?>
+			}
+			if($('#win').attr("checked") == "checked"){
+			<?php foreach($wines as $wine) :?>
+				<?php $i++?>
+					var center = new google.maps.LatLng(<?php echo $wine->loc_y + 0.00002;?>, <?php echo $wine->loc_z + 0.00002 ?>);
+				marker<?php echo $i?> = new google.maps.Marker({
+											position: center,
+											map: map, 
+											icon: '/images/wine/wine_logo.png',  
+											title: '<?php echo $wine->name?>'
+										});
+				var contentString<?php echo $i?> = 
+					'<div class="map_wine" style="width: 300px; height: 200px;">'+
+					'<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/viewvineyard/vineyard/<?php echo $wine->alias ?>"><img src="<?php echo $this->baseUrl()?>/images/wine/<?php echo !empty($wine->image) ? $wine->image : 'default_wine.png'?>" width="100px"  style="float: left; margin-right: 15px; margin-bottom: 15px;">'+
+					'<h4><?php echo $wine->name?></h4></a>'+
+					'<p><?php echo $wine->notes?></p>'+
+					'<p>Vintage:<?php echo $wine->vintage?></p>'+
+					'</div>';
+
+
+				google.maps.event.addListener(marker<?php echo $i?>, 'click', function() {
+					if(infowindow) {
+						infowindow.setContent(contentString<?php echo $i?>);
+						infowindow.open(map,marker<?php echo $i?>);
+					} else {
+						infowindow = new google.maps.InfoWindow({content: contentString<?php echo $i?>});
+						infowindow.open(map,marker<?php echo $i?>);
+					}
+				});
+			<?php endforeach;?>
+			}
+		})
+		/////////////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+
+
+
+	
+		$('#continent').change(function () {
+			var continent = $(this).val();
+			var cont_text = $('#continent option:selected').text();
+			if (continent == '0') {
+				$('#country').html('');
+				$('#country').attr('disabled', true);
+				return(false);
+			}
+			$('#country').attr('disabled', true);
+			$('#country').html('<option>loading...</option>');
+			$.ajax({
+					url: SYS.siteUrl + 'ajaxselect',
+					type: 'POST',
+					dataType: 'json',
+					data: "continent=" + continent,
+					success: function(result) {
+							var options = '';
+							$(result.country).each(function() {
+								options += '<option value="' + $(this).attr('id') + '">' + $(this).attr('title') + '</option>';
+							});
+
+							$('#country').html(options);
+							$('#country').attr('disabled', false);
+							geocod(map, cont_text, 4);
+					}	
+			});
+		});		
+
+		$('#country').change(function () {
+			var country = $(this).val();
+			var count_text = $('#country option:selected').text();
+			if (country == '0') {
+				$('#ass_region').html('');
+				$('#ass_region').attr('disabled', true);
+				return(false);
+			}
+			$('#ass_region').attr('disabled', true);
+			$('#ass_region').html('<option>loading...</option>');
+			$.ajax({
+					url: SYS.siteUrl + 'ajaxselect',
+					type: 'POST',
+					dataType: 'json',
+					data: "country=" + country,
+					success: function(result) {
+							var options = '';
+							$(result.ass_region).each(function() {
+								options += '<option value="' + $(this).attr('id') + '">' + $(this).attr('title') + '</option>';
+							});
+							$('#ass_region').html(options);
+							$('#ass_region').attr('disabled', false);
+							geocod(map, count_text, 5);
+					}
+			});
+		});
+		$('#ass_region').change(function () {
+			var region = $('#ass_region option:selected').text();
+			geocod(map, region, 10);
+		});
+});
+
+function geocod(map, address, zoom) {
+	geocoder.geocode( {'address': address}, function(results, status) {
+		if (status == google.maps.GeocoderStatus.OK) {
+			map.setCenter(results[0].geometry.location);
+			map.setZoom(zoom);
+		} else {
+			alert("Geocode was not successful for the following reason: " + status);
+		}
+	});		 
+}	

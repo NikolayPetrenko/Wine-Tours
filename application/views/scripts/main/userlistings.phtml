@@ -1,0 +1,47 @@
+<div class="content">
+	<h2 class="title"><?php echo $this->message ?></h2>
+	<form class="jNice user-listing" name="type_filter" action="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/userlistings" id="type_filter" method="post">
+		<h4>Filter By Type:</h4>
+		<select name="type" id="type">
+			<option value="all" <?php echo $this->type == 'all' ? 'selected' : ''?>><?php echo $this->translate('All Types')?></option>
+			<option value="verif" <?php echo $this->type == 'verif' ? 'selected' : ''?>><?php echo $this->translate('Verfied Listing')?></option>
+			<option value="unverif" <?php echo $this->type == 'unverif' ? 'selected' : ''?>><?php echo $this->translate('Unverfied Listing')?></option>
+		</select>
+	</form>	
+	<?php if(count($this->paginator)) :?>
+		<table class="table table-bordered table-striped">
+			<thead>
+				<tr>
+					<th class="span2"><?php echo $this->translate('Vineyard Name')?></th>
+					<th class=""><?php echo $this->translate('Country')?></th>
+					<th class=""><?php echo $this->translate('Ass Region')?></th>
+					<th class=""><?php echo $this->translate('City')?></th>
+					<th class=""><?php echo $this->translate('Status')?></th>
+					<th class=""><?php echo $this->translate('Data last change')?></th>
+					<th class="option-th span3"><?php echo $this->translate('Options')?></th>
+				</tr>
+			</thead>
+			<tbody>
+			<?php foreach($this->paginator as $vineyard):?>
+				<tr>
+					<td><?php echo $this->escape($vineyard['name']) ?></td>
+					<td><?php echo $this->escape($vineyard['country']) ?></td>
+					<td><?php echo $vineyard['ass_region'] ?></td>
+					<td><?php echo $this->escape($vineyard['city']) ?></td>
+					<td><?php echo $vineyard['status'] == 0 ? $this->translate('Unverified Listing') : $this->translate('Verified Listing') ?></td>
+					<td><?php echo $this->escape(date("d.m.Y H:i:s",$vineyard['update'])) ?></td>
+					<td class="options-td">
+						<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/editvineyard/<?php echo $vineyard['alias']?>"><?php echo $this->translate('Edit')?></a> 
+					</td>
+				</tr>
+			<?php endforeach;?>
+			</tbody>
+		</table>
+	<?php echo $this->paginationControl($this->paginator,
+                                    'Sliding',
+                                    'main/pagination_listings.phtml',
+					array('type' => $this->type)); ?>
+	<?php else:?>
+		<p><?php echo $this->translate('No Listings')?></p>
+	<?php endif;?>
+</div>

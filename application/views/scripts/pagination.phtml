@@ -1,0 +1,74 @@
+	<?php if(!empty($this->paginator)) :?>
+				<?php foreach($this->paginator as $item) :?>
+					<?php $reg_mod = new Application_Model_Assregions();?>
+					<?php $i=0;?>
+					<?php if(!empty($item['VINEYARD'])):?>
+							<div data-region="<?php echo $item['reg_id']?>" data-country="<?php echo $item['coun_id']?>" data-continent="<?php echo $item['count_id']?>" class="win_vin vin del<?php echo $item['list_id']?>" id="vin<?php echo $i?>" data-status="<?php echo $item['status']?>" data-claim="<?php echo $item['claim']?>">
+								<div class="image" style="float: left; width: 200px; margin: 10px;">
+									<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/view-vineyard/<?php echo $item['country_alias']?>/<?php echo main::getParent1($item['reg_alias'])?>/<?php echo $item['alias'] ?>"><img src="<?php echo !empty($item['logo']) ? '/images/vineyard/logo/' . $item['logo'] : '/images/vineyard/logo/default.jpg'?>" style="float: left; margin-right: 15px; margin-bottom: 15px;"></a>
+								</div>	
+								<div class="logo" style="float: left; width: 100px; padding: 53px">
+									<img src="<?php echo '/images/vineyard.gif';?>">
+								</div>
+								<div class="text">
+									<?php $par_alias = Main::getAliasParent($item['reg_alias']);?>
+									<?php if($item['status'] == 0) :?>
+										<span class="label label-info" style="margin-left: 174px;"><?php echo $this->translate('Unverified Listing') ?></span>
+									<?php else:?>
+										<span class="label label-success" style="margin-left: 187px;"><?php echo $this->translate('Verified Listing') ?></span>
+									<?php endif;?>
+									<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/view-vineyard/<?php echo $item['country_alias']?>/<?php echo main::getParent1($item['reg_alias'])?>/<?php echo $item['alias'] ?>"><h4><?php echo $item['name']?></h4></a>
+									<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-country/<?php echo $item['country_alias']?>"><?php echo $item['country']?></a> <?php echo !empty($par_alias) ? '>' : ''?> <a href="<?php echo !empty($par_alias) ? $this->baseUrl() . '/' . $_SESSION['lang'] . '/main/view-region/' . $reg_mod ->getRegionByAlias($par_alias['alias'])->country_alias . '/' . main::getParent1($par_alias['alias']) : ''?>"><?php echo !empty($par_alias) ? $par_alias['name'] : ''?></a> > <a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-region/<?php echo $reg_mod ->getRegionByAlias($item['reg_alias'])->country_alias?>/<?php echo main::getParent1($item['reg_alias']) ?>"><?php echo $item['ass_region'] ?></a>
+									<?php echo $item['claim'] == '0' && $item['user_claim'] == '0'? '<a data-listing="'.$item['list_id'].'" data-toggle="modal" href="#myModal" class="btn btn-danger claim_btn">'.$this->translate("Claim this Listing").'</a>' : '' ?>
+								</div>
+							</div>
+							<div class="clear"></div>	
+							<?php $i++?>
+					<?php endif;?>
+					<?php if(!empty($item['WINE'])) :?>
+						<?php $i = 0;?>
+							<div data-region="<?php echo $item['reg_id']?>" data-country="<?php echo $item['coun_id']?>" data-continent="<?php echo $item['count_id']?>" class="win_vin win del<?php echo $item['list_id']?>" id="win<?php echo $i?>" data-status="<?php echo $item['status']?>" data-claim="<?php echo $item['claim']?>">
+								<div class="image" style="float: left; width: 200px; margin: 10px;">
+									<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/view-vineyard/<?php echo $item['country_alias']?>/<?php echo main::getParent1($item['reg_alias'])?>/<?php echo $item['alias'] ?>#wines"><img src="<?php echo !empty($item['image']) ? '/images/wine/'. $item['image'] : '/images/wine/default_wine.png'?>" style="float: left; margin-right: 15px; margin-bottom: 15px;"></a>
+								</div>	
+								<div class="logo" style="float: left; width: 100px; padding: 53px">
+									<img src="<?php echo '/images/wine/wine_logo.png'?>">
+								</div>
+								<div class="text">
+									<?php $par_alias = Main::getAliasParent($item['reg_alias']);?>
+									<?php if($item['status'] == 0) :?>
+										<span class="label label-info" style="margin-left: 174px;"><?php echo $this->translate('Unverified Listing') ?></span>
+									<?php else:?>
+										<span class="label label-success" style="margin-left: 187px;"><?php echo $this->translate('Verified Listing') ?></span>
+									<?php endif;?>
+									<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/view-vineyard/<?php echo $item['country_alias']?>/<?php echo main::getParent1($item['reg_alias'])?>/<?php echo $item['alias'] ?>"><h4><?php echo $item['name']?></h4></a>
+									<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-country/<?php echo $item['country_alias']?>"><?php echo $item['country']?></a> <?php echo !empty($par_alias) ? '>' : ''?> <a href="<?php echo !empty($par_alias) ? $this->baseUrl() . '/' . $_SESSION['lang'] . '/main/view-region/' . $reg_mod ->getRegionByAlias($par_alias['alias'])->country_alias . '/' . main::getParent1($par_alias['alias']) : ''?>"><?php echo !empty($par_alias) ? $par_alias['name'] : ''?></a> > <a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-region/<?php echo $reg_mod ->getRegionByAlias($item['reg_alias'])->country_alias?>/<?php echo main::getParent1($item['reg_alias']) ?>"><?php echo $item['ass_region'] ?></a>
+									<?php echo $item['claim'] == '0' && $item['user_claim'] == '0'? '<a data-listing="'.$item['list_id'].'" data-toggle="modal" href="#myModal" class="btn btn-danger claim_btn">'.$this->translate("Claim this Listing").'</a>' : '' ?>
+								</div>
+							</div>
+							<div class="clear"></div>	
+							<?php $i++?>
+					<?php endif;?>
+					<?php if(!empty($item['REGION'])) :?>
+						<?php $i = 0?>		
+							<div class="region" data-region="<?php echo $item['pid']?>" data-country="<?php echo $item['country']?>" data-continent="<?php echo $item['cont_id']?>">
+								<div class="image" style="float: left; width: 200px; margin: 10px;">
+									<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-region/<?php echo $item['country_alias']?>/<?php echo main::getParent1($item['alias'])?>"><img src="/images/region/<?php echo !empty($item['image']) ? $item['image']  :  'default_region.jpg'?>"></a>
+								</div>	
+								<div class="logo" style="float: left; width: 100px; padding: 53px">
+									<img src="/images/region/region.jpg" style="float: left; margin-right: 15px; margin-bottom: 15px;"></a>
+								</div>
+								<div class="text">
+									<h3><?php echo $this->translate('Wine Region')?>:</h3>
+									<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-region/<?php echo $item['country_alias']?>/<?php echo main::getParent1($item['alias'])?>"><h4><?php echo $item['name']?></h4></a>
+									<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-country/<?php echo $item['country_alias']?>"><?php echo $item['country_name']?></a> 
+								</div>
+							</div>
+							<div class="clear"></div>
+							<?php $i++?>
+					<?php endif;?>
+				<?php endforeach; ?>
+				<?php echo $this->paginationControl($this->paginator, 'Sliding', 'search/pagination_search.phtml'); ?>			
+			<?php else :?>
+				<p><?php echo $this->translate('No wines, vineyards and wineregions')?></p>
+			<?php endif;?>

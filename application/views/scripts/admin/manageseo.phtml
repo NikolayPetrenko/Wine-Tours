@@ -1,0 +1,25 @@
+<div id="view-content">
+	<h2><?php echo $this->message ?></h2>
+	<?php if(!empty($this->seo[0])) :?>
+		<table class="table table-bordered table-striped">
+			<thead>
+				<tr>
+					<th class="span2">Page Name</th>
+					<th class="span2">Options</th>
+				</tr>
+			</thead>
+			<tbody>
+			<?php foreach($this->seo as $item):?>
+				<tr>
+					<td><?php echo $this->escape($item->page) ?></td>
+					<td class="span2">
+						<a href="<?php echo $this->baseUrl()?>/<?php echo $_SESSION['lang']?>/admin/editseo/<?php echo $item->id?>">Edit</a>
+					</td>
+				</tr>
+			<?php endforeach;?>
+			</tbody>
+		</table>
+	<?php else:?>
+		<p>No Pages</p>
+	<?php endif;?>
+</div>

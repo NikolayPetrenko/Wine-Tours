@@ -1,0 +1,75 @@
+<?php if(!empty($this->top_regions)) :?>
+			<div class="topWineRegion grayBox">
+				<h3 class="title"><?php echo $this->translate('Top Wine Region Destinations')?></h3>
+				<div class="padding">
+<!--					<span class="descr">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span>-->
+						<?php if(in_array(2, $this->top_id)) :?>	
+							<ul>
+								<li class="title">Asia</li>
+								<?php foreach($this->top_regions as $top_region) :?>
+									<?php if($top_region['continent'] == 2) :?>
+										<?php $par_alias = Main::getAliasParent($top_region['alias']);?>
+										<li><a href="<?php echo !empty($par_alias) ? $this->baseUrl() . '/' . $_SESSION['lang'] . '/main/view-region/' . $reg_mod ->getRegionByAlias($par_alias['alias'])->country_alias . '/' . main::getParent1($par_alias['alias']) : $this->baseUrl() . '/' . $_SESSION['lang'] . '/main/view-region/' . $top_region['country_alias'] . '/' . $top_region['alias']?>"><?php echo $top_region['name']?></a></li>
+									<?php endif;?>	
+								<?php endforeach;?>		
+							</ul>
+						<?php endif;?>
+						<?php if(in_array(7, $this->top_id)) :?>
+							<ul>
+								<li class="title">Europe</li>
+								<?php foreach($this->top_regions as $top_region) :?>
+									<?php if($top_region['continent'] == 7) :?>
+										<?php $par_alias = Main::getAliasParent($top_region['alias']);?>
+										<li><a href="<?php echo !empty($par_alias) ? $this->baseUrl() . '/' . $_SESSION['lang'] . '/main/view-region/' . $reg_mod ->getRegionByAlias($par_alias['alias'])->country_alias . '/' . main::getParent1($par_alias['alias']) : $this->baseUrl() . '/' . $_SESSION['lang'] . '/main/view-region/' . $top_region['country_alias'] . '/' . $top_region['alias']?>"><?php echo $top_region['name']?></a></li>
+									<?php endif;?>
+								<?php endforeach;?>
+							</ul>
+						<?php endif;?>
+						<?php if(in_array(3, $this->top_id)) :?>
+							<ul>
+								<li class="title">Africa</li>
+								<?php foreach($this->top_regions as $top_region) :?>
+									<?php if($top_region['continent'] == 3) :?>
+										<?php $par_alias = Main::getAliasParent($top_region['alias']);?>
+										<li><a href="<?php echo !empty($par_alias) ? $this->baseUrl() . '/' . $_SESSION['lang'] . '/main/view-region/' . $reg_mod ->getRegionByAlias($par_alias['alias'])->country_alias . '/' . main::getParent1($par_alias['alias']) : $this->baseUrl() . '/' . $_SESSION['lang'] . '/main/view-region/' . $top_region['country_alias'] . '/' . $top_region['alias']?>"><?php echo $top_region['name']?></a></li>
+									<?php endif;?>
+								<?php endforeach;?>
+							</ul>
+						<?php endif;?>
+						<?php if(in_array(9, $this->top_id)) :?>
+							<ul>
+								<li class="title">Oceania</li>
+								<?php foreach($this->top_regions as $top_region) :?>
+									<?php if($top_region['continent'] == 9) :?>
+										<?php $par_alias = Main::getAliasParent($top_region['alias']);?>
+										<li><a href="<?php echo !empty($par_alias) ? $this->baseUrl() . '/' . $_SESSION['lang'] . '/main/view-region/' . $reg_mod ->getRegionByAlias($par_alias['alias'])->country_alias . '/' . main::getParent1($par_alias['alias']) : $this->baseUrl() . '/' . $_SESSION['lang'] . '/main/view-region/' . $top_region['country_alias'] . '/' . $top_region['alias']?>"><?php echo $top_region['name']?></a></li>
+									<?php endif;?>
+								<?php endforeach;?>
+							</ul>
+						<?php endif;?>
+						<?php if(in_array(4, $this->top_id)) :?>
+							<ul>
+								<li class="title">North America</li>
+								<?php foreach($this->top_regions as $top_region) :?>
+									<?php if($top_region['continent'] == 4) :?>
+										<?php $par_alias = Main::getAliasParent($top_region['alias']);?>
+										<li><a href="<?php echo !empty($par_alias) ? $this->baseUrl() . '/' . $_SESSION['lang'] . '/main/view-region/' . $reg_mod ->getRegionByAlias($par_alias['alias'])->country_alias . '/' . main::getParent1($par_alias['alias']) : $this->baseUrl() . '/' . $_SESSION['lang'] . '/main/view-region/' . $top_region['country_alias'] . '/' . $top_region['alias']?>"><?php echo $top_region['name']?></a></li>
+									<?php endif;?>	
+								<?php endforeach;?>		
+							</ul>
+						<?php endif;?>
+						<?php if(in_array(5, $this->top_id)) :?>
+							<ul>
+								<li class="title">South America</li>
+								<?php foreach($this->top_regions as $top_region) :?>
+									<?php if($top_region['continent'] == 5) :?>
+										<?php $par_alias = Main::getAliasParent($top_region['alias']);?>
+										<li><a href="<?php echo !empty($par_alias) ? $this->baseUrl() . '/' . $_SESSION['lang'] . '/main/view-region/' . $reg_mod ->getRegionByAlias($par_alias['alias'])->country_alias . '/' . main::getParent1($par_alias['alias']) : $this->baseUrl() . '/' . $_SESSION['lang'] . '/main/view-region/' . $top_region['country_alias'] . '/' . $top_region['alias']?>"><?php echo $top_region['name']?></a></li>
+									<?php endif;?>
+								<?php endforeach;?>		
+							</ul>
+						<?php endif;?>
+					</div>
+				<div class="shadow"></div>
+			</div>
+		<?php endif;?>	

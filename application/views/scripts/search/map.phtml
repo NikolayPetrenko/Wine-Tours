@@ -1,0 +1,935 @@
+<script>
+var map;
+var geocoder = new google.maps.Geocoder();
+var infowindow;
+var marker_w  =new Array();
+var marker_v  =new Array();
+var marker_r = new Array();
+var lang = '<?php echo $_SESSION['lang']?>';
+<?php $con_mod = new Application_Model_Countries();?>
+$(document).ready(
+	function initial() {
+		var latlng = new google.maps.LatLng(10.247776508331299, 36.51087791337704);
+		var myOptions = {
+			zoom: 2,
+			center: latlng,
+			mapTypeId: google.maps.MapTypeId.ROADMAP,
+			overviewMapControl: true
+		};
+		var map = new google.maps.Map(document.getElementById("map_show"), myOptions);
+		/////////////////////Default all listing\\\\\\\\\\\\\\\\\\\\\\\
+		if($('#all').attr("checked") == "checked"){
+			$('#vin').attr('checked', 'checked');
+			$('#win').attr('checked', 'checked');
+			$('#reg').attr('checked', 'checked');
+			<?php $i=0;?>
+			<?php $vin_mod = new Application_Model_Vineyards();?>
+			<?php $reg_mod = new Application_Model_Assregions();?>
+			<?php $claim_mod = new Application_Model_Claimes();?>	
+			<?php $grape_mod = new Application_Model_Grapes();?>
+			<?php foreach($this->vineyards as $vineyard) :?>
+				<?php if(!empty($vineyard->loc_y) || !empty($vineyard->loc_z)): ?>
+					var center = new google.maps.LatLng(<?php echo $vineyard->loc_y ?>, <?php echo $vineyard->loc_z ?>);
+					marker_v[<?php echo $i?>] = new google.maps.Marker({
+												position: center,
+												map: map, 
+												icon: '/images/vineyards-map.png', 
+												title: '<?php echo $vineyard->name?>'
+											});
+												<?php $par_alias = Main::getAliasParent($vineyard['reg_alias']);?>
+
+					marker_v[<?php echo $i?>]['content'] = 
+						'<div class="map_vineyard" style="width: 300px; height: 150px;">'+
+							'<div class="floatLeft" style="width: 117px;">'+
+								'<div class="img">'+
+									'<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/view-vineyard/<?php echo $vineyard['country_alias']?>/<?php echo main::getParent1($vineyard['reg_alias'])?>/<?php echo $vineyard['alias'] ?>"><img src="<?php echo $this->baseUrl()?>/images/vineyard/logo/<?php echo !empty($vineyard['logo']) ? $vineyard['logo'] : 'default.jpg'?>" width="100px"  style="float: left; margin-right: 15px; margin-bottom: 15px; border: 1px solid #A7ADB2;"></a>'+
+								'</div>'+
+								'<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/view-vineyard/<?php echo $vineyard['country_alias']?>/<?php echo main::getParent1($vineyard['reg_alias'])?>/<?php echo $vineyard['alias'] ?>" class="moreLink">More info</a>'+
+							'</div>'+
+							'<div class="floatRight" style="width: 168px; margin-left: 15px;">'+
+								'<h6 style="font-size: 14px; font-weight: bold; margin-bottom: 5px;"><?php echo $vineyard->name?></h6>'+
+								'<ul class="breadcrumbs">'+
+									'<li><a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-country/<?php echo $vineyard['country_alias']?>"><?php echo $vineyard['country']?></a></li>'+
+									'<?php echo !empty($par_alias) ? '<li class="sep"></li>' : ''?>'+
+									'<li><a href="<?php echo !empty($par_alias) ? $this->baseUrl() . '/' . $_SESSION['lang'] . '/main/view-region/' . $reg_mod ->getRegionByAlias($par_alias['alias'])->country_alias . '/' . main::getParent1($par_alias['alias']) : ''?>"><?php echo !empty($par_alias) ? $par_alias['name'] : ''?></a></li>'+
+									'<li class="sep"></li>'+
+									'<li><a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-region/<?php echo $reg_mod ->getRegionByAlias($vineyard->reg_alias)->country_alias?>/<?php echo main::getParent1($vineyard->reg_alias) ?>"><?php echo $vineyard['ass_region'] ?></a></li>'+
+								'</ul>'+
+								<?php if($vineyard->claim == '0'):?>
+									<?php if($claim_mod->ClaimByUser($vineyard->list_id) == '0') :?>
+										'<a data-listing="<?php echo $vineyard->list_id?>" href="#myModal" class="button_claim1 various_claim claimListing" id="claim_click<?php echo $vineyard->list_id?>"><?php echo $this->translate("Claim this Listing")?></a>'+
+									<?php endif;?>
+								<?php else:?>		
+									'<span class="itali">Listing Manager by Owner</span>'+
+								<?php endif;?>	
+								'<p class="marginBottom"><p class="greenText"><?php echo $this->translate("Principle Grapes Grown") ?>:</p>'+
+									<?php $grapes[$i] = $vin_mod->getGrapesVineyard($vineyard->list_id)->toArray(); ?>
+									<?php if(!empty($grapes[$i])):?>
+										<?php foreach($grapes[$i] as $grape) :?>
+											'<span style="font-size: 12px;"><?php echo $grape == $grapes[$i][count($grapes[$i])-1 ] ? $grape['name'] : $grape['name'] .' / ' ?></span>'+
+										<?php endforeach;?>
+									<?php else:?>
+										'<span style="font-size: 12px;"><?php echo $this->translate("Don`t know")?></span>'+
+									<?php endif;?>
+								'</p>'+
+								'<div class="oneLine">'+
+										'<p class="greenText">Free Wine Tasting Available:</p>'+
+										'<span style="font-size: 12px;"><?php echo $vineyard['tasting'] != 3 ? ($vineyard['tasting'] == 2 ? $this->translate('No') : $this->translate('Yes')) : 'Don`t know'?></span>'+
+								'</div>'+	
+							'</div>'+
+						'</div>';
+					marker_v[<?php echo $i?>]['id']			= '<?php echo $vineyard->list_id ?>';
+					marker_v[<?php echo $i?>]['status']		= '<?php echo $vineyard->status ?>';
+					marker_v[<?php echo $i?>]['continent']	= '<?php echo $vineyard->count_id ?>';
+					marker_v[<?php echo $i?>]['country']		= '<?php echo $vineyard->coun_id ?>';				
+					marker_v[<?php echo $i?>]['pid']			= '<?php echo $vineyard->reg_id ?>';
+					marker_v[<?php echo $i?>]['reg']			= '<?php echo $vineyard->reg_id ?>';
+
+					google.maps.event.addListener(marker_v[<?php echo $i?>], 'click', function() {
+						if(infowindow) {
+							infowindow.setContent(this['content']);
+							infowindow.open(map,this);
+						} else {
+							infowindow = new google.maps.InfoWindow({content: this['content']});
+							infowindow.open(map,this);
+						}
+					});
+					<?php $i++?>
+				<?php endif;?>	
+			<?php endforeach;?>
+			<?php $i=0;?>
+			<?php foreach($this->wines as $wine) :?>
+				<?php if((!empty($_SESSION['loc_y']) && !empty($_SESSION['loc_y'])) && ($_SESSION['loc_y'] == $wine->loc_y && $_SESSION['loc_z'] == $wine->loc_z)):?>
+					var loc_y = <?php echo $wine->loc_y-0.00001?>;
+					var loc_z = <?php echo $wine->loc_z+0.00001?>;
+				<?php else:?>
+					var loc_y = <?php echo $wine->loc_y+0.00001?>;
+					var loc_z = <?php echo $wine->loc_z+0.00001?>;
+				<?php endif;?>
+				<?php $_SESSION['loc_y'] = $wine->loc_y?>
+				<?php $_SESSION['loc_z'] = $wine->loc_z?>					
+				var center = new google.maps.LatLng(loc_y, loc_z);
+				marker_w[<?php echo $i?>] = new google.maps.Marker({
+											position: center,
+											map: map, 
+											icon: '/images/wine/wine_logo.png', 
+											title: '<?php echo $wine->name?>'
+										});
+										<?php $par_alias = Main::getAliasParent($wine['reg_alias']);?>
+				marker_w[<?php echo $i?>]['content'] = 
+						'<div class="map_wine" style="width: 300px; height: 150px;">'+
+							'<div class="floatLeft" style="width: 117px;">'+
+								'<div class="img">'+
+									'<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/view-vineyard/<?php echo $wine['country_alias']?>/<?php echo main::getParent1($wine['reg_alias'])?>/<?php echo $wine['alias'] ?>#wines"><img src="<?php echo $this->baseUrl()?>/images/wine/<?php echo !empty($wine->image) ? $wine->image : 'default_wine.png'?>" width="100px"  style="float: left; margin-right: 15px; margin-bottom: 15px; border: 1px solid #A7ADB2;"></a>'+
+								'</div>'+
+								'<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/view-vineyard/<?php echo $wine['country_alias']?>/<?php echo main::getParent1($wine['reg_alias'])?>/<?php echo $wine['alias'] ?>#wines" class="moreLink">More info</a>'+
+							'</div>'+
+							'<div class="floatRight" style="width: 168px; margin-left: 15px;">'+
+								'<h6 style="font-size: 14px; font-weight: bold; margin-bottom: 5px;"><?php echo $wine->name?></h6>'+
+								'<ul class="breadcrumbs">'+
+									'<li><a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-country/<?php echo $wine['country_alias']?>"><?php echo $wine['country']?></a></li>'+
+									'<?php echo !empty($par_alias) ? '<li class="sep"></li>' : ''?>'+
+									'<li><a href="<?php echo !empty($par_alias) ? $this->baseUrl() . '/' . $_SESSION['lang'] . '/main/view-region/' . $reg_mod ->getRegionByAlias($par_alias['alias'])->country_alias . '/' . main::getParent1($par_alias['alias']) : ''?>"><?php echo !empty($par_alias) ? $par_alias['name'] : ''?></a></li>'+
+									'<li class="sep"></li>'+
+									'<li><a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-region/<?php echo $reg_mod ->getRegionByAlias($wine->reg_alias)->country_alias?>/<?php echo main::getParent1($wine->reg_alias) ?>"><?php echo $wine['ass_region'] ?></a></li>'+
+									'<li class="sep"></li>'+
+									'<li><a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/view-vineyard/<?php echo $wine->country_alias?>/<?php echo main::getParent1($wine->reg_alias)?>/<?php echo $wine->alias?>"><?php echo $wine->vineyard_name?></a></li>	'+
+								'</ul>'+								
+								<?php if(!empty($wine->type)):?>
+									'<p class="marginBottom"><span class="greenText"><?php echo $this->translate("Wine Type") ?>:</span>'+
+										'<span style="font-size: 12px; color: #35424A;"> <?php echo $wine->type?></span>'+
+									'</p>'+
+								<?php endif;?>	
+								'<p class="marginBottom"><p class="greenText"><?php echo $this->translate("Principle Grapes") ?>:</p>'+
+								<?php $grapes_wine[$i] = unserialize($wine->grapes)?>
+								<?php if(is_array($grapes_wine[$i]) && !empty($grapes_wine[$i]) && !empty($grapes_wine[$i][0])):?>
+									<?php foreach($grapes_wine[$i] as $grape_wine) :?>
+										'<span style="font-size: 12px;"><?php echo $grape_wine == $grapes_wine[$i][count($grapes_wine[$i])-1 ] ?  $grape_mod->getGrapeById($grape_wine)->name : $grape_mod->getGrapeById($grape_wine)->name ." / " ?></span>'+
+									<?php endforeach;?>
+								<?php else:?>
+									'<span style="font-size: 12px;"><?php echo $this->translate("Don`t know")?></span>'+
+								<?php endif;?>
+								'</p>'+
+							'</div>'+	
+					'</div>';
+
+				marker_w[<?php echo $i?>]['id'] = '<?php echo $wine->id ?>';
+				marker_w[<?php echo $i?>]['status'] = '<?php echo $wine->status ?>';
+				marker_w[<?php echo $i?>]['continent'] = '<?php echo $wine->count_id ?>';
+				marker_w[<?php echo $i?>]['country'] = '<?php echo $wine->coun_id ?>';
+				marker_w[<?php echo $i?>]['pid'] = '<?php echo $wine->reg_id ?>';
+				marker_w[<?php echo $i?>]['reg'] = '<?php echo $wine->reg_id ?>';
+
+				google.maps.event.addListener(marker_w[<?php echo $i?>], 'click', function() {
+					if(infowindow) {
+						infowindow.setContent(this['content']);
+						infowindow.open(map,this);
+					} else {
+						infowindow = new google.maps.InfoWindow({content: this['content']});
+						infowindow.open(map,this);
+					}
+				});
+				<?php $i++?>
+			<?php endforeach;?>
+			<?php unset($_SESSION['loc_y'])?>	
+			<?php unset($_SESSION['loc_z'])?>	
+			<?php $i=0;?>
+			<?php foreach($this->regions as $region) :?>
+				var center = new google.maps.LatLng(<?php echo $region->loc_y?>, <?php echo $region->loc_z?>);
+				marker_r[<?php echo $i?>] = new google.maps.Marker({
+											position: center,
+											map: map, 
+											icon: '/images/region/icon_region.png',
+											title: "<?php echo $region->name?> region"
+										});
+				marker_r[<?php echo $i?>]['content'] = 
+					'<div class="map_region" style="width: 300px;">'+
+						'<div class="floatLeft" style="width: 117px;">'+
+							'<div class="img">'+					
+								'<a class="name" href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-region/<?php echo $con_mod->getCountryByCode($region['country'])->alias ?>/<?php echo main::getParent1($region['alias'])?>"><img src="<?php echo $this->baseUrl()?>/images/region/<?php echo !empty($region->image) ? $region->image : 'default_region.png'?>" width="100px"  style="float: left; margin-right: 15px; margin-bottom: 15px; border: 1px solid #A7ADB2;"></a>'+
+							'</div>'+
+							'<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-region/<?php echo $con_mod->getCountryByCode($region['country'])->alias ?>/<?php echo main::getParent1($region['alias'])?>" class="moreLink">More info</a>'+
+						'</div>'+
+						'<div class="floatRight" style="width: 168px; margin-left: 15px;">'+
+							"<h6 style='font-size: 14px; font-weight: bold; margin-bottom: 5px;'><?php echo $region->name?> region</h6>"+
+							'<p class="marginBottom"><span class="greenText" style="font-size: 12px;"><?php echo $this->translate("Country") ?>:</span>'+
+								'<span style="font-size: 12px;"> <?php echo $region->country_name?></span>'+
+							'</p>'+
+							<?php if($region->pid != 0):?>
+							'<p class="marginBottom"><span class="greenText" style="font-size: 12px;"><?php echo $this->translate("Parent Region") ?>:</span>'+
+								'<span style="font-size: 12px;">' <?php echo $reg_mod->getAssRegionById($region->pid)->name?>'</span>'+
+							'</p>'+
+							<?php endif;?>
+							'<p><p class="greenText" style="font-size: 12px;"><?php echo $this->translate("Principle Grapes") ?>:</p>'+
+							<?php $grapes_reg[$i] = unserialize($region->grapes)?>
+							<?php if(is_array($grapes_reg[$i]) && !empty($grapes_reg[$i]) && !empty($grapes_reg[$i][0])):?>
+								<?php foreach($grapes_reg[$i] as $grape_reg) :?>
+									'<span style="font-size: 12px;"><?php echo $grape_reg == $grapes_reg[$i][count($grapes_reg[$i])-1 ] ? $grape_mod->getGrapeById($grape_reg)->name : $grape_mod->getGrapeById($grape_reg)->name .' / ' ?></span>'+
+								<?php endforeach;?>
+							<?php else:?>
+								'<span style="font-size: 12px;"><?php echo $this->translate("Don`t know")?></span>'+
+							<?php endif;?>
+							'</p>'+							
+						'</div>'+
+					'</div>';
+				marker_r[<?php echo $i?>]['id'] = '<?php echo $region->id?>';
+				marker_r[<?php echo $i?>]['continent'] = '<?php echo $region->cont_id ?>';
+				marker_r[<?php echo $i?>]['country'] = '<?php echo $region->country ?>';
+				marker_r[<?php echo $i?>]['pid'] = '<?php echo $region->pid ?>';
+				marker_r[<?php echo $i?>]['region'] = '<?php echo $region->id?>';
+				google.maps.event.addListener(marker_r[<?php echo $i?>], 'click', function() {
+					if(infowindow) {
+						infowindow.setContent(this['content']);
+						infowindow.open(map,this);
+					} else {
+						infowindow = new google.maps.InfoWindow({content: this['content']});
+						infowindow.open(map,this);
+					}
+				});
+				<?php $i++?>
+			<?php endforeach;?>	
+				
+		}			
+		/////////////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\		
+	
+		$('#continent').change(function () {
+			var continent = $(this).val();
+			var cont_text = $('#continent option:selected').text();
+			var continent = $('#continent option:selected').val();
+			if (continent == '0') {
+				$('#country').html('');
+				$('#country').attr('disabled', true);
+				return(false);
+			}
+			if(continent != '') {
+				$('#country').attr('disabled', true);
+				$.ajax({
+						url: SYS.siteUrl + 'ajaxselect',
+						type: 'POST',
+						dataType: 'json',
+						data: "continent=" + continent,
+						success: function(result) {
+								var options = '';
+								var select   =  '<select name="country" id="country">';
+								var selectval	=	$('#country').val();
+								$(result.country).each(function() {
+									if(selectval == $(this).attr('id')) {
+										options += '<option selected="selected" value="' + $(this).attr('id') + '">' + $(this).attr('title') + '</option>';
+									} else {
+										options += '<option value="' + $(this).attr('id') + '">' + $(this).attr('title') + '</option>';
+									}										
+								});
+								select	+=	options;
+								select	+=	'</select>';
+								$('#country').closest('.jNiceWrapper').replaceWith(select);
+								$('#country').closest('.oneLine').jNice();
+								if($('#all').attr("checked") == "checked"){
+									for(i in marker_r) {
+										if(marker_r[i]['continent'] != continent) {
+											marker_r[i].setMap(null);
+										} else {
+											marker_r[i].setMap(map);
+										}
+									}
+									for(i in marker_v) {
+										if(marker_v[i]['continent'] != continent) {
+											marker_v[i].setMap(null);
+										} else {
+											marker_v[i].setMap(map);
+										}
+									}
+									for(i in marker_w) {
+										if(marker_w[i]['continent'] != continent) {
+											marker_w[i].setMap(null);
+										} else {
+											marker_w[i].setMap(map);
+										}
+									}
+								}
+								$('#country').html(options);
+								$('#country').attr('disabled', false);
+								$('#ass_region').html('<option value="">'+translate('Select Associated Region')+'</option>');
+								$('#ass_region').attr('disabled', true);							
+								geocod(map, cont_text, 4);
+						}	
+				});
+			}
+		});
+
+		$('#country').live('change', function () {
+			var country = $(this).val();
+			var count_text = $('#country option:selected').text();
+			if (country == '0') {
+				$('#ass_region').html('');
+				$('#ass_region').attr('disabled', true);
+				return(false);
+			}
+			if(country != '') {
+				$('#ass_region').attr('disabled', true);
+				$.ajax({
+						url: SYS.siteUrl + 'ajaxselect',
+						type: 'POST',
+						dataType: 'json',
+						data: "country=" + country,
+						success: function(result) {
+								var options = '';
+								var options = '';
+								var select		=  '<select name="ass_region" id="ass_region">';
+								var selectval	=	$('#ass_region').val();
+								$(result.ass_region).each(function() {
+									if(selectval == $(this).attr('id')) {
+										options += '<option selected="selected" value="' + $(this).attr('id') + '">' + $(this).attr('title') + '</option>';
+									} else {
+										options += '<option value="' + $(this).attr('id') + '">' + $(this).attr('title') + '</option>';
+									}
+								});	
+								select	+=	options;
+								select	+=	'</select>';	
+								$('#ass_region').closest('.jNiceWrapper').replaceWith(select);
+								$('#ass_region').closest('.oneLine').jNice();
+								if($('#all').attr("checked") == "checked"){
+									for(i in marker_r) {
+										if(marker_r[i]['country'] != country) {
+											marker_r[i].setMap(null);
+										} else {
+											marker_r[i].setMap(map);
+										}
+									}
+									for(i in marker_v) {
+										if(marker_v[i]['country'] != country) {
+											marker_v[i].setMap(null);
+										} else {
+											marker_v[i].setMap(map);
+										}
+									}
+									for(i in marker_w) {
+										if(marker_w[i]['country'] != country) {
+											marker_w[i].setMap(null);
+										} else {
+											marker_w[i].setMap(map);
+										}
+									}
+								}
+								$('#ass_region').html(options);
+								$('#ass_region').attr('disabled', false);
+								geocod(map, count_text, 5);
+						}
+				});
+			}
+		});
+		$('#ass_region').live('change', function () {
+			var region = $('#ass_region option:selected').val();
+			if(region != '') {
+				$.ajax({
+						url: SYS.siteUrl + 'ajaxselect',
+						type: 'POST',
+						dataType: 'json',
+						data: "region=" + region,
+						success: function(result) {
+							var e=0;
+							for(i in result.regions) {
+								var center_r = new google.maps.LatLng(result.regions[i]['loc_y'], result.regions[i]['loc_z']);
+								if(result.regions[i]['image'] != 'null'){
+									var image = '/images/region/'+result.regions[i]['image'];
+								} else {
+									var image = '/images/region/default_region.jpg';
+								}
+								marker_r[e] = new google.maps.Marker({
+															position: center_r,
+															map: map, 
+				//											icon: '/images/wine/wine_logo.png', 
+															title: result.regions[i]['name']
+														});		
+
+								marker_r[e]['content'] = 
+									'<div class="map_region" style="width: 300px; height: 200px;">'+
+									'<a href="/'+  lang +'/main/view-region/'+result.regions[i]['country_name']+'/'+result.regions[i]['par_alias']+'"><img src="'+image+'" style="float: left; margin-right: 15px; margin-bottom: 15px;"></a>'+
+									"<h4>"+result.regions[i]['name']+"</h4></a>"+
+									'<p>'+result.regions[i]['description']+'</p>'+
+									'</div>';
+								marker_r[i]['continent'] = result.regions[i]['cont_id'];
+								marker_r[i]['country'] = result.regions[i]['country'];
+								marker_r[i]['pid'] = result.regions[i]['pid'];
+								marker_r[i]['reg'] = result.regions[i]['id'];
+								google.maps.event.addListener(marker_r[e], 'click', function() {
+									if(infowindow) {
+										infowindow.setContent(this['content']);
+										infowindow.open(map,this);
+									} else {
+										infowindow = new google.maps.InfoWindow({content: this['content']});
+										infowindow.open(map,this);
+									}
+								});
+								e++;
+							}
+							if($('#all').attr("checked") == "checked"){
+								for(i in marker_r) {
+									if(marker_r[i]['pid'] != region ) {
+										marker_r[i].setMap(null);
+									} else {
+										marker_r[i].setMap(map);
+									}
+								}
+								for(i in marker_w) {
+									if(marker_w[i]['pid'] != region) {
+										marker_w[i].setMap(null);
+									} else {
+										marker_w[i].setMap(map);
+									}
+								}
+								for(i in marker_v) {
+									if(marker_v[i]['pid'] != region) {
+										marker_v[i].setMap(null);
+									} else {
+										marker_v[i].setMap(map);
+									}
+								}
+							}
+							centr = new google.maps.LatLng(result.region.loc_y, result.region.loc_z);
+							map.setCenter(centr);
+							map.setZoom(8);
+						}
+				})
+			}			
+		});
+		
+		$('#all').live('change', function () {
+			if($('#all').attr("checked") == "checked"){
+				$('#vin').attr('checked', true);
+				$('#win').attr('checked', true);
+				$('#reg').attr('checked', true);
+				$('#reg').next('span').addClass('jNiceChecked');
+				$('#vin').next('span').addClass('jNiceChecked');
+				$('#win').next('span').addClass('jNiceChecked');
+				for(i in marker_v) {
+					marker_v[i].setMap(map);
+				}
+				for(i in marker_w) {
+					marker_w[i].setMap(map);
+				}
+				for(i in marker_r) {
+					marker_r[i].setMap(map);
+				}
+
+				////////////////filter by status\\\\\\\\\\\\\\\\
+				if($('#verif').attr("checked") == "checked"){
+					for(i in marker_v) {
+						if(marker_v[i]['status'] == '1') {
+							marker_v[i].setMap(map);
+						}
+					}
+				} else {
+					for(i in marker_v) {
+						if(marker_v[i]['status'] == '1') {
+							marker_v[i].setMap(null);
+						}
+					}
+				}			
+
+				if($('#unver').attr("checked") == "checked"){
+					for(i in marker_v) {
+						if(marker_v[i]['status'] == '0') {
+							marker_v[i].setMap(map);
+						}
+					}
+				} else {
+					for(i in marker_v) {
+						if(marker_v[i]['status'] == '0') {
+							marker_v[i].setMap(null);
+						}
+					}	
+				}
+				///////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\
+			} else {
+				$('#vin').attr('checked', false);
+				$('#win').attr('checked', false);
+				$('#reg').attr('checked', false);
+				$('#reg').next('span').removeClass('jNiceChecked');
+				$('#vin').next('span').removeClass('jNiceChecked');
+				$('#win').next('span').removeClass('jNiceChecked');				
+				for(i in marker_r) {
+					marker_r[i].setMap(null);
+				}
+				for(i in marker_v) {
+					marker_v[i].setMap(null);
+				}
+				for(i in marker_w) {
+					marker_w[i].setMap(null);
+				}
+			}
+		})
+		
+		$('.type').live('change', function () {
+			if($('#reg').attr('checked') != 'checked' || $('#vin').attr('checked') != 'checked' || $('#win').attr('checked') != 'checked') {
+				$('#all').attr('checked', false);
+				$('#all').next('span').removeClass('jNiceChecked');
+			}
+			if($('#vin').attr("checked") == "checked"){
+				for(i in marker_v) {
+					marker_v[i].setMap(map);
+				}
+			} else {
+				for(i in marker_v) {
+					marker_v[i].setMap(null);
+				}
+			}
+			if($('#win').attr("checked") == "checked"){
+				for(i in marker_w) {
+					marker_w[i].setMap(map);
+				}
+			} else {
+				for(i in marker_w) {
+					marker_w[i].setMap(null);
+				}
+			}
+			
+			if($('#reg').attr("checked") == "checked"){
+				for(i in marker_r) {
+					marker_r[i].setMap(map);
+				}
+			} else {
+				for(i in marker_r) {
+					marker_r[i].setMap(null);
+				}
+			}
+			////////////////filter by status\\\\\\\\\\\\\\\\
+			if($('#verif').attr("checked") == "checked" && $('#vin').attr("checked") == "checked"){
+				for(i in marker_v) {
+					if(marker_v[i]['status'] == '1') {
+						marker_v[i].setMap(map);
+					}
+				}
+			} else {
+				for(i in marker_v) {
+					if(marker_v[i]['status'] == '1') {
+						marker_v[i].setMap(null);
+					}
+				}
+			}			
+		
+			if($('#unver').attr("checked") == "checked" && $('#vin').attr("checked") == "checked"){
+				for(i in marker_v) {
+					if(marker_v[i]['status'] == '0') {
+						marker_v[i].setMap(map);
+					}
+				}
+			} else {
+				for(i in marker_v) {
+					if(marker_v[i]['status'] == '0') {
+						marker_v[i].setMap(null);
+					}
+				}	
+			}
+			if($('#reg').attr("checked") == "checked" &&  $('#vin').attr("checked") == "checked" && $('#win').attr("checked") == "checked") {
+//				$('#vin').parent('span').addClass('vin');
+//				$('.vin').next('label').css('color', 'gray');
+//				$('#vin').parent('span').html('<img src="/images/ckeckbox-disabled.png">');
+//				$('#win').parent('span').addClass('win');
+//				$('.win').next('label').css('color', 'gray');
+//				$('#win').parent('span').html('<img src="/images/ckeckbox-disabled.png">');
+//				$('#reg').parent('span').addClass('reg');
+//				$('.reg').next('label').css('color', 'gray');
+//				$('#reg').parent('span').html('<img src="/images/ckeckbox-disabled.png">');	
+				for(i in marker_v) {
+					marker_v[i].setMap(map);
+				}
+				for(i in marker_w) {
+					marker_w[i].setMap(map);
+				}
+				for(i in marker_r) {
+					marker_r[i].setMap(map);
+				}
+				$('#all').next('.jNiceCheckbox').trigger('click');
+				////////////////filter by status\\\\\\\\\\\\\\\\
+				if($('#verif').attr("checked") == "checked"){
+					for(i in marker_v) {
+						if(marker_v[i]['status'] == '1') {
+							marker_v[i].setMap(map);
+						}
+					}
+				} else {
+					for(i in marker_v) {
+						if(marker_v[i]['status'] == '1') {
+							marker_v[i].setMap(null);
+						}
+					}
+				}			
+
+				if($('#unver').attr("checked") == "checked"){
+					for(i in marker_v) {
+						if(marker_v[i]['status'] == '0') {
+							marker_v[i].setMap(map);
+						}
+					}
+				} else {
+					for(i in marker_v) {
+						if(marker_v[i]['status'] == '0') {
+							marker_v[i].setMap(null);
+						}
+					}	
+				}
+			}						
+			////////////////////////////////////////////////
+		})
+		
+		$('.status').live('change', function() {
+			if($('#verif').attr("checked") == "checked"){
+				for(i in marker_v) {
+					if(marker_v[i]['status'] == '1') {
+						marker_v[i].setMap(map);
+					}
+				}
+
+			} else {
+				for(i in marker_v) {
+					if(marker_v[i]['status'] == '1') {
+						marker_v[i].setMap(null);
+					}
+				}
+
+			}			
+		
+			if($('#unver').attr("checked") == "checked"){
+				for(i in marker_v) {
+					if(marker_v[i]['status'] == '0') {
+						marker_v[i].setMap(map);
+					}
+				}
+
+			} else {
+				for(i in marker_v) {
+					if(marker_v[i]['status'] == '0') {
+						marker_v[i].setMap(null);
+					}
+				}	
+	
+				
+			}
+			///////////////////////////////////////////////
+		})
+		
+		var reg = window.location.hash.replace("#reg","");
+		if(reg > 0) {				
+			for(i in marker_v) {
+					marker_v[i].setMap(null);
+			}
+			for(i in marker_w) {
+				marker_w[i].setMap(null);
+			}			
+			if(reg in marker_v) {
+				for(i in marker_r) {
+					if(marker_r[i]['id'] != reg) {
+						marker_r[i].setMap(null);
+					} else {
+						marker_r[i].setMap(map);
+						map.setCenter(marker_r[i].position);
+						map.setZoom(9);
+					}
+				}
+			} else {	
+				for(i in marker_r) {
+					marker_r[i].setMap(null);
+				}	
+				$.ajax({
+						url: SYS.siteUrl + 'getregion',
+						type: 'POST',
+						dataType: 'json',
+						data: "region=" + reg,
+						success: function(result) {
+							var center = new google.maps.LatLng(result.loc_y, result.loc_z);
+							var length = marker_r.length;
+							marker_r[length] = new google.maps.Marker({
+														position: center,
+														map: map, 
+														icon: '/images/region/icon_region.png', 
+														title: result.name
+													});
+							if(result.image != '') {
+								var image =  'default_region.png';
+							} else {
+								var image =  result.image;
+							}					
+							marker_r[length]['content'] = 
+								'<div class="map_region" style="width: 300px;">'+
+								'<a class="name" href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-region/'+result.country_alias+'/'+result.region_alias+'"><img src="<?php echo $this->baseUrl()?>/images/region/'+image+'" width="100px"  style="float: left; margin-right: 15px; margin-bottom: 15px;"></a>'+
+								'<a class="name" href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-region/'+result.country_alias+'/'+result.region_alias+'">'+result.name+'</a>'+
+								'<p>' + result.description + '</p>'+
+								'</div>';
+							marker_r[length]['id'] = result.id;
+							marker_r[length]['continent'] = result.cont_id;
+							marker_r[length]['country'] = result.country;
+							marker_r[length]['pid'] = result.pid;
+							marker_r[length]['region'] = result.id;
+							google.maps.event.addListener(marker_r[length], 'click', function() {
+								if(infowindow) {
+									infowindow.setContent(this['content']);
+									infowindow.open(map,this);
+								} else {
+									infowindow = new google.maps.InfoWindow({content: this['content']});
+									infowindow.open(map,this);
+								}
+							});
+							map.setCenter(marker_r[length].position);
+							map.setZoom(9);
+						}	
+				});
+			}	
+		}
+		
+		var vin = window.location.hash.replace("#vin","");
+		if(vin > 0) {
+			for(i in marker_r) {
+				marker_r[i].setMap(null);
+			}
+			for(i in marker_v) {
+				if(marker_v[i]['id'] != vin) {
+					marker_v[i].setMap(null);
+				} else {
+					marker_v[i].setMap(map);
+					map.setCenter(marker_v[i].position);
+					map.setZoom(14);
+				}
+			}
+			for(i in marker_w) {
+				marker_w[i].setMap(null);
+			}
+		}
+
+		var win = window.location.hash.replace("#win","");
+		if(win > 0) {
+			for(i in marker_r) {
+				marker_r[i].setMap(null);
+			}
+			for(i in marker_w) {
+				if(marker_w[i]['id'] != win) {
+					marker_w[i].setMap(null);
+				} else {
+					marker_w[i].setMap(map);
+					map.setCenter(marker_w[i].position);
+					map.setZoom(14);
+				}
+			}
+			for(i in marker_v) {
+				marker_v[i].setMap(null);
+			}
+		}
+
+		var loc = window.location.hash.replace("#","");
+		var continent_id = '';
+		var continent_text = '';
+		if(loc == 'north-america'){
+			continent_id = '4';
+			continent_text = 'North America';
+		}
+		if(loc == 'south-america'){
+			continent_id = '5';
+			continent_text = 'South America';			
+		}
+		if(loc == 'europe'){
+			continent_id = '7';
+			continent_text = 'Europe';			
+		}
+		if(loc == 'africa'){
+			continent_id = '3';
+			continent_text = 'Africa';			
+		}
+		if(loc == 'asia'){
+			continent_id = '2';
+			continent_text = 'Asia';			
+		}
+		if(loc == 'oceania'){
+			continent_id = '9';
+			continent_text = 'Oceania';			
+		}
+		if(continent_id != '' && continent_text != ''){
+			for(i in marker_r) {
+				if(marker_r[i]['continent'] != continent_id) {
+					marker_r[i].setMap(null);
+				} else {
+					marker_r[i].setMap(map);
+				}
+			}
+			for(i in marker_v) {
+				if(marker_v[i]['continent'] != continent_id) {
+					marker_v[i].setMap(null);
+				} else {
+					marker_v[i].setMap(map);
+				}
+			}
+			for(i in marker_w) {
+				if(marker_w[i]['continent'] != continent_id) {
+					marker_w[i].setMap(null);
+				} else {
+					marker_w[i].setMap(map);
+				}
+			}
+			$.each($("#continent option"), function(){
+				if($(this).val() == continent_id) {
+					$(this).attr('selected', 'selected');
+					$.ajax({
+							url: SYS.siteUrl + 'ajaxselect',
+							type: 'POST',
+							dataType: 'json',
+							data: "continent=" + continent_id,
+							success: function(result) {
+								var options = '';
+								var select   =  '<select name="country" id="country">';
+								var selectval	=	$('#country').val();
+								$(result.country).each(function() {
+									if(selectval == $(this).attr('id')) {
+										options += '<option selected="selected" value="' + $(this).attr('id') + '">' + $(this).attr('title') + '</option>';
+									} else {
+										options += '<option value="' + $(this).attr('id') + '">' + $(this).attr('title') + '</option>';
+									}										
+								});
+								select	+=	options;
+								select	+=	'</select>';
+								$('#country').closest('.jNiceWrapper').replaceWith(select);
+								$('#country').closest('.oneLine').jNice();
+								$('#continent').closest('.oneLine').jNice();
+							}	
+					});					
+				}
+			})			
+			geocod(map, continent_text, 4);
+		}
+	});		
+
+	function geocod(map, address, zoom) {
+		geocoder.geocode( {'address': address}, function(results, status) {
+			if (status == google.maps.GeocoderStatus.OK) {
+				map.setCenter(results[0].geometry.location);
+				map.setZoom(zoom);
+			} 
+		});		 
+	}		
+</script>
+<form name="filter" id="filter" class="jNice">
+<div class="leftSidebar">
+	<div class="grayBox">
+		<h3 class="title noBg"><?php echo $this->translate('Filter') ?></h3>
+			<div class="filterBox">
+				<div class="oneLine"><input type="checkbox" name="option1" value="a1" id="all" checked><label for="all"><?php echo $this->translate('All Listings')?></label></div>
+				<div class="oneLine"><input type="checkbox" name="option1" value="a1" id="reg" checked class="type"><label for="reg"><?php echo $this->translate('Wine Regions')?></label></div>
+				<div class="oneLine"><input type="checkbox" name="option1" value="a1" id="vin" checked class="type"><label for="vin"><?php echo $this->translate('Vineyards/Wineries')?></label></div>
+				<div class="oneLine"><input type="checkbox" name="option1" value="a1" id="win" checked class="type"><label for="win"><?php echo $this->translate('Wines')?></label></div>
+			</div>
+			<h3 class="title noPaddingTop"></h3>
+			<h3 class="title noBg"><?php echo $this->translate('Filter Vineyards') ?></h3>
+			<div class="filterBox">
+				<div class="oneLine"><input type="checkbox" name="option1" value="a1" id="verif" class="status" checked><label for="verif"><?php echo $this->translate('Verified Listings')?></label></div>
+				<div class="oneLine"><input type="checkbox" name="option1" value="a1" id="unver" class="status" checked><label for="unver"><?php echo $this->translate('Unverified Listings')?></label></div>
+			</div>
+			<div class="shadow"></div>
+	</div>
+</div>	
+<div class="content showAsList">
+	<div class="chooseRegion">
+	<div class="oneLine">
+			<label for="continent" class="label1 required"><?php echo $this->translate('Continent')?></label>
+			<select name="continent" id="continent">
+			<?php $continentes = new Application_Model_Continents();?>
+				<option value=""><?php echo $this->translate('Select Continent')?></option>
+				<?php foreach ($continentes->getContinents(true) as $continent) :?>
+					<option value="<?php echo $continent->id?>" <?php echo !empty($this->continent) && $continent->id == $this->continent ? 'selected="selected"' : ''?>><?php echo $continent->name?></option>
+				<?php endforeach;?>
+			</select>
+		</div>
+		<div class="oneLine">
+			<label for="country" class="label1 required"><?php echo $this->translate('Country')?></label>
+			<select name="country" id="country">
+				<option value=""><?php echo $this->translate('Select Country')?></option>
+			</select>
+		</div>
+		<div class="oneLine">
+			<label for="ass_region" class="label1 required">Region</label>
+			<select name="ass_region" id="ass_region" <?php echo !empty($this->region) || !empty($this->country) ? '' : 'disabled="disabled"'?>>
+				<option value=""><?php echo $this->translate('Select Associated Region')?></option>
+			</select>
+		</div>
+	</div>
+	<ul class="tabs">
+		<li class="<?php echo $this->type == 'list' ? 'active' : ''?>"><a href="<?php echo $this->baseUrl()?>/<?php echo $_SESSION['lang']?>/search/list?type%5Ball%5D=all&amp;status%5Bverif%5D=verif&amp;status%5Bunver%5D=unver&amp;status%5Bclaim%5D=claim&amp;continent="><?php echo $this->translate('Show as List')?></a></li>
+		<li class="<?php echo $this->type == 'map' ? 'active' : ''?>"><a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/search/map"><?php echo $this->translate('Show on Map')?></a></li>
+	</ul>	
+	<div id="map_show" class="map-show"></div>
+</div>
+</form>
+<div class="popUpWrapper" id="myModal" style="display: none">
+	<div class="popUp">
+		<form name="claim" action="#" method="post" id="form_claim" class="jNice form">
+			<input type="hidden" name="listing" id="claim_list" value="">
+			<h3 class="title"><?php echo $this->translate('Claim Listing')?></h3>
+			<div class="flw borderBottom formSection">
+				<div class="oneLine">
+					<?php if(Zend_Auth::getInstance()->hasIdentity()):?>
+						<?php $user_mod = new Application_Model_Users();?>
+						<?php $user = $user_mod->getUserById(Zend_Auth::getInstance()->getIdentity()->id)?>
+						<?php $full_name = $user->name?>
+					<?php else:?>
+						<?php $full_name = '';?>
+					<?php endif;?>
+					<label for="name"><?php echo $this->translate('Full Name')?>*:</label>
+					<div class="wrapperInput"><?php echo $this->form1->getElement('name')->setValue($full_name)?></div>
+					<span id="name_error" class="error error_claim"><?php echo $this->translate('This information is required')?></span>
+				</div>
+				<div class="oneLine">
+					<label for="number"><?php echo $this->translate('Contact Number')?>*:</label>
+					<div class="wrapperInput"><?php echo $this->form1->number?></div>
+					<span id="number_error" class="error error_claim"><?php echo $this->translate('This information is required')?></span>
+				</div>
+				<div class="oneLine">
+					<label for="position"><?php echo $this->translate('Position in Business')?>*:</label>
+					<div class="wrapperInput"><?php echo $this->form1->position?></div>
+					<span id="position_error" class="error error_claim"><?php echo $this->translate('This information is required')?></span>
+				</div>
+				<div class="oneLine">
+					<label for="comment"><?php echo $this->translate('Comments')?>*:</label>
+					<div class="wrapperInput texarea"><?php echo $this->form1->comment?></div>
+					<div id="comment_error" class="error error_claim error_claim_comment"><?php echo $this->translate('This information is required')?></div>
+				</div>
+			</div>
+			<div class="textAlignCenter"><input type="submit" class="redSubmitBg" value="<?php echo $this->translate('Send Claim')?>" id="send_claim"/></div>
+		</form>
+	</div>
+</div>

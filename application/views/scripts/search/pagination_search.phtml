@@ -1,0 +1,23 @@
+<?php if ($this->pageCount && $this->pageCount > 1) :?>
+	<div class="textAlignCenter">
+		<ul class="paginator">
+			<?php if (isset($this->previous)) :?>
+				<li><a href="<?php echo $this->baseUrl?>/<?php echo $_SESSION['lang']?>/search/list/page/<?php echo $this->previous ?><?php echo !empty($this->get) ? '?' . $this->get : ''; ?>">« Prev</a></li>
+			<?php else :?>
+				<li class="inactive"><a href="<?php echo $this->baseUrl?>/<?php echo $_SESSION['lang']?>/search/list/page/<?php echo $this->previous ?><?php echo !empty($this->get) ? '?' . $this->get : ''; ?>">« Prev</a></li>
+			<?php endif;?>
+			<?php foreach ($this->pagesInRange as $page) :?>
+				<?php if ($page != $this->current) :?>
+					<li><a href="<?php echo $this->baseUrl?>/<?php echo $_SESSION['lang']?>/search/list/page/<?php echo $page ?><?php echo !empty($this->get) ? '?' . $this->get : ''; ?>"><?php echo $page; ?></a></li>
+				<?php else :?>
+					<li class="active"><?php echo $page; ?></li>
+				<?php endif;?>
+			<?php endforeach;?>  
+			<?php if (isset($this->next)) :?>
+			<li class="marginRightNone"><a href="<?php echo $this->baseUrl?>/<?php echo $_SESSION['lang']?>/search/list/page/<?php echo $this->next ?><?php echo !empty($this->get) ? '?' . $this->get : ''; ?>">Next »</a></li>
+			<?php else :?>
+				<li class="inactive marginRightNone"><a href="<?php echo $this->baseUrl?>/<?php echo $_SESSION['lang']?>/search/list/page/<?php echo $this->next ?><?php echo !empty($this->get) ? '?' . $this->get : ''; ?>">Next »</a></li>
+			<?php endif;?>
+		</ul>	
+	</div>
+<?php endif;?>

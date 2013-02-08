@@ -1,0 +1,55 @@
+<div class="content">
+	<h2 class="title"><?php echo $this->translate('About Us')?></h2>
+	<div class="about">
+		<?php echo $this->page?>
+	</div>	
+</div>
+<aside>
+	<div class="lattestWines grayBox">
+		<h3 class="title"><?php echo $this->translate('Latest Wines Added')?></h3>
+		<?php $reg_mod = new Application_Model_Assregions();?>
+		<?php if(!empty($this->wines[0])) :?>
+			<?php $i = 0;?>
+			<?php foreach($this->wines as $wine) :?>
+				<?php $i++?>
+				<?php $par_alias = Main::getAliasParent($wine['reg_alias']);?>
+				<div class="box">
+					<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/view-vineyard/<?php echo $wine['country_alias']?>/<?php echo main::getParent1($wine['reg_alias'])?>/<?php echo $wine['alias'] ?>#wines"><img src="<?php echo $this->baseUrl()?>/images/wine/<?php echo !empty($wine->image) ? $wine->image : 'default_wine.png'?>" style="width:150px; height: 110px;" alt="wine <?php echo $wine->name?>"></a>	
+					<div class="descrBlock">
+						<a class="name" href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/view-vineyard/<?php echo $wine['country_alias']?>/<?php echo main::getParent1($wine['reg_alias'])?>/<?php echo $wine['alias'] ?>#wines"><?php echo $wine->name?></a>
+						<ul class="breadcrumbs">
+							<li><a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-country/<?php echo $wine['country_alias']?>"><?php echo $wine['country']?></a></li>
+							<?php echo !empty($par_alias) ? '<li class="sep"></li>' : ''?>
+							<li><a href="<?php echo !empty($par_alias) ? $this->baseUrl() . '/' . $_SESSION['lang'] . '/main/view-region/' . $reg_mod ->getRegionByAlias($par_alias['alias'])->country_alias . '/' . main::getParent1($par_alias['alias']) : ''?>"><?php echo !empty($par_alias) ? $par_alias['name'] : ''?></a></li>
+							<li class="sep"></li>
+							<li><a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-region/<?php echo $reg_mod ->getRegionByAlias($wine->reg_alias)->country_alias?>/<?php echo main::getParent1($wine->reg_alias) ?>"><?php echo $wine['ass_region'] ?></a></li>
+						</ul>
+						<?php if(!empty($wine->type)) :?>
+						<span><span class="greenText bold" ><?php echo $this->translate('Wine Type')?>: </span><?php echo $wine->type?></span>
+						<?php endif;?>
+						<?php if(!empty($wine->vintage)) :?>
+						<span><span class="greenText bold" ><?php echo $this->translate('Vintage')?>: </span><?php echo $wine->vintage?></span>
+						<?php endif;?>
+					</div>
+				</div>
+			<?php endforeach;?>
+		<?php else :?>
+			<h4><?php echo $this->translate('No Wines')?></h4>
+		<?php endif;?>						
+		<div class="shadow"></div>
+	</div>
+	<div class="mapBox">
+		<h3 class="title noBg"><?php echo $this->translate('Search by map')?></h3>
+		<div class="map"><img src="<?php echo $this->baseUrl()?>/images/map.png" alt="" />
+			<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/search/map#north-america" class="country northAmerica"><?php echo $this->translate('North America')?></a>
+			<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/search/map#south-america" class="country southAmerica"><?php echo $this->translate('South America')?></a>
+			<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/search/map#europe" class="country europe"><?php echo $this->translate('Europe')?></a>
+			<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/search/map#africa" class="country africa"><?php echo $this->translate('Africa')?></a>
+			<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/search/map#asia" class="country asia"><?php echo $this->translate('Asia')?></a>
+			<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/search/map#oceania" class="country australia"><?php echo $this->translate('Oceania')?></a>
+		</div>
+		<div class="shadow"></div>
+	</div>
+	<?php echo $this->render('holiday_organization/holiday_box.phtml');?>
+</aside>
+<?php echo $this->render('holiday_organization/holiday_form.phtml');?>

@@ -1,0 +1,164 @@
+<script>
+	var loc_y = <?php echo $this->vineyard['loc_y']?>;
+	var loc_z = <?php echo $this->vineyard['loc_z']?>;
+	var loc_yc = <?php echo $this->correct->loc_y?>;
+	var loc_zc = <?php echo $this->correct->loc_z?>;	
+</script>
+<div id="view-content" style="float:left; width: 498px;">
+		<h1>The original</h1>
+		<br>
+		<p>Name: <?php echo $this->vineyard['name'] ?></p>
+		<p>Name Local: <?php echo $this->vineyard['nameloc'] ?></p>
+		<input type="hidden" id="name" value="<?php echo $this->vineyard['name'] ?>" name="name">
+		<input type="hidden" id="list_alias" value="<?php echo $this->vineyard['alias'] ?>" name="list_alias">
+		<?php $user_mod = new Application_Model_Users();?>
+		<?php if($this->vineyard['owner'] == '1') :?>
+			<p>Propiretor: <?php echo $user_mod->getUserById($this->vineyard['owner'])->name ?></p>
+		<?php else:?>
+			<p>Propiretor: <?php echo $this->vineyard['proprietor'] ?></p>
+		<?php endif;?>
+		<p>Address1: <?php echo $this->vineyard['address1'] ?></p>
+		<p>Address2: <?php echo $this->vineyard['address2'] ?></p>
+		<p>Zip/Postal Code: <?php echo $this->vineyard['zip'] ?></p>
+		<?php $telephone = unserialize($this->vineyard['telephone']);?>
+		<p>Telephone Number: <?php echo  '+'. $telephone['country_code'] . ' ' . $telephone['city_code'] . ' ' . $telephone['telephone']?></p>
+		<p>E-mail address: <?php echo $this->vineyard['email'] ?></p>
+		<p>Web Address: <?php echo $this->vineyard['web'] ?></p>
+		<p>Continent :<?php echo $this->vineyard['continent'] ?></p>
+		<p>Country: <?php echo $this->vineyard['country'] ?></p>
+		<p>Wine Region: <?php echo $this->vineyard['ass_region'] ?></p>
+		<p>Location:</p>
+		<div id="map_canvas" style="width: 600px; height: 500px; margin-bottom: 8px;"></div>
+		<div id="location" style="margin-bottom:8px;">	
+			<p>Longitude:</p>
+			<p><?php echo $this->vineyard['loc_y'] ?></p>
+			<p>Latitude:</p>
+			<p><?php echo $this->vineyard['loc_z'] ?></p>
+		</div>
+		<p>Region: <?php echo $this->vineyard['region'] ?>
+		<p>City: <?php echo $this->vineyard['city'] ?>
+		<p>Individuals: <?php echo $this->vineyard['individuals'] == 1 ? 'Yes' : 'No'?></p>
+		<p>Visits: <?php echo $this->vineyard['visits'] == 1 ? 'Yes' : 'No'?></p>
+		<p>Groups: <?php echo $this->vineyard['groups'] == 1 ? 'Yes' : 'No'?></p>
+<!--		<p>Appointment: <?php // echo $this->vineyard['appointment'] == 1 ? 'Yes' : 'No'?></p>-->
+		<p>Tasting: <?php echo $this->vineyard['tasting'] == 0 ? 'Free' : ($this->vineyard['tasting'] == 1 ? 'Charged' :'Not available')?></p>
+		<p>Tour: <?php echo $this->vineyard['tour'] == 0 ? 'Free' : ($this->vineyard['tour'] == 1 ? 'Charged' :'Not available')?></p>
+		<p>Sales: <?php echo $this->vineyard['sales'] == 1 ? 'Yes' : 'No'?></p>
+		<p>Workshops: <?php echo $this->vineyard['workshops'] == 1 ? 'Yes' : 'No'?></p>
+		<p>Restaurant: <?php echo $this->vineyard['restaurant'] == 1 ? 'Yes' : 'No'?></p>
+		<p>Accommodation: <?php echo $this->vineyard['accommodation'] == 1 ? 'Yes' : 'No'?></p>
+		<p>Weddings: <?php echo $this->vineyard['weddings'] == 1 ? 'Yes' : 'No'?></p>
+		<p>Seminars: <?php echo $this->vineyard['seminars'] == 1 ? 'Yes' : 'No'?></p>
+		<?php if(!empty($this->spoken[0])) :?>
+			<p>Spoken: </p>
+			<?php foreach($this->spoken as $spoken) :?>
+			<p><?php echo $spoken->name?></p>
+			<?php endforeach;?>
+		<?php endif;?>
+		<br>
+		<?php if(!empty($this->wines)) :?>
+			<p>Wines: </p>
+			<?php $win_mod = new Application_Model_Wines();?>
+			<?php foreach($this->wines as $wine) :?>
+				<p><?php  echo $wine->name?>: vintage-<?php  echo $wine->vintage?></p>
+			<?php endforeach;?>
+		<?php endif;?>		
+</div>
+<div  class="correct_info" style="float:left; width: 700px; padding: 60px 2px 3px 100px;">
+	<h1>The correct</h1>
+	<br>
+		<p>Name: <?php echo $this->vineyard['name'] ?></p>
+		<p>Name Local: <?php echo $this->vineyard['nameloc'] ?></p>
+		<?php $user_mod = new Application_Model_Users();?>
+		<?php if($this->vineyard['owner'] == '1') :?>
+			<p>Propiretor: <?php echo $user_mod->getUserById($this->vineyard['owner'])->name ?></p>
+		<?php else:?>
+			<p>Propiretor: <?php echo $this->vineyard['proprietor'] ?></p>
+		<?php endif;?>
+		<p>Address1: <?php echo $this->vineyard['address1'] ?></p>
+		<p>Address2: <?php echo $this->vineyard['address2'] ?></p>
+		<p>Zip/Postal Code: <?php echo $this->vineyard['zip'] ?></p>
+		<?php $telephone = unserialize($this->vineyard['telephone']);?>
+		<p>Telephone Number: <?php echo  '+'. $telephone['country_code'] . ' ' . $telephone['city_code'] . ' ' . $telephone['telephone']?></p>
+		<p>E-mail address: <?php echo $this->vineyard['email'] ?></p>
+		<p>Web Address: <?php echo $this->vineyard['web'] ?></p>
+		<p>Continent :<?php echo $this->vineyard['continent'] ?></p>
+		<p>Country: <?php echo $this->vineyard['country'] ?></p>
+		<p>Wine Region: <?php echo $this->vineyard['ass_region'] ?></p>	
+	<p>Location:</p>
+	<div id="map_correct" style="width: 600px; height: 500px; margin-bottom: 8px;"></div>
+	<input type="hidden" value="<?php echo $this->correct->loc_y?>" name="loc_yc" id="loc_yc">
+	<input type="hidden" value="<?php echo $this->correct->loc_z?>" name="loc_zc" id="loc_zc">
+	<div id="location" style="margin-bottom:8px;">	
+		<p>Longitude:</p>
+		<p><?php echo $this->correct->loc_y ?></p>
+		<p>Latitude:</p>
+		<p><?php echo $this->correct->loc_z ?></p>
+	</div>	
+	<p>Region: <?php echo $this->vineyard['region'] ?>
+	<p>City: <?php echo $this->vineyard['city'] ?>	
+	<form name="cor_automat">
+	<input type="hidden" id="correct_id" value="<?php echo $this->correct->id?>">
+	<input type="hidden" id="listing_id" value="<?php echo $this->correct->listing?>">
+	<input type="hidden" id="user_id" value="<?php echo $this->correct->user?>">
+	<p>Individuals: <?php echo $this->correct->individuals == 1 ? 'Yes' : 'No'?></p>
+	<p>Visits: <?php echo $this->correct->visits == 1 ? 'Yes' : 'No'?></p>
+	<p>Groups: <?php echo $this->correct->groups == 1 ? 'Yes' : 'No'?></p>
+<!--	<p>Appointment: <?php // echo $this->correct->appointment == 1 ? 'Yes' : 'No'?></p>-->
+	<p>Tasting: <?php echo $this->correct->tasting == 0 ? 'Free' : ($this->correct->tasting == 1 ? 'Charged' :'Not available')?></p>
+	<p>Tour: <?php echo $this->correct->tour == 0 ? 'Free' : ($this->correct->tour == 1 ? 'Charged' :'Not available')?></p>
+	<p>Sales: <?php echo $this->correct->sales == 1 ? 'Yes' : 'No'?></p>
+	<p>Workshops: <?php echo $this->correct->workshops == 1 ? 'Yes' : 'No'?></p>
+	<p>Restaurant: <?php echo $this->correct->restaurant == 1 ? 'Yes' : 'No'?></p>
+	<p>Accommodation: <?php echo $this->correct->accommodation == 1 ? 'Yes' : 'No'?></p>
+	<p>Weddings: <?php echo $this->correct->weddings == 1 ? 'Yes' : 'No'?></p>
+	<p>Seminars: <?php echo $this->correct->seminars == 1 ? 'Yes' : 'No'?></p>
+	<?php if(unserialize($this->correct->spoken)) :?>
+		<p>Spoken: </p>
+		<?php $sp_mod = new Application_Model_Spokens();?>
+		<?php foreach(unserialize($this->correct->spoken) as $spoken) :?>
+		<p><?php echo $sp_mod->getSpokenById($spoken)->name?></p>
+		<?php endforeach;?>
+	<?php endif;?>
+	<br>
+	<?php if(unserialize($this->correct->vintage)) :?>
+		<p>Wines: </p>
+		<?php $win_mod = new Application_Model_Wines();?>
+		<?php foreach(unserialize($this->correct->vintage) as $key => $value) :?>
+			<p><?php echo $win_mod->getWineById($key)->name?>: vintage-<?php echo $value?></p>
+		<?php endforeach;?>
+	<?php endif;?>
+	<a data-toggle="modal" href="#canCorrect" class="btn btn-danger">Cancel correction</a>
+	<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/editcorrectvineyard/type/edit/correct/<?php echo $this->correct->id?>" class="btn btn-danger">Correct and Edit</a>
+	<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/editcorrectvineyard/type/auto/correct/<?php echo $this->correct->id?>" class="btn btn-danger">Automatical Correct</a>
+	</form>
+</div>
+<div class="clear"></div>
+<div id="editCorrect" class="modal hide fade">
+	<div class="modal-header">
+		<a class="close" data-dismiss="modal" >&times;</a>
+		<h3>Edit Correct</h3>
+	</div>
+	<div class="modal-body">
+		<label>Comment by Edit Correct:</label>
+		<div class="input">
+			<textarea name="comment" id="edit_comment" rows="15" cols="80"></textarea>
+		</div>
+		<br>
+		<input type="button" class="btn btn-danger" id="edit" value="Correct and Edit">
+	</div>
+</div>
+<div id="canCorrect" class="modal hide fade">
+	<div class="modal-header">
+		<a class="close" data-dismiss="modal" >&times;</a>
+		<h3>Reject Correct</h3>
+	</div>
+	<div class="modal-body">
+		<label>Reject Comment:</label>
+		<div class="input">
+			<textarea name="comment" id="reject_comment" rows="15" cols="80"></textarea>
+		</div>
+		<br>
+		<input type="button" class="btn btn-danger" id="can_cor" value="Cancel correction">
+	</div>
+</div>

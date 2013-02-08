@@ -1,0 +1,310 @@
+/* line 1, ../sass/ie7.scss */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: normal;
+}
+
+/* line 5, ../sass/ie7.scss */
+.inputBox {
+  border-color: #fff;
+}
+
+/* line 9, ../sass/ie7.scss */
+.oneLine {
+  clear: both;
+  overflow: hidden;
+}
+
+/* line 14, ../sass/ie7.scss */
+.formSection {
+  overflow: hidden;
+}
+
+
+/* line 24, ../sass/ie7.scss */
+.container .form .redSubmitBg {
+  top: 20px;
+  position: relative;
+}
+
+/* line 31, ../sass/ie7.scss */
+span {
+  line-height: 16px;
+}
+
+/* line 37, ../sass/ie7.scss */
+.popUpWrapper .popUp .oneLine {
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+}
+/* line 41, ../sass/ie7.scss */
+.popUpWrapper .popUp .oneLine .wrapperInput {
+
+}
+/* line 44, ../sass/ie7.scss */
+.popUpWrapper .popUp .oneLine .error {
+  z-index: 100;
+  overflow: hidden;
+}
+
+.popUpWrapper .popUp .redSubmitBg {
+  z-index:600;
+}
+
+/* line 54, ../sass/ie7.scss */
+.headerWrapper .shadowBox {
+  z-index: -1;
+}
+
+/* line 59, ../sass/ie7.scss */
+.contentWrapper {
+  z-index: 10;
+}
+
+/* line 63, ../sass/ie7.scss */
+header {
+  overflow: hidden;
+}
+/* line 65, ../sass/ie7.scss */
+header .top {
+  margin-bottom: 7px;
+}
+/* line 68, ../sass/ie7.scss */
+header .top h2 {
+  margin-top: -1px;
+}
+/* line 73, ../sass/ie7.scss */
+header .top ul li {
+  line-height: 16px;
+}
+/* line 79, ../sass/ie7.scss */
+header .searchForm {
+  z-index: 100;
+}
+/* line 81, ../sass/ie7.scss */
+header .searchForm .searchDropdown {
+  left: 0;
+  top: 50px;
+  z-index: 1000000000;
+}
+
+/* line 90, ../sass/ie7.scss */
+.grayBox {
+  clear: both;
+}
+
+/* line 94, ../sass/ie7.scss */
+.contentWrapper {
+  margin-top: 0;
+}
+/* line 99, ../sass/ie7.scss */
+.contentWrapper .container aside {
+  position: relative;
+}
+/* line 106, ../sass/ie7.scss */
+.contentWrapper .container aside .lattestWines .box .descrBlock .name {
+  margin-top: 0;
+}
+/* line 113, ../sass/ie7.scss */
+.contentWrapper .container aside .adress {
+  height: 270px;
+}
+/* line 118, ../sass/ie7.scss */
+.contentWrapper .container aside .organiseHoliday .redSubmitBg {
+  width: 270px;
+}
+/* line 123, ../sass/ie7.scss */
+.contentWrapper .container aside .mapBox {
+  overflow: none;
+}
+/* line 127, ../sass/ie7.scss */
+.contentWrapper .container aside .shadow {
+  left: 0;
+}
+/* line 133, ../sass/ie7.scss */
+.contentWrapper .container .content .breadcrumbs {
+  overflow: hidden;
+  clear: both;
+}
+/* line 138, ../sass/ie7.scss */
+.contentWrapper .container .content .borderBottom {
+  overflow: hidden;
+  clear: both;
+}
+/* line 144, ../sass/ie7.scss */
+.contentWrapper .container .content .topWineRegion .shadow {
+  left: 0;
+}
+/* line 151, ../sass/ie7.scss */
+.contentWrapper .container .content .box .descrBlock span {
+  clear: both;
+}
+/* line 157, ../sass/ie7.scss */
+.contentWrapper .container .content .chooseRegion {
+  clear: both;
+  overflow: hidden;
+}
+/* line 161, ../sass/ie7.scss */
+.contentWrapper .container .content .chooseRegion .oneLine {
+  clear: none;
+}
+/* line 169, ../sass/ie7.scss */
+.contentWrapper .container .content .listRegion .listRegionItem .descr .listRegionBreadcrumbs {
+  clear: both;
+  overflow: hidden;
+}
+/* line 174, ../sass/ie7.scss */
+.contentWrapper .container .content .listRegion .listRegionItem .descr .showOnMap {
+  clear: both;
+  overflow: hidden;
+}
+/* line 179, ../sass/ie7.scss */
+.contentWrapper .container .content .listRegion .listRegionItem .descr .claimListing {
+  clear: both;
+  overflow: hidden;
+  top: 5px;
+  position: relative;
+}
+/* line 189, ../sass/ie7.scss */
+.contentWrapper .container .content .tabs {
+  overflow: hidden;
+  clear: both;
+  padding-left:1px;
+}
+/* line 193, ../sass/ie7.scss */
+.contentWrapper .container .content .tabs li {
+  position: relative;
+  z-index: 2;
+}
+/* line 200, ../sass/ie7.scss */
+.contentWrapper .container .content .showOnMap .grapeIcon {
+  z-index: 0;
+}
+/* line 204, ../sass/ie7.scss */
+.contentWrapper .container .content .showOnMap .grapeIcon .popup {
+  z-index: 1000000;
+  position: relative;
+}
+/* line 214, ../sass/ie7.scss */
+.contentWrapper .container .content .aboutVineyard .tabPage .oneLine label {
+  line-height: 16px;
+}
+/* line 218, ../sass/ie7.scss */
+.contentWrapper .container .content .aboutVineyard .tabPage .oneLine .long {
+  width: 118px;
+}
+/* line 223, ../sass/ie7.scss */
+.contentWrapper .container .content .aboutVineyard .tabPage .otherFacilities {
+  clear: both;
+}
+/* line 230, ../sass/ie7.scss */
+.contentWrapper .container .content .aboutVineyard .tabPage .vinesWines .vinesWinesTable tr td {
+  border-bottom: 1px solid #a2a8ac;
+}
+/* line 234, ../sass/ie7.scss */
+.contentWrapper .container .content .aboutVineyard .tabPage .vinesWines .vinesWinesTable tr td.label {
+  /*                                   border-bottom:1px solid #a2a8ac;
+                                     border-right:none;*/
+}
+/* line 241, ../sass/ie7.scss */
+.contentWrapper .container .content .aboutVineyard .tabPage .vinesWines .vinesWinesTable .noBorderBottom td {
+  border-bottom: none !important;
+}
+/* line 254, ../sass/ie7.scss */
+.contentWrapper .container .leftSidebar .filterBox .oneLine label {
+  line-height: 16px;
+}
+/* line 265, ../sass/ie7.scss */
+.footerWrapper footer .copyright {
+  line-height: 16px;
+}
+.topWineRegion  {
+  padding-bottom:15px;
+}
+
+.container aside .lattestWines .box .descrBlock ul {
+  clear:both;
+  float:none;
+  overflow:hidden;
+}
+
+.container aside .lattestWines .box .descrBlock ul li {
+  display:block;
+  overflow:hidden;
+}
+
+.container aside .grayBox .list li ul {
+  clear:both;
+  float:none;
+  overflow:hidden;
+}
+
+.container aside .grayBox .list li ul li {
+  display:block;
+  overflow:hidden;
+}
+
+aside .textAlignCenter {
+  /*height:38px*/;
+  overflow:hidden;
+  width:100%;
+}
+
+.neighbordhood .title {
+  padding-top:20px !important;
+}
+
+.neighbordhood .shadow {
+  bottom:-30px !important;
+}
+
+header  ul li {
+  position:relative;
+  z-index:100000;
+}
+
+header  ul {
+  position:relative;
+  z-index:10000;
+}
+
+.headerWrapper .top ul li .loginDropdown form .checkboxLabel {
+  line-height:22px !important;
+}
+
+.selectPicture {
+  line-height:12px;
+}
+
+.oneLine .helpWrapper {
+left:10px;
+}
+
+.inv_select {
+  clear:none;
+}
+
+.featureUpdates label {
+  line-height:21px !important;
+}
+
+.container .showAsList {
+overflow:hidden;
+   position:relative;
+}
+
+.recaptcha_nothad_incorrect_sol {
+  position:relative;
+}
+
+.recaptcha_area {
+  position:relative;
+  overflow:hidden;
+}
+
+.editBlockHelp {
+	z-index: 999999 !important;
+}
+
+.editBlock {
+	z-index: 999999 !important;
+}

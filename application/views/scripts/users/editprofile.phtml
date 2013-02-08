@@ -1,0 +1,177 @@
+<form enctype="multipart/form-data" action="<?php echo $this->form->getAction()?>" method="post" id="profile"  class="jNice form editprofile profile">
+	<h2 class="title borderBottom noBg"><?php echo $this->translate('Edit Profile')?></h2>
+	<a class="editLink" href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/users/changepassword"><?php echo $this->translate('Reset Password') ?></a>
+	<div class="flw borderBottom formSection">
+		<div class="oneLine">
+			<h5 class="sectionTitle"><?php echo $this->translate('Your LogIn &amp; Contact Details')?></h5>
+			<div class="oneLine">
+				<label for="name/username"><?php echo $this->translate('Display Name/Username')?>*:</label>
+				<div class="wrapperInput">
+					<div class="rounded tl"></div>
+					<div class="rounded tr"></div>
+					<div class="rounded br"></div>
+					<div class="rounded bl"></div>	
+					<?php echo $this->form->name;?>
+				</div>
+				<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please enter your name')?></span></div>
+			</div>
+		</div>	
+		<div class="oneLine">
+			<label for="email"><?php echo $this->translate('E-mail Address')?>*:</label>
+			<div class="wrapperInput">
+				<div class="rounded tl"></div>
+				<div class="rounded tr"></div>
+				<div class="rounded br"></div>
+				<div class="rounded bl"></div>
+				<?php echo $this->form->email;?>
+			</div>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please enter your e-mail address')?></span></div>
+		</div>
+		<?php /**
+		<div class="oneLine">
+			<label for="image"><?php echo $this->translate('Photo/avatar:') ?></label>
+			<div class="uploadImages">
+				<div id="user_image">
+					<?php echo !empty($this->avatar) ? '<img src="' . $this->baseUrl() . '/images/user/' . $this->avatar . '"></img><input type="hidden" name="image" value="' . $this->avatar . '">' : ''?>
+				</div>
+				<span class="btn btn-success fileinput-button">
+					<i class="icon-plus icon-white"></i>
+					<span class="selectPicture"><?php echo $this->translate('Change the avatar...') ?></span>
+					<input id="root" type="file" name="image">
+				</span>
+				<div id="image"></div>
+			</div>
+		</div>
+		*/?>
+		<div class="oneLine">
+			<label for="firstName"><?php echo $this->translate('First Name')?>*:</label>
+			<div class="wrapperInput">
+				<div class="rounded tl"></div>
+				<div class="rounded tr"></div>
+				<div class="rounded br"></div>
+				<div class="rounded bl"></div>
+				<?php echo $this->form->firstname;?>
+			</div>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please enter your first name')?></span></div>
+		</div>
+		<div class="oneLine">
+			<label for="surname"><?php echo $this->translate('Surname')?>*:</label>
+			<div class="wrapperInput">
+				<div class="rounded tl"></div>
+				<div class="rounded tr"></div>
+				<div class="rounded br"></div>
+				<div class="rounded bl"></div>
+				<?php echo $this->form->surname;?>
+			</div>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please enter your surname')?></span></div>
+		</div>
+		<div class="oneLine">
+			<label for="companyName"><?php echo $this->translate('Company Name')?>:</label>
+			<div class="wrapperInput">
+				<div class="rounded tl"></div>
+				<div class="rounded tr"></div>
+				<div class="rounded br"></div>
+				<div class="rounded bl"></div>
+				<?php echo $this->form->company;?>
+			</div>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please enter your company name')?></span></div>
+		</div>
+		<div class="oneLine">
+			<label for="country"><?php echo $this->translate('Country of Residence')?>*:</label>
+			<?php echo $this->form->country;?>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please select your country')?></span></div>
+		</div>		
+		<div class="oneLine">
+			<label for="zone"><?php echo $this->translate('Time Zone')?>:</label>
+			<?php echo $this->form->zone;?>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please select your time zone')?></span></div>
+		</div>		
+	</div>
+	<div class="flw borderBottom formSection interest">
+		<h5 class="sectionTitle"><?php echo $this->translate('What is your interest in Vintlas?')?></h5>
+		<span class="caption"><?php echo $this->translate('Please select one option only')?></span>
+		<div class="oneLine">
+			<input type="radio" name="involve" id="involve-1" value="1" <?php echo  $this->user['involve'] == 1 ? 'checked="checked"' : ''?>>
+			<label for="involve-1"><?php echo $this->translate('Are a wine tourist/interested in wine/planning to visit a vineyard?')?></label>
+		</div>
+		<span class="grayText"><?php echo $this->translate('OR')?></span>
+		<div class="oneLine marging-botton">
+			<input type="radio" name="involve" id="involve-2" value="2" <?php echo  $this->user['involve'] == 2 ? 'checked="checked"' : ''?>>
+			<label for="involve-2"><?php echo $this->translate('Are involved in the wine/wine tourism industry?')?></label>
+		</div>
+		<!-- <div class="oneLine inv_select">
+			<?php echo $this->form->inv_select;?>
+		</div> -->
+		<div class="oneLine inv_select floatLeft">
+			<input type="checkbox" value="Vineyard/Winery employee or owner" name="inv_select[]" <?php echo  in_array('Vineyard/Winery employee or owner', $this->user['inv_select']) ? 'checked="checked"' : ''?>>
+			<label for="involve-2"><?php echo $this->translate('Vineyard/Winery employee or owner')?></label>
+		</div>
+		<div class="oneLine inv_select floatLeft">
+			<input type="checkbox" value="Accommodation provider e.g. Hotel, Guest House etc." name="inv_select[]" <?php echo  in_array('Accommodation provider e.g. Hotel, Guest House etc.', $this->user['inv_select']) ? 'checked="checked"' : ''?>>
+			<label for="involve-2"><?php echo $this->translate('Accommodation provider e.g. Hotel, Guest House etc.')?></label>
+		</div>
+		<div class="oneLine inv_select floatLeft">
+			<input type="checkbox" value="Restaurant employee or owner" name="inv_select[]" <?php echo  in_array('Restaurant employee or owner', $this->user['inv_select']) ? 'checked="checked"' : ''?>>
+			<label for="involve-2"><?php echo $this->translate('Restaurant employee or owner')?></label>
+		</div>
+		<div class="oneLine inv_select floatLeft">
+			<input type="checkbox" value="Wine Retailer" name="inv_select[]" <?php echo  in_array('Wine Retailer', $this->user['inv_select']) ? 'checked="checked"' : ''?>>
+			<label for="involve-2"><?php echo $this->translate('Wine Retailer')?></label>
+		</div>
+		<div class="oneLine inv_select floatLeft">
+			<input type="checkbox" value="Wine Distributer/Wholesaler" name="inv_select[]" <?php echo  in_array('Wine Distributer/Wholesaler', $this->user['inv_select']) ? 'checked="checked"' : ''?>>
+			<label for="involve-2"><?php echo $this->translate('Wine Distributer/Wholesaler')?></label>
+		</div>
+		<div class="oneLine inv_select floatLeft">
+			<input type="checkbox" value="Wine tourism professional e.g. wine tour operator, tourism office, government official" name="inv_select[]" <?php in_array('Wine tourism professional e.g. wine tour operator, tourism office, government official', $this->user['inv_select']) ? 'checked="checked"' : ''?>>
+			<label for="involve-2"><?php echo $this->translate('Wine tourism professional e.g. wine tour operator, tourism office, government official')?></label>
+		</div>
+		<div class="oneLine inv_select floatLeft">
+			<input type="checkbox" value="Other" name="inv_select[]" id="inv_select-Other" <?php echo in_array('Other', $this->user['inv_select']) ? 'checked="checked"' : ''?>>
+			<label for="involve-2"><?php echo $this->translate('Other. Please state')?></label>
+			<div class="oneLine other" style="display: none">
+				<label for="other"><?php echo $this->translate('Other')?>:</label>
+				<div class="flw">
+					<div class="wrapperInput">
+						<div class="rounded tl"></div>
+						<div class="rounded tr"></div>
+						<div class="rounded br"></div>
+						<div class="rounded bl"></div>
+						<?php echo $this->form->other;?>
+					</div>
+					<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please enter other your interest Vintlas')?></span></div>
+				</div>
+			</div>
+		</div>	
+	</div>	
+	<div class="flw borderBottom formSection privacyContacting">
+		<h5 class="sectionTitle"><?php echo $this->translate('Your Privacy Controls &amp; Contacting You')?></h5>
+		<span class="caption"><?php echo $this->translate('We do not share your data to third parties. You can view our full Privacy Policy')?> <a href="#">here</a>.</span>
+		<span class="bold"><?php echo $this->translate('New Features &amp; Updates from Vintlas')?></span>
+		<div class="oneLine">
+			<label class="label-privacy" for="email_update"><?php echo $this->translate('Please send me occasional email updates about new features and special offers from Vintlas.com.')?></label>
+			<div class="radioBox">
+				<input type="radio" name="email_update" value="1" <?php echo $this->user['email_update'] == 1 ? 'checked="checked"' : ''?>/>
+				<span class="radoiLabel"><?php echo $this->translate('Yes')?></span>
+			</div>
+			<div class="radioBox">
+				<input type="radio" name="email_update" value="0" <?php echo $this->user['email_update'] == 0 ? 'checked="checked"' : ''?>/>
+				<span class="radoiLabel"><?php echo $this->translate('No')?></span>
+			</div>
+		</div>
+		<span class="bold"><?php echo $this->translate('Sponsor Offers')?></span>
+		<div class="oneLine">
+			<label class="label-privacy" for="email_ofers"><?php echo $this->translate("Please send me relevant &amp; targeted email offers from Vintlas.com's affiliated web sites &amp; carefully selected companies (Maximum 2 permonth)")?></label>
+			<div class="radioBox">
+				<input type="radio" name="email_ofers" value="1" <?php echo $this->user['email_ofers'] == 1 ? 'checked="checked"' : ''?>/>
+				<span class="radoiLabel"><?php echo $this->translate('Yes')?></span>
+			</div>
+			<div class="radioBox">
+				<input type="radio" name="email_ofers" value="0" <?php echo $this->user['email_ofers'] == 0 ? 'checked="checked"' : ''?>/>
+				<span class="radoiLabel"><?php echo $this->translate('No')?></span>
+			</div>
+		</div>
+		<span class="caption lastCaption"><?php echo $this->translate('By completing registration you acknowledge our')?>  <a href="#"><?php echo $this->translate('Privacy Policy ')?></a><?php echo $this->translate('and agree')?> <a href="#"><?php echo $this->translate('Terms and Conditions')?></a>.</span>
+	</div>	
+	<div class="textAlignCenter"><?php echo $this->form->getElement('register')->setLabel('Edit Profile');?></div>
+</form>

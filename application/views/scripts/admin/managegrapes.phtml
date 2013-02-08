@@ -1,0 +1,34 @@
+<div id="view-content">
+	<h2><?php echo $this->message ?></h2>
+	<b><a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/admin/addgrape">Add New Grape</a></b>
+	<?php if(count($this->paginator)) :?>
+		<table class="table table-bordered table-striped">
+			<thead>
+				<tr>
+					<th class="span1">Grape Name</th>
+					<th class="span1">Grape Other Name</th>
+					<th class="">Characteristics</th>
+					<th class="">Data last change</th>
+					<th class="option-th span3">Options</th>
+				</tr>
+			</thead>
+			<tbody>
+			<?php foreach($this->paginator as $grape):?>
+				<tr>
+					<td><?php echo $this->escape($grape['name']) ?></td>
+					<td><?php echo $this->escape($grape['other_name']) ?></td>
+					<td><?php echo $this->escape($grape['characteristics']) ?></td>
+					<td><?php echo $this->escape(date("d.m.Y H:i:s",$grape['update'])) ?></td>
+					<td class="options-td">
+						<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/admin/editgrape/<?php echo $grape['id']?>">Edit</a> - 
+						<a class="remove" href="#" rel="grape_<?php echo $grape['id']?>">Delete</a>
+					</td>
+				</tr>
+			<?php endforeach;?>
+			</tbody>
+		</table>
+	<?php echo $this->paginationControl($this->paginator, 'Sliding', 'users/pagination_users.phtml'); ?>
+	<?php else:?>
+		<p>No Grapes</p>
+	<?php endif;?>
+</div>

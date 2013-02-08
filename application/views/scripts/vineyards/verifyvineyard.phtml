@@ -1,0 +1,130 @@
+<script>
+	var loc_y = <?php echo $this->vineyard->loc_y?>;
+	var loc_z = <?php echo $this->vineyard->loc_z?>;
+</script>
+<div id="view-content" style="width: 1500px;">
+	<div class="left" style="float: left; width: 600px;  padding-left: 70px;">
+		<h2 style="color: red"><?php echo $this->vineyard->name?></h2>
+		<div class="vineyard_logo">
+			<img src="<?php echo $this->baseUrl()?>/images/vineyard/logo/<?php echo $this->vineyard->logo?>" style="margin: 15px;">
+		</div>
+		<div id="tab-content">
+			<div class="tab-pane" id="visiting">
+				<div class="welcome" style="border-bottom: 2px solid gainsboro; margin-bottom: 10px;">
+					<h3>This Vineyard Welcomes You</h3>
+					<p><span class="green" style="color: green; margin-right: 66px;">From Individuals:</span><?php echo $this->vineyard->individuals == 1 ?'Yes' : 'No' ?>
+					<p><span class="green" style="color: green; margin-right: 13px;">Wineyard Welcomes Visits:</span><?php echo $this->vineyard->visits == 1 ?'Yes' : 'No' ?>
+					<p><span class="green" style="color: green; margin-right: 87px;">From Groups:</span><?php echo $this->vineyard->groups == 1 ?'Yes' : 'No' ?>
+				</div>
+				<div class="tasting" style="border-bottom: 2px solid gainsboro; margin-bottom: 10px;">
+					<h3>Wine Tasting, Tours & Sales</h3>
+					<p><span class="green" style="color: green; margin-right: 61px;">Languages Spoken:</span>
+                                        <?php foreach($this->spokens as $spoken) :?>
+                                            <?php echo $spoken->name ?>
+										<?php endforeach;?>
+                                        </p>    
+                    <p><span class="green" style="color: green; margin-right: 97px;">Wine Tasting:</span><?php echo $this->vineyard->tasting == 0 ?'Free' : ($this->vineyard->tasting == 1 ? 'Charged' : 'Not available') ?>
+					<p><span class="green" style="color: green; margin-right: 115px;">Wine Tour:</span><?php echo $this->vineyard->tour == 0 ?'Free' : ($this->vineyard->tour == 1 ? 'Charged' : 'Not available') ?>
+					<p><span class="green" style="color: green; margin-right: 109px;">Wine Sales:</span><?php echo $this->vineyard->sales == 1 ?'Yes' : 'No' ?>
+					<p><span class="green" style="color: green; margin-right: 78px;">Wine Workshops:</span><?php echo $this->vineyard->workshops == 1 ?'Yes' : 'No' ?>
+				</div>
+				<div class="open_hourse" style="border-bottom: 2px solid gainsboro; margin-bottom: 10px;">
+					<h3><?php echo $this->translate('Opening Hours &amp; Seasons')?></h3>
+					<?php $i = 0; ?>
+					<?php foreach($this->seasons as $season) :?>
+						<?php $i = $i++ ?>
+						<div class="seasono">
+							<p><span class="green"  style="color: green;">Season <?php echo $i?>:</span> <?php echo $season->name ?><span class="green"  style="color: green; margin-left: 80px;"><?php echo $this->translate('Need a appointment?')?></span> <?php echo $season->appointment != 1 ? ($season->appointment == 0 ? $this->translate('No') : $this->translate("Don't know")) : $this->translate('Yes')?></p>
+							<p><?php echo !empty($season->date1) && !empty($season->date2) ? date('j F', $season->date1) . ' - ' . date('j F', $season->date2) : '' ?></p>
+							<?php $weeks = unserialize($season->weeks) ?>
+							<?php $week = is_array($weeks) ? $weeks[0] . ' to '. $weeks[count($weeks)-1] : ''?>
+							<p><?php echo !empty($season->time1) && !empty($season->time2) ? $week . ' - ' . $season->time1 . ' to ' . $season->time2 :  $week . '' ?></p>
+						</div>
+					<?php endforeach;?>
+				</div>				
+			</div>
+			<div class="tab-pane" id="stay">
+				<h3>Stay/Eat</h3>
+				<p><span class="green" style="color: green; margin-right: 112px;">Restaurant:</span><?php echo $this->vineyard->restaurant == 1 ?'Yes' : 'No' ?>
+				<p><span class="green" style="color: green; margin-right: 24px;">Accommodation Available:</span><?php echo $this->vineyard->accommodation == 1 ?'Yes' : 'No' ?>
+			</div>
+			<div class="tab-pane" id="facilities">
+				<h3>Other Facilities</h3>
+				<p><span class="green" style="color: green; margin-right: 66px;">Weddings:</span><?php echo $this->vineyard->weddings == 1 ?'Yes' : 'No' ?>
+				<p><span class="green" style="color: green; margin-right: 13px;">Corporate Seminars:</span><?php echo $this->vineyard->seminars == 1 ?'Yes' : 'No' ?>
+			</div>
+				<div class="tab-pane" id="vines">
+					<h3>Vines &amp; Wines</h3>
+					<?php if(!empty($this->wines[0])) :?>
+						<table>
+							<tr class="header-name">
+									<td class="span1">Wine Name</td>
+									<td class="span1">Wine Type</td>
+									<td class="span2">Grape Type</td>
+									<td class="span1">Vintage</td>
+									<td class="span1">Label</td>
+							</tr>
+							<?php foreach($this->wines as $wine) :?>
+								<tr>
+									<td><?php echo $wine['name']?></td>
+									<td><?php echo $wine['type']?></td>
+									<td><?php echo $wine['grapes']?></td>
+									<td>
+											<?php for($i = 1900; $i <= date('Y'); $i++) :?>
+												<?php echo $wine['vintage'] == $i ? $i : ''?>
+											<?php endfor;?>	
+									</td>
+									<td>
+										<img src="/images/wine/<?php echo !empty($wine['image']) ? $wine['image'] : 'default_wine.png'?>">
+									</td>
+								</tr>
+							<?php endforeach;?>
+						</table>
+						<div class="box-shadow-570"></div>
+					<?php else :?>
+						<p>No Wines</p>
+					<?php endif;?>	
+			</div>
+		</div>
+		<a  data-toggle="modal" href="#myModal" class="btn">Verify</a>
+	</div>
+	<div class="right" style="float: left; width: 500px; margin-left: 50px;">
+		<div class="contacts" style="height: 300px; background-color: ghostwhite;">
+			<div class="name_contacts">
+				<h3 style="color: red; border-bottom: 2px solid gainsboro; padding: 10px;"><?php echo $this->vineyard->name?></h3>
+			</div>
+			<div class="info_contacts">
+				<div class="logo_contacts" style="float: left; width: 200px; margin-right: 40px;">
+					<img src="<?php echo $this->baseUrl()?>/images/vineyard/logo/<?php echo $this->vineyard->logo?>" style="margin: 15px;">
+				</div>
+				<div class="description_contacts" style="float: left; width: 240px; margin-bottom: 30px;">
+					<p><?php echo !empty($this->vineyard->address) ? $this->vineyard->address . ',' : ''?></p>
+					<p><?php echo !empty($this->vineyard->zip) ? $this->vineyard->zip : ''?></p>
+					<p><?php echo !empty($this->vineyard->telephone) ? 'Tel: ' . $this->vineyard->telephone : ''?></p>
+					<p><?php echo !empty($this->vineyard->fax) ? 'Fax: '. $this->vineyard->fax : ''?></p>
+					<p><?php echo !empty($this->vineyard->email) ? '<a href="mailto:' . $this->vineyard->email . '">' . $this->vineyard->email . '</a>' : ''?></p>
+					<?php echo !empty($this->vineyard->proprietor) ? '<p>Proprietor/Owner:</p><p>' . $this->vineyard->proprietor . '</p>' : ''?>
+					<?php echo '<p>Date last update:</p><p>' . date("j F Y", $this->vineyard->update) . '</p>'?>
+					<?php echo !empty($this->vineyard->web) ? '<p><a href="' . $this->vineyard->web . '" target="_blank"</a>' . $this->vineyard->web . '</a></p>' : ''?>
+				</div>
+				<div class="clear"></div>
+			</div>
+		</div>
+		<div class="location" style="padding: 10px; border: 1px solid gainsboro; padding-right: 15px; padding-left: 15px; margin-top: 30px;">
+			<h3 style="color: red; border-bottom: 2px solid gainsboro; padding: 10px;">Map of location</h3>
+			<div id="map_canvas" style="height: 300px; width: 470px;"></div>
+		</div>
+	</div>
+	<div class="clear"></div>
+</div>
+<div id="myModal" class="modal hide fade">
+	<div class="modal-header">
+		<a class="close" data-dismiss="modal" >&times;</a>
+		<h3>Verify Listing</h3>
+	</div>
+	<div class="modal-body popup">
+		<input type="hidden" name="listing" id="verif_list" value="<?php echo $this->vineyard->id?>">
+		<p>Are you sure you want to make this list verifed?</p>
+		<input type="button" id="verif" class="btn btn-danger" value="Verify">
+	</div>
+</div>

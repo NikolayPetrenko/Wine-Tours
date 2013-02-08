@@ -1,0 +1,29 @@
+<table class="table table-bordered table-striped">
+	<thead>
+		<tr>
+			<th class="span2"><?php echo $this->translate('Name')?></th>
+			<th class=""><?php echo $this->translate('Telephone')?></th>
+			<th class=""><?php echo $this->translate('Position')?></th>
+			<th class=""><?php echo $this->translate('Comment')?></th>
+			<th class="option-th span3"><?php echo $this->translate('Actions')?></th>
+		</tr>
+	</thead>
+	<tbody>
+	<?php foreach($this->claimes as $claim) :?>
+		<tr>
+			<td><?php echo $this->escape($claim->name) ?></td>
+			<td><?php echo $this->escape($claim->number) ?></td>
+			<td><?php echo $this->escape($claim->position) ?></td>
+			<td><?php echo $this->escape($claim->comment) ?></td>
+			<td>
+				<?php if($claim->status == 0) :?>
+					<input data-claim="<?php echo $claim->id?>" type="button" class="claim_ok btn btn-danger" value="<?php echo $this->translate('Claim')?>">
+					<input data-claim="<?php echo $claim->id?>" type="button" class="claim_rej btn" value="<?php echo $this->translate('Reject')?>">
+				<?php else:?>
+					<input data-claim="<?php echo $claim->id?>" type="button" class="claim_rem btn btn-danger" value="<?php echo $this->translate('Remove')?>">
+				<?php endif;?>
+			</td>
+		</tr>
+	<?php endforeach;?>
+	</tbody>
+</table>

@@ -1,0 +1,581 @@
+header .searchForm .searchDropdown li a, .ui-autocomplete li a.ui-corner-all {
+	cursor: pointer;
+}
+
+header .searchForm .searchDropdown li a:hover, .ui-autocomplete li a.ui-corner-all:hover, .ui-state-hover{
+  background-color: #fcb3b4 !important;
+}
+
+ .ui-autocomplete {
+  width: 663px !important;
+  position: absolute;
+  background: #fff;
+  border: 1px solid #000;
+  max-height: 250px;
+  z-index: 100000000 !important;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.ui-autocomplete li a.ui-corner-all {
+  padding: 0 20px;
+  height: 30px;
+  line-height: 30px;
+  font-size: 24px;
+  text-decoration: none; 
+  width: 628px;
+  color: #35424a;
+  display: block;
+}
+
+a.redSubmitBg {
+	text-decoration: none;
+	line-height: 40px;
+	height: 38px;
+	display:inline-block;
+}
+
+.container aside .mapBox .map .asia {
+	top: 62px;
+	left: 254px;
+}
+
+.errors_mod {
+background: url("../images/errorIcon.png") no-repeat scroll 0 0 transparent;
+color: #BF0404;
+display: block;
+float: left;
+font-size: 12px;
+font-weight: bold;
+height: 19px;
+line-height: 22px;
+margin-left: 168px;
+padding-left: 23px;
+margin-top: 5px;
+}
+
+.number .errors_mod {
+  margin-top: -11px;
+}
+
+.errors_contact {
+	float: left;
+	display: block;
+	padding-left: 23px;
+	margin-left: 341px;
+	background: url("../images/errorIcon.png") no-repeat;
+	color: #BF0404;
+	height: 19px;
+	line-height: 17px;
+	position: absolute;
+	margin-top: 3px;
+}
+
+.input-chechbox {
+	margin-top: 0px;
+	margin-left: 0px;
+}
+
+.filter-show {
+/*  position: absolute;*/
+	padding-top: 26px;
+	font-size: 13px;
+	text-decoration: none;
+	line-height: 29px;
+	height: 29px;
+	display: inline-block;
+	border-width: 1px;
+	border-style: solid;
+	border-color: #730102 #570202 #3E0202;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-o-border-radius: 5px;
+	-ms-border-radius: 5px;
+	-khtml-border-radius: 5px;
+	border-radius: 5px;
+  behavior: url(/js/PIE.php);
+	font-family: 'NeoSansBold';
+	color: white;
+	background: url("../images/redSubmit.png") repeat-x;
+	cursor: pointer;
+	padding: 3px 15px 0;
+	display: block;
+	margin-top: 12px;
+	margin-left: 47px;
+}
+
+.filter-show:hover {
+  background-position:0 -41px;
+}
+
+.map-show {
+	height: 605px;
+	width: 728px;
+	margin-top: 30px;
+}
+
+.jNiceCheckboxDisabled {
+	background: url("../images/ckeckbox-disabled.png") no-repeat center top;
+	height: 13px;
+	width: 13px;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	z-index: 2;
+}
+
+.popUpWrapper, .popUp {
+/*  width: 495px !important;*/
+	background: white;
+	margin: 0 !important;
+	position: relative;
+}
+
+.vineyardimg {
+	border: 1px solid #A7ADB2;
+	margin: 20px 0 19px;	
+}
+
+#tab-content .active {
+	display: block;
+}
+
+#tab-content .inactive {
+	display: none;
+}
+
+.popUpCor {
+	width: 462px !important;
+}
+
+.errors_cor {
+	color:red;
+}
+
+.errors {
+	font-family: arial;
+	color: red;
+	font-size: 14px;
+	margin-top: 10px;
+}
+
+.selectPicture {
+/*  border-width: 1px;
+  border-style: solid;
+  border-color: #730102 #570202 #3E0202;
+  -webkit-border-radius: 5px;
+  -khtml-border-radius: 5px;
+  border-radius: 5px;*/
+	color: white;
+	/*background: url("../images/redSubmit.png") repeat-x;*/
+	cursor: pointer;
+	padding: 7px 7px 0;
+	display: block;
+	height: 16px;
+	font-size: 12px;
+}
+
+.fileinput-button {
+  border-width: 1px;
+	border-style: solid;
+	border-color: #730102 #570202 #3E0202;
+	-webkit-border-radius: 5px;
+	-khtml-border-radius: 5px;
+	border-radius: 5px;
+	  behavior: url(/js/PIE.php);
+	background: url("../images/redSubmit.png") repeat-x;
+}
+
+.fileinput-button:hover {
+  background-position:0 -42px;
+}
+
+#user_image {
+  width:150px;
+  min-height:100px;
+  margin-bottom:5px;
+  display:none;
+}
+
+.loginDropdown {
+	display: none;
+}
+
+.inv_select {
+	padding-left: 20px;
+}
+
+.link {
+	color: #004670;
+}
+
+.jNiceHidden {
+	height: 24px;
+}
+
+#modalinvise {
+	height: 100%;
+	width:100%;
+	position: fixed;
+	top:0;
+	left:0;
+}
+
+.flash_message {
+	text-align: center;
+	position: fixed;
+	background: #1B7304;
+	width: 1000px;
+	top: 200px;
+	height: 50px;
+	font-size: 26px;
+	line-height: 47px;
+	display: none;
+	color:#fff;
+}
+
+.oneLineRightSide {
+	position: relative;
+}
+
+.checkbox .editBlock {
+	left: 351px !important;
+}
+
+.oneLineRightSide .radiobox label.radioLabel {
+	width: 93px !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	display: inline !important;
+}
+
+.container .content .aboutVineyard .tabPage .editBlock {
+	width: 13px;
+	height: 16px;
+	background: url("../images/editBlockBg.png") no-repeat;
+	position: absolute;
+	float: left;
+	left: 355px;
+	display:none;
+}
+
+.map-show .map_region a {
+	font-size: 12px;
+	color: #004670;
+	line-height: 15px;
+}
+
+.map-show .map_wine a {
+	font-size: 12px;
+	color: #004670;
+	line-height: 15px;
+}
+
+.map-show .map_wine p {
+	font-size: 12px;
+	color: #1B7304;
+	margin-top: 5px;
+	line-height: 20px;
+}
+
+.table-bordered {
+    border: 1px solid #DDDDDD;
+    border-collapse: separate;
+    border-radius: 4px 4px 4px 4px;
+}
+
+.table {
+    margin-bottom: 18px;
+    width: 100%;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    max-width: 100%;
+}
+.table-bordered thead:first-child tr:first-child th:first-child, .table-bordered tbody:first-child tr:first-child td:first-child {
+    border-radius: 4px 0 0 0;
+}
+
+.table-bordered thead:first-child tr:first-child th, .table-bordered tbody:first-child tr:first-child th, .table-bordered tbody:first-child tr:first-child td {
+    border-top: 0 none;
+}
+
+.table thead:first-child tr th, .table thead:first-child tr td {
+    border-top: 0 none;
+}
+
+.table thead th {
+    vertical-align: bottom;
+}
+
+table .span2 {
+    float: none;
+    margin-left: 0;
+    width: 124px;
+}
+
+.table th {
+    font-weight: bold;
+}
+
+.table th, .table td {
+    border-top: 1px solid #DDDDDD;
+    line-height: 18px;
+    padding: 8px;
+    text-align: left;
+    vertical-align: top;
+}
+
+.table-striped tbody tr:nth-child(2n+1) td, .table-striped tbody tr:nth-child(2n+1) th {
+    background-color: #F9F9F9;
+}
+
+.table th, .table td {
+    border-top: 1px solid #DDDDDD;
+    line-height: 18px;
+    padding: 8px;
+    text-align: left;
+    vertical-align: top;
+	border-left: 1px solid #DDDDDD;
+}
+
+.user-listing {
+	margin-bottom: 15px;
+	margin-top: 10px;
+}
+
+.error_main {
+    background: url("../images/errorIcon.png") no-repeat scroll 0 0 transparent;
+    color: #BF0404;
+    display: block;
+    float: left;
+    font-size: 12px;
+	font-weight: bold;
+    height: 19px;
+    line-height: 22px;
+    margin-left: 0;
+    padding-left: 23px;
+	margin-top: 7px;
+}
+
+.claim-body {
+	min-height: 100px;
+}
+
+.claim-body p {
+	margin-bottom: 15px;
+	margin-left: 15px;
+}
+
+.claim-footer {
+	margin-left: 125px;
+}
+
+.claim-footer-reject {
+	margin-left: 40px;
+}
+
+.profile {
+	margin-top: 18px !important;
+}
+
+.error-login {
+    background: url("../images/errorIcon.png") no-repeat scroll 0 0 transparent;
+    color: #BF0404;
+	margin-top: -26px;
+    display: block;
+    font-size: 14px;
+	font-weight: bold;
+    height: 19px;
+    line-height: 22px;
+    margin-left: 0;
+    padding-left: 23px
+}
+
+.descr-forgot {
+	margin-top: 12px;
+}
+
+.bottom-login {
+	margin-bottom: 20px!important;
+}
+
+.wines-vin {
+	position: absolute;
+	margin-top: 29px;
+	margin-left: 10px;
+}
+
+.topWelcomes {
+	margin-top: 19px;
+}
+
+.oneLinePassword {
+	width: 1010px;
+}
+
+.select-other label {
+	margin-left: 478px !important;
+	width: 53px !important;
+}
+
+.search_query {
+	margin-bottom: 8px;
+}
+
+.search_alternative {
+	margin-bottom: 8px;
+	margin-top: 15px;
+}
+
+.results-list {
+	margin-top: 10px;
+	margin-left: 10px;
+	font-size: 15pt;
+}
+
+.wrapper {
+	display: none;
+}
+
+.footerWrapper {
+	display: none;
+}
+
+.error_claim {
+	font-size: 15px !important;
+}
+
+.error_claim_comment {
+	top: 134px !important;
+}
+
+.country-error {
+	margin-left: 3px !important;
+}
+
+.greyBold {
+	font-weight: bold !important;
+}
+
+.info-edit {
+	display: none;
+}
+
+.edit-lang {
+	float: left;
+	margin-bottom: 4px;
+}
+
+.contact-vineyard {
+	padding-left: 60px;
+	padding-top: 17px;
+}
+
+.terms {
+	margin-top: 20px;
+	padding-bottom: 20px;
+/*	border-bottom: 1px solid #7F7F7F;*/
+	background: url("/images/titleSep.png") repeat-x bottom;
+}
+
+.about {
+	margin-top: 10px;
+	padding-bottom: 20px;
+	background: url("/images/titleSep.png") repeat-x bottom;
+}
+
+.image-box {
+	width: 193px; 
+	height: 130px; 
+	margin-right: 18px; 
+	float: left;
+}
+
+.descrip-main {
+	margin-top: 0 !important;
+}
+
+.button_claim {
+	padding-top: 26px;
+	font-size: 13px;
+	text-decoration: none;
+	line-height: 23px;
+	display: inline-block;
+	border-width: 1px;
+	border-style: solid;
+	border-color: #730102 #570202 #3E0202;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-o-border-radius: 5px;
+	-ms-border-radius: 5px;
+	-khtml-border-radius: 5px;
+	border-radius: 5px;
+	behavior: url(/js/PIE.php);
+	font-family: 'NeoSansBold';
+	color: white;
+	background: url("../images/redSubmit.png") repeat-x;
+	cursor: pointer;
+	padding: 3px 10px 0;
+	margin-bottom: 10px;
+}
+
+.noPaddingTop {
+	padding: 0px 0 10px 15px !important;
+}
+
+.reg-descr {
+	width: 269px !important;
+}
+
+.marginBottom {
+	margin-bottom: 5px;
+}
+
+.bold-listing {
+	font-weight: 500;
+}
+
+.itali {
+	font-family: 'NeoSansItalic';
+	font-size: 12px;
+	display: block;
+	margin: 10px 0 5px;	
+	font-style: italic;
+}
+
+.button_claim1 {
+	padding-top: 26px;
+	font-size: 13px;
+	text-decoration: none;
+	line-height: 23px;
+	display: inline-block;
+	border-width: 1px;
+	border-style: solid;
+	border-color: #730102 #570202 #3E0202;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-o-border-radius: 5px;
+	-ms-border-radius: 5px;
+	-khtml-border-radius: 5px;
+	border-radius: 5px;
+	behavior: url(/js/PIE.php);
+	font-family: 'NeoSansBold';
+	color: white !important;
+	background: url("../images/redSubmit.png") repeat-x;
+	cursor: pointer;
+	padding: 3px 10px 0;
+	margin-top: 10px;
+/*	margin-bottom: 10px;*/
+}
+
+.season-name {
+	display: inline-block;
+	width: 210px;
+}
+
+.li-season {
+	margin-bottom: 15px !important;
+}

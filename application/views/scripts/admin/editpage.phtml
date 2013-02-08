@@ -1,0 +1,14 @@
+<div id="view-content">
+	<h2><?php echo $this->message ?></h2>
+	<form id="edit_page" action="<?php echo $this->baseUrl()?>/<?php echo $_SESSION['lang']?>/admin/editpage/<?php echo $this->id?>" method="post">
+		<input type="hidden" name="id" value="<?php echo $this->id?>">
+		<textarea name="text" id="text" class="contentPage" rows="12" cols="40" ><?php echo $this->page->text?></textarea>
+		<?php if(!empty($this->error)) :?>
+			<p class="warning">The field must not be empty</p>
+		<?php endif;?>
+		<div class="template-submit">
+			<input type="submit" class="btn btn-danger" value="Edit Page">
+			<a href="<?php echo $this->baseUrl()?>/<?php echo $_SESSION['lang']?>/admin/managepages" class="btn">Cancel</a>
+		</div>
+	</form>
+</div>

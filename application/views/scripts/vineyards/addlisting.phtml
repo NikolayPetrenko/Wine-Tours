@@ -1,0 +1,704 @@
+<form enctype="multipart/form-data" action="" method="post" id="add_listing" class="form jNice">
+	<h2 class="title borderBottom noBg"><?php echo $this->translate('Add a Vineyard/Winery')?></h2>
+	<div class="flw borderBottom formSection">
+		<div class="oneLine">
+			<label for="name"><?php echo $this->translate('Vineyard Name*')?>:</label>
+			<div class="wrapperInput">
+				<div class="rounded tl"></div>
+				<div class="rounded tr"></div>
+				<div class="rounded br"></div>
+				<div class="rounded bl"></div>
+				<?php echo $this->form->getElement('name')->setLabel('')->setAttrib('class', 'inputBox') ?>
+			</div>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please enter vineyard name')?></span></div>
+		</div>
+		<div class="oneLine">
+			<label for="location"><?php echo $this->translate('Vineyard Name in local Language (if different)')?>:</label>
+			<div class="wrapperInput">
+				<div class="rounded tl"></div>
+				<div class="rounded tr"></div>
+				<div class="rounded br"></div>
+				<div class="rounded bl"></div>
+				<?php echo $this->form->nameloc->setLabel('')->setAttrib('class', 'inputBox') ?>
+			</div>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please enter vineyard name in local language (if different)')?></span></div>
+		</div>
+		<div class="oneLine">
+			<label for=""><?php echo $this->translate('I am the Owner/Manager of this location')?>:</label>
+			<div class="radioBox">
+				<input type="radio" name="owner" id="owner-1" value="1"/>
+				<span class="radoiLabel"><?php echo $this->translate('Yes')?></span>
+			</div>
+			<div class="radioBox">
+				<input type="radio" name="owner" id="owner-0" value="0" checked="checked"/>
+				<span class="radoiLabel"><?php echo $this->translate('No')?></span>
+			</div>
+		</div>
+	</div>
+	<div class="flw borderBottom formSection">
+		<h5 class="sectionTitle"><?php echo $this->translate('Other Facilities')?></h5>
+		<div class="oneLine">
+			<label for="continent"><?php echo $this->translate('Continent')?>*:</label>
+			<?php echo $this->form->continent ?>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please select a continent in which the vineyard')?></span></div>
+		</div>		
+		<div class="oneLine">
+			<label for="country"><?php echo $this->translate('Country')?>*:</label>
+			<select name="country" id="country">
+				<option value="" label="Select country"><?php echo $this->translate('Select country')?></option>
+			</select>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please select a country in which the vineyard')?></span></div>
+		</div>
+		<div class="oneLine">
+			<label for="region"><?php echo $this->translate('Associated Wine Region')?>*:</label>
+			<select name="ass_region" id="ass_region">
+				<option value="" label="Select Associated Region"><?php echo $this->translate('Select Associated Region')?></option>
+			</select>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please select a associated region in which the vineyard')?></span></div>
+		</div>		
+	</div>	
+	<div class="flw borderBottom formSection">
+		<h5 class="sectionTitle"><?php echo $this->translate('Pinpoint Exact location on the Map OR Enter GPS Co-ordinates')?></h5>
+		<div class="mapBox">
+			<div id="map_canvas" class="map"></div>
+			<h5 class="sectionTitle textAlignCenter"><?php echo $this->translate('OR')?></h5>
+		</div>
+		<div class="oneLine">
+			<label for="gpsOne"><?php echo $this->translate('GPS Long')?>:</label>
+			<div class="wrapperInput">
+				<div class="rounded tl"></div>
+				<div class="rounded tr"></div>
+				<div class="rounded br"></div>
+				<div class="rounded bl"></div>
+				<?php echo $this->form->loc_y ?>
+			</div>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please enter GPS Long on the map of the vineyard')?></span></div>
+		</div>
+		<div class="oneLine">
+			<label for="gpsTwo"><?php echo $this->translate('GPS Lat')?>:</label>
+			<div class="wrapperInput">
+				<div class="rounded tl"></div>
+				<div class="rounded tr"></div>
+				<div class="rounded br"></div>
+				<div class="rounded bl"></div>
+				<?php echo $this->form->loc_z ?>
+			</div>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please enter GPS Lat on the map of the vineyard')?></span></div>
+		</div>
+	</div>	
+	<div class="flw borderBottom formSection">
+		<h5 class="sectionTitle"><?php echo $this->translate('Address Details')?></h5>
+		<div class="oneLine">
+			<label for="addres1"><?php echo $this->translate('Address 1')?>:</label>
+			<div class="wrapperInput">
+				<div class="rounded tl"></div>
+				<div class="rounded tr"></div>
+				<div class="rounded br"></div>
+				<div class="rounded bl"></div>
+				<?php echo $this->form->address1 ?>
+			</div>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please enter address 1 of the vineyard')?></span></div>
+		</div>
+		<div class="oneLine">
+			<label for="addres2"><?php echo $this->translate('Address 2')?>:</label>
+			<div class="wrapperInput">
+				<div class="rounded tl"></div>
+				<div class="rounded tr"></div>
+				<div class="rounded br"></div>
+				<div class="rounded bl"></div>
+				<?php echo $this->form->address2 ?>
+			</div>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please enter address 2 of the vineyard')?></span></div>
+		</div>
+		<div class="oneLine">
+			<label for="city"><?php echo $this->translate('City/Town')?>*:</label>
+			<div class="wrapperInput">
+				<div class="rounded tl"></div>
+				<div class="rounded tr"></div>
+				<div class="rounded br"></div>
+				<div class="rounded bl"></div>
+				<?php echo $this->form->city ?>
+			</div>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please enter city or town of the vineyard')?></span></div>
+		</div>
+		<div class="oneLine">
+			<label for="state"><?php echo $this->translate('Province/Region/State')?>:</label>
+			<div class="wrapperInput">
+				<div class="rounded tl"></div>
+				<div class="rounded tr"></div>
+				<div class="rounded br"></div>
+				<div class="rounded bl"></div>
+				<?php echo $this->form->region ?>
+			</div>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please enter province or region or state of the vineyard')?></span></div>
+		</div>
+		<div class="oneLine">
+			<label for="code"><?php echo $this->translate('Zip/Postal Code')?>:</label>
+			<div class="wrapperInput">
+				<div class="rounded tl"></div>
+				<div class="rounded tr"></div>
+				<div class="rounded br"></div>
+				<div class="rounded bl"></div>
+				<?php echo $this->form->zip ?>
+				</div>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please enter zip or postal code of the vineyard')?></span></div>
+		</div>
+	</div>
+	<div class="flw borderBottom formSection">
+		<h5 class="sectionTitle"><?php echo $this->translate('Contact Information')?></h5>
+		<div class="oneLine div_prop">
+			<label for="proprietor"><?php echo $this->translate('Proprietor Name')?>:</label>
+			<div class="wrapperInput">
+				<div class="rounded tl"></div>
+				<div class="rounded tr"></div>
+				<div class="rounded br"></div>
+				<div class="rounded bl"></div>
+				<?php echo $this->form->proprietor->setLabel('')->setAttrib('class', 'inputBox') ?>
+			</div>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please enter proprietor name vineyard')?></span></div>
+		</div>		
+		<div class="oneLine">
+			<label for="telephone"><?php echo $this->translate('Telephone Number')?>*:</label>
+			<div class="wrapperInput countryCode">
+				<div class="rounded tl"></div>
+				<div class="rounded tr"></div>
+				<div class="rounded br"></div>
+				<div class="rounded bl"></div>
+				<?php echo $this->form->country_code ?>
+			</div>
+			<div class="wrapperInput cityCode">
+				<div class="rounded tl"></div>
+				<div class="rounded tr"></div>
+				<div class="rounded br"></div>
+				<div class="rounded bl"></div>				
+				<?php echo $this->form->city_code ?>
+			</div>
+			<div class="wrapperInput telCode">
+				<div class="rounded tl"></div>
+				<div class="rounded tr"></div>
+				<div class="rounded br"></div>
+				<div class="rounded bl"></div>				
+				<?php echo $this->form->telephone ?>
+			</div>				
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please enter country code, area code, telephone number of the vineyard')?></span></div>				
+		</div>
+		<div class="oneLine">
+			<label for="fax"><?php echo $this->translate('Fax')?>:</label>
+			<div class="wrapperInput">
+				<div class="rounded tl"></div>
+				<div class="rounded tr"></div>
+				<div class="rounded br"></div>
+				<div class="rounded bl"></div>
+				<?php echo $this->form->fax ?>
+			</div>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please enter fax of the vineyard')?></span></div>
+		</div>
+		<div class="oneLine">
+			<label for="email"><?php echo $this->translate('E-mail address')?>:</label>
+			<div class="wrapperInput">
+				<div class="rounded tl"></div>
+				<div class="rounded tr"></div>
+				<div class="rounded br"></div>
+				<div class="rounded bl"></div>
+				<?php echo $this->form->email ?>
+			</div>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please enter e-mail address of the vineyard')?></span></div>
+		</div>
+		<div class="oneLine">
+			<label for="web"><?php echo $this->translate('Web address')?>:</label>
+			<div class="wrapperInput">
+				<div class="rounded tl"></div>
+				<div class="rounded tr"></div>
+				<div class="rounded br"></div>
+				<div class="rounded bl"></div>
+				<?php echo $this->form->web ?>
+			</div>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please enter web address of the vineyard')?></span></div>
+		</div>
+	</div>	
+	<div class="flw borderBottom formSection">
+		<h5 class="sectionTitle"><?php echo $this->translate('Images')?></h5>
+		<div class="oneLine">
+			<label for="logo"><?php echo $this->translate('Vineyard Logo')?>:</label>
+			<input id="root9" type="file" name="logo">
+			<div class="spiner" id="logo"></div>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please upload vineyard logo')?></span></div>
+		</div>
+		<div id="vineyard_logo"></div>
+		<div class="oneLine">
+			<label for="images"><?php echo $this->translate('Images of Property')?>:</label>
+			<input id="root10" type="file" name="photo[]" multiple="">
+			<div  class="spiner" id="photos"></div>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please upload vineyard photo(you can load multiple images)')?></span></div>
+		</div>
+		<div class="fileupload-loading"></div>
+		<table class="table table-striped">
+			<tbody id="vineyard_photos" class="files" data-toggle="modal-gallery" data-target="#modal-gallery">
+			</tbody>
+		</table>
+	</div>
+	<div class="flw borderBottom formSection">
+		<h5 class="sectionTitle"><?php echo $this->translate('Visiting this Vineyard/Winery')?></h5>
+		<div class="oneLine">
+			<label><?php echo $this->translate('Welcomes Visits?')?></label>
+			<div class="radioBox">
+				<input type="radio" name="visits" value="1"/>
+				<span class="radoiLabel"><?php echo $this->translate('Yes')?></span>
+			</div>
+			<div class="radioBox">
+				<input type="radio" name="visits" value="0"/>
+				<span class="radoiLabel"><?php echo $this->translate('No')?></span>
+			</div>
+			<div class="radioBox">
+				<input type="radio" name="visits" value="2" checked="checked"/>
+				<span class="radoiLabel"><?php echo $this->translate('Don`t know')?></span>
+			</div>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please select welcomes visits of the vineyard')?></span></div>
+		</div>
+		<div class="oneLine">
+			<label ><?php echo $this->translate('From Individuals')?>:</label>
+			<div class="radioBox">
+				<input type="radio" name="individuals" value="1"/>
+				<span class="radoiLabel"><?php echo $this->translate('Yes')?></span>
+			</div>
+			<div class="radioBox">
+				<input type="radio" name="individuals" value="0"/>
+				<span class="radoiLabel"><?php echo $this->translate('No')?></span>
+			</div>
+			<div class="radioBox">
+				<input type="radio" name="individuals" value="2" checked="checked"/>
+				<span class="radoiLabel"><?php echo $this->translate('Don`t know')?></span>
+			</div>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please select from individuals of the vineyard')?></span></div>
+		</div>
+		<div class="oneLine">
+			<label for=""><?php echo $this->translate('From Groups')?>:</label>
+			<div class="radioBox">
+				<input type="radio" name="groups" value="1"/>
+				<span class="radoiLabel"><?php echo $this->translate('Yes')?></span>
+			</div>
+			<div class="radioBox">
+				<input type="radio" name="groups" value="0"/>
+				<span class="radoiLabel"><?php echo $this->translate('No')?></span>
+			</div>
+			<div class="radioBox">
+				<input type="radio" name="groups" value="2" checked="checked"/>
+				<span class="radoiLabel"><?php echo $this->translate('Don`t know')?></span>
+			</div>							
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please select from groups of the vineyard')?></span></div>
+		</div>
+	</div>	
+	<div class="flw borderBottom formSection">
+		<h5 class="sectionTitle"><?php echo $this->translate('Opening Hours &amp; Seasons')?></h5>
+		<div class="seasons">
+			<div class="season" id="season1">
+				<div class="oneLine">
+					<label for="seasonName"><?php echo $this->translate('Season Name')?>:</label>
+					<div class="wrapperInput">
+						<div class="rounded tl"></div>
+						<div class="rounded tr"></div>
+						<div class="rounded br"></div>
+						<div class="rounded bl"></div>
+						<?php echo $this->form->getElement("seasons")?>
+					</div>
+					<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please enter name season of the vineyard')?></span></div>
+				</div>
+				<div class="oneLine">
+					<label for=""><?php echo $this->translate('Need a appointment?')?></label>
+					<div class="radioBox">
+						<input id="appointment-yes1" type="radio" name="season[appointment][0]" value="1"/>
+						<span class="radoiLabel"><?php echo $this->translate('Yes')?></span>
+					</div>
+					<div class="radioBox">
+						<input id="appointment-no1" type="radio" name="season[appointment][0]" value="0"/>
+						<span class="radoiLabel"><?php echo $this->translate('No')?></span>
+					</div>
+					<div class="radioBox">
+						<input id="appointment-dont1" type="radio" name="season[appointment][0]" value="2" checked="checked"/>
+						<span class="radoiLabel"><?php echo $this->translate('Don`t know')?></span>
+					</div>
+					<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please select need to make appointment of the vineyard season')?></span></div>
+				</div>
+				<div class="oneLine">
+					<label for="startEnd"><?php echo $this->translate('Start &amp; End Dates')?>:</label>
+				</div>	
+				<div class="oneLine">
+					<label for="start"><?php echo $this->translate('Start Date')?>:</label>
+					<div class="wrapperInput datapickerWrapper">
+						<div class="rounded tl"></div>
+						<div class="rounded tr"></div>
+						<div class="rounded br"></div>
+						<div class="rounded bl"></div>
+						<?php echo $this->form->date1 ?>
+					</div>
+					<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please select start date season')?></span></div>
+				</div>
+				<div class="oneLine">
+					<label for="end"><?php echo $this->translate('End Date')?>:</label>
+					<div class="wrapperInput datapickerWrapper">
+						<div class="rounded tl"></div>
+						<div class="rounded tr"></div>
+						<div class="rounded br"></div>
+						<div class="rounded bl"></div>
+						<?php echo $this->form->date2 ?>
+					</div>
+					<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please select end date season')?></span></div>
+				</div>
+				<div class="oneLine">
+					<label for="days"><?php echo $this->translate('Days of week')?>:</label>
+					<div class="checkboxBox"><input type="checkbox" name="season[weeks][0][]" id="weeks-Monday" value="Monday"/><span class="checkboxLabel"><?php echo $this->translate('Mo')?></span></div>
+					<div class="checkboxBox"><input type="checkbox" name="season[weeks][0][]" id="weeks-Tuesday" value="Tuesday"/><span class="checkboxLabel"><?php echo $this->translate('Tu')?></span></div>
+					<div class="checkboxBox"><input type="checkbox" name="season[weeks][0][]" id="weeks-Wednesday" value="Wednesday"/><span class="checkboxLabel"><?php echo $this->translate('We')?></span></div>
+					<div class="checkboxBox"><input type="checkbox" name="season[weeks][0][]" id="weeks-Thursday" value="Thursday"/><span class="checkboxLabel"><?php echo $this->translate('Th')?></span></div>
+					<div class="checkboxBox"><input type="checkbox" name="season[weeks][0][]" id="weeks-Friday" value="Friday"/><span class="checkboxLabel"><?php echo $this->translate('Fr')?></span></div>
+					<div class="checkboxBox"><input type="checkbox" name="season[weeks][0][]" id="weeks-Saturday" value="Saturday"/><span class="checkboxLabel"><?php echo $this->translate('Sa')?></span></div>
+					<div class="checkboxBox"><input type="checkbox" name="season[weeks][0][]" id="weeks-Sunday" value="Sunday"/><span class="checkboxLabel"><?php echo $this->translate('Su')?></span></div>
+					<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please select days of weeks season')?></span></div>
+				</div>		
+				<div class="oneLine hours">
+					<label for="hours"><?php echo $this->translate('Opening Hours')?>:</label>
+					<span class="label"><?php echo $this->translate('From')?></span>
+					<div class="wrapperInput">
+						<div class="rounded tl"></div>
+						<div class="rounded tr"></div>
+						<div class="rounded br"></div>
+						<div class="rounded bl"></div>
+						<?php echo $this->form->time1 ?>
+					</div>
+					<span class="label to"><?php echo $this->translate('to')?></span>
+					<div class="wrapperInput">
+						<div class="rounded tl"></div>
+						<div class="rounded tr"></div>
+						<div class="rounded br"></div>
+						<div class="rounded bl"></div>
+						<?php echo $this->form->time2 ?>
+					</div>
+					<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please select opening hours')?></span></div>
+				</div>
+				<div class="oneLine">
+					<label for="notes"><?php echo $this->translate('Season Notes')?>:</label>
+					<div class="wrapperInput texarea">
+						<div class="rounded tl"></div>
+						<div class="rounded tr"></div>
+						<div class="rounded br"></div>
+						<div class="rounded bl"></div>
+						<textarea name="season[notes][]" id="notes" cols="30" rows="10" class="inputBox"></textarea>
+					</div>
+					<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please enter notes season')?></span></div>
+				</div>
+				<a href="#" rel="season1" class="delete_season redButton"><?php echo $this->translate('Delete Season')?></a>
+			</div>
+		</div>	
+		<a href="#" class="add_season redButton"><?php echo $this->translate('Add Another Season')?></a>
+	</div>
+	<div class="flw borderBottom formSection">
+		<h5 class="sectionTitle"><?php echo $this->translate('Wine Tasting/Tours')?></h5>
+		<div class="oneLine addBox">
+			<label for="languages"><?php echo $this->translate('Languages Spoken')?>:</label>
+			<div class="spokens">
+				<div class="addedBox">
+					<?php echo $this->form->spoken ?>
+					<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please select languages spoken of the vineyard')?></span></div>
+				</div>
+			</div>
+			<a href="#" class="add" id="add_spoken"><?php echo $this->translate('Add a Language')?></a>
+		</div>
+		<div id="spoken_tmp" style="display:none;">
+			<div class="addedBox">
+				<?php echo $this->form->spoken ?>
+			</div>
+		</div>
+		<div class="oneLine">
+			<label for=""><?php echo $this->translate('Wine Tasting')?>:</label>
+			<?php echo $this->form->tasting ?>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please select wine tasting of the vineyard')?></span></div>
+		</div>
+		<div class="oneLine">
+			<label for=""><?php echo $this->translate('Wine Tours')?>:</label>
+			<?php echo $this->form->tour ?>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please select wine tours of the vineyard')?></span></div>
+		</div>
+		<div class="oneLine">
+			<label for=""><?php echo $this->translate('Wines Sales')?>:</label>
+			<div class="radioBox"><input type="radio" name="sales" value="1"/><span class="radoiLabel"><?php echo $this->translate('Yes')?></span></div>
+			<div class="radioBox"><input type="radio" name="sales" value="0"/><span class="radoiLabel"><?php echo $this->translate('No')?></span></div>
+			<div class="radioBox"><input type="radio" name="sales" value="2" checked="checked"/><span class="radoiLabel"><?php echo $this->translate('Don`t know')?></span></div>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please select wine sales of the vineyard')?></span></div>
+		</div>
+		<div class="oneLine">
+			<label for=""><?php echo $this->translate('Wine Workshops')?>:</label>
+			<div class="radioBox"><input type="radio" name="workshops" value="1"/><span class="radoiLabel">Yes</span></div>
+			<div class="radioBox"><input type="radio" name="workshops" value="0"/><span class="radoiLabel">No</span></div>
+			<div class="radioBox"><input type="radio" name="workshops" value="2" checked="checked"/><span class="radoiLabel">Don`t know</span></div>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please select wine workshops of the vineyard')?></span></div>
+		</div>
+	</div>
+	<div class="flw borderBottom formSection">
+		<h5 class="sectionTitle"><?php echo $this->translate('Other Facilities')?></h5>
+		<div class="oneLine">
+			<label for=""><?php echo $this->translate('Restaurant')?>:</label>
+			<div class="radioBox"><input type="radio" name="restaurant" value="1"/><span class="radoiLabel"><?php echo $this->translate('Yes')?></span></div>
+			<div class="radioBox"><input type="radio" name="restaurant" value="0"/><span class="radoiLabel"><?php echo $this->translate('No')?></span></div>
+			<div class="radioBox"><input type="radio" name="restaurant" value="2" checked="checked"/><span class="radoiLabel"><?php echo $this->translate('Don`t know')?></span></div>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please select restaurant of the vineyard')?></span></div>
+		</div>
+		<div class="oneLine">
+			<label for=""><?php echo $this->translate('Accommodation Available On Site')?>:</label>
+			<div class="radioBox"><input type="radio" name="accommodation" value="1"/><span class="radoiLabel"><?php echo $this->translate('Yes')?></span></div>
+			<div class="radioBox"><input type="radio" name="accommodation" value="0"/><span class="radoiLabel"><?php echo $this->translate('No')?></span></div>
+			<div class="radioBox"><input type="radio" name="accommodation" value="2" checked="checked"/><span class="radoiLabel"><?php echo $this->translate('Don`t know')?></span></div>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please select accommodation available on site of the vineyard')?></span></div>
+		</div>
+		<div class="oneLine">
+			<label for=""><?php echo $this->translate('Weddings')?>:</label>
+			<div class="radioBox"><input type="radio" name="weddings" value="1"/><span class="radoiLabel"><?php echo $this->translate('Yes')?></span></div>
+			<div class="radioBox"><input type="radio" name="weddings" value="0"/><span class="radoiLabel"><?php echo $this->translate('No')?></span></div>
+			<div class="radioBox"><input type="radio" name="weddings" value="2" checked="checked"/><span class="radoiLabel"><?php echo $this->translate('Don`t know')?></span></div>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please select weddings of the vineyard')?></span></div>
+		</div>
+		<div class="oneLine">
+			<label for=""><?php echo $this->translate('Corporate Seminars')?>:</label>
+			<div class="radioBox"><input type="radio" name="seminars" value="1"/><span class="radoiLabel"><?php echo $this->translate('Yes')?></span></div>
+			<div class="radioBox"><input type="radio" name="seminars" value="0"/><span class="radoiLabel"><?php echo $this->translate('No')?></span></div>
+			<div class="radioBox"><input type="radio" name="seminars" value="2" checked="checked"/><span class="radoiLabel"><?php echo $this->translate('Don`t know')?></span></div>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please select corporate seminars of the vineyard')?></span></div>
+		</div>
+	</div>
+	<div class="flw borderBottom formSection">
+		<h5 class="sectionTitle"><?php echo $this->translate('About the Grapes &amp; Wines Produced')?></h5>
+		<div class="oneLine addBox">
+			<label for=""><?php echo $this->translate('Grapes Grown')?>:</label>
+			<div class="grapes">
+				<div class="addedBox">
+					<?php echo $this->form->grapes ?>
+					<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please select grapes grown of the vineyard')?></span></div>
+				</div>
+			</div>
+		</div>
+		<div class="oneLine addBox"><a href="#" class="add" id="add_grape"><?php echo $this->translate('Add a grape grown')?></a></div>
+		<div id="grape_tmp" style="display: none;">
+			<div class="addedBox">
+				<?php echo $this->form->grapes ?>
+			</div>
+		</div>
+	</div>
+	<div class="flw borderBottom formSection">
+		<h5 class="sectionTitle"><?php echo $this->translate('Add Related Wines')?></h5>
+		<div class="wines">
+			<div class="wine" id="wine1">
+				<div class="oneLine">
+					<label for=""><?php echo $this->translate('Wine Name')?>:</label>
+					<div class="wrapperInput">
+						<div class="rounded tl"></div>
+						<div class="rounded tr"></div>
+						<div class="rounded br"></div>
+						<div class="rounded bl"></div>
+						<?php echo $this->form->name_w ?>
+					</div>
+					<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please enter wine name')?></span></div>
+				</div>
+				<div class="oneLine addBox">
+					<div class="grapes-wine">
+						<label for=""><?php echo $this->translate('Grapes')?>:</label>
+						<div class="addedBox">
+							<?php echo $this->form->grapes_w ?>
+							<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please enter grapes')?></span></div>
+						</div>	
+					</div>
+				</div>
+				<div class="oneLine addBox"><a href="#" class="add add_grape_w"><?php echo $this->translate('Add a grape')?></a></div>
+				<div class="oneLine">
+					<label for=""><?php echo $this->translate('Wine Type')?>:</label>
+					<select name="wines[type][]" id="type_w">
+						<option value="" label="<?php echo $this->translate('Select Wine Type')?>"><?php echo $this->translate('Select Wine Type')?></option>
+						<option value="Wine red" label="<?php echo $this->translate('Wine red')?>"><?php echo $this->translate('Wine red')?></option>
+						<option value="Wine rose" label="<?php echo $this->translate('Wine rose')?>"><?php echo $this->translate('Wine rose')?></option>
+						<option value="Wine white" label="<?php echo $this->translate('Fortified dessert wine')?>"><?php echo $this->translate('Wine white')?></option>
+						<option value="Fortified dessert wine" label="dessert wine"><?php echo $this->translate('Fortified dessert wine')?></option>
+						<option value="Fortified Port" label="<?php echo $this->translate('Fortified Port')?>"><?php echo $this->translate('Fortified Port')?></option>
+						<option value="Fortified sherry" label="Fortified sherry"><?php echo $this->translate('Fortified sherry')?></option>
+						<option value="Fortified sherry-style" label="<?php echo $this->translate('Fortified sherry-style')?>"><?php echo $this->translate('Fortified sherry-style')?></option>
+						<option value="Fortified vin doux naturel" label="<?php echo $this->translate('Fortified vin doux naturel')?>"><?php echo $this->translate('Fortified vin doux naturel')?></option>
+						<option value="Champange red" label="<?php echo $this->translate('Champange red')?>"><?php echo $this->translate('Champange red')?></option>
+						<option value="Champange rose" label="<?php echo $this->translate('Champange rose')?>"><?php echo $this->translate('Champange rose')?></option>
+						<option value="Champange white" label="<?php echo $this->translate('Champange white')?>"><?php echo $this->translate('Champange white')?></option>
+					</select>
+					<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please enter wine type')?></span></div>
+				</div>
+<!--				<div class="oneLine year">
+					<label for=""><?php // echo $this->translate('Vintage')?>:</label>
+					<?php // echo $this->form->vintage_w ?>
+				</div>-->
+				<div class="oneLine">
+					<label for=""><?php echo $this->translate('Add Label Image')?></label>
+					<input id="root0" type="file" name="image">
+					<div class="wine_image spiner"></div>
+					<div class="image"></div>
+				</div>
+				<a href="#" rel="wine1" class="delete_wine redButton"><?php echo $this->translate('Delete Wine')?></a>
+			</div>	
+		</div>
+		<a href="#" class="add_wine redButton"><?php echo $this->translate('Add Wine')?></a>
+	</div>
+	<div class="textAlignCenter">
+		<?php echo $this->form->getElement('add')?>
+	</div>
+</form>
+<div id="grape_w_tmp" style="display: none;">
+	<div class="addedBox">
+		<?php echo $this->form->grapes_w ?>
+	</div>
+</div>	
+<div id="season-tmp" style="display:none">
+	<div class="season" id="">
+		<div class="oneLine">
+			<label for="seasonName"><?php echo $this->translate('Season Name')?>:</label>
+			<div class="wrapperInput">
+				<div class="rounded tl"></div>
+				<div class="rounded tr"></div>
+				<div class="rounded br"></div>
+				<div class="rounded bl"></div>
+				<?php echo $this->form->getElement("seasons")?>
+			</div>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please enter season name')?></span></div>
+		</div>
+		<div class="oneLine">
+			<label for=""><?php echo $this->translate('Need a appointment?')?></label>
+			<div class="radioBox">
+				<input id="appointment-yes0" type="radio" name="season[appointment][0]" value="1"/>
+				<span class="radoiLabel"><?php echo $this->translate('Yes')?></span>
+			</div>
+			<div class="radioBox">
+				<input id="appointment-no0" type="radio" name="season[appointment][0]" value="0"/>
+				<span class="radoiLabel"><?php echo $this->translate('No')?></span>
+			</div>
+			<div class="radioBox">
+				<input id="appointment-dont0" type="radio" name="season[appointment][0]" value="2"/>
+				<span class="radoiLabel"><?php echo $this->translate('Don`t know')?></span>
+			</div>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please select need to make appointment of the vineyard season')?></span></div>
+		</div>	
+		<div class="oneLine">
+			<label for="startEnd"><?php echo $this->translate('Start &amp; End Dates')?>:</label>
+		</div>	
+		<div class="oneLine">
+			<label for="start"><?php echo $this->translate('Start Date')?>:</label>
+			<div class="wrapperInput datapickerWrapper">
+				<div class="rounded tl"></div>
+				<div class="rounded tr"></div>
+				<div class="rounded br"></div>
+				<div class="rounded bl"></div>
+				<?php echo $this->form->date1 ?>
+			</div>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please select start date of the season')?></span></div>
+		</div>
+		<div class="oneLine">
+			<label for="end"><?php echo $this->translate('End Date')?>:</label>
+			<div class="wrapperInput datapickerWrapper">
+				<div class="rounded tl"></div>
+				<div class="rounded tr"></div>
+				<div class="rounded br"></div>
+				<div class="rounded bl"></div>
+				<?php echo $this->form->date2 ?>
+			</div>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please slect end date of the season')?></span></div>
+		</div>
+		<div class="oneLine week_days">
+			<label for="days"><?php echo $this->translate('Days of week')?>:</label>
+				<div class="checkboxBox"><input type="checkbox" name="season[weeks][0][]" id="weeks-Monday" value="Monday"/><span class="checkboxLabel"><?php echo $this->translate('Mo')?></span></div>
+				<div class="checkboxBox"><input type="checkbox" name="season[weeks][0][]" id="weeks-Tuesday" value="Tuesday"/><span class="checkboxLabel"><?php echo $this->translate('Tu')?></span></div>
+				<div class="checkboxBox"><input type="checkbox" name="season[weeks][0][]" id="weeks-Wednesday" value="Wednesday"/><span class="checkboxLabel"><?php echo $this->translate('We')?></span></div>
+				<div class="checkboxBox"><input type="checkbox" name="season[weeks][0][]" id="weeks-Thursday" value="Thursday"/><span class="checkboxLabel"><?php echo $this->translate('Th')?></span></div>
+				<div class="checkboxBox"><input type="checkbox" name="season[weeks][0][]" id="weeks-Friday" value="Friday"/><span class="checkboxLabel"><?php echo $this->translate('Fr')?></span></div>
+				<div class="checkboxBox"><input type="checkbox" name="season[weeks][0][]" id="weeks-Saturday" value="Saturday"/><span class="checkboxLabel"><?php echo $this->translate('Sa')?></span></div>
+				<div class="checkboxBox"><input type="checkbox" name="season[weeks][0][]" id="weeks-Sunday" value="Sunday"/><span class="checkboxLabel"><?php echo $this->translate('Su')?></span></div>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please select days of week of the season')?></span></div>
+		</div>		
+		<div class="oneLine hours">
+			<label for="hours"><?php echo $this->translate('Opening Hours')?>:</label>
+			<span class="label"><?php echo $this->translate('From')?></span>
+			<div class="wrapperInput">
+				<div class="rounded tl"></div>
+				<div class="rounded tr"></div>
+				<div class="rounded br"></div>
+				<div class="rounded bl"></div>
+				<?php echo $this->form->time1 ?>
+			</div>
+			<span class="label to"><?php echo $this->translate('to')?></span>
+			<div class="wrapperInput">
+				<div class="rounded tl"></div>
+				<div class="rounded tr"></div>
+				<div class="rounded br"></div>
+				<div class="rounded bl"></div>
+				<?php echo $this->form->time2 ?>
+			</div>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please select opening hours of the season')?></span></div>
+		</div>
+		<div class="oneLine">
+			<label for="notes"><?php echo $this->translate('Season Notes')?>:</label>
+			<div class="wrapperInput texarea">
+				<div class="rounded tl"></div>
+				<div class="rounded tr"></div>
+				<div class="rounded br"></div>
+				<div class="rounded bl"></div>
+				<textarea name="season[notes][]" id="notes" cols="30" rows="10" class="inputBox"></textarea>
+			</div>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please enter notes season')?></span></div>
+		</div>
+		<a href="#" rel="season1" class="delete_season redButton"><?php echo $this->translate('Delete Season')?></a>
+	</div>
+</div>
+<div id="wine-tmp" style="display: none">
+	<div class="wine" id="">
+		<div class="oneLine">
+			<label for=""><?php echo $this->translate('Wine Name')?>:</label>
+			<div class="wrapperInput">
+				<div class="rounded tl"></div>
+				<div class="rounded tr"></div>
+				<div class="rounded br"></div>
+				<div class="rounded bl"></div>
+				<?php echo $this->form->name_w ?>
+			</div>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please enter wine name')?></span></div>
+		</div>
+		<div class="oneLine addBox">
+			<div class="grapes-wine">
+				<label for=""><?php echo $this->translate('Grapes')?>:</label>
+				<div class="addedBox">
+					<?php echo $this->form->grapes_w ?>
+					<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please enter grapes')?></span></div>
+				</div>	
+			</div>
+		</div>
+		<div class="oneLine addBox"><a href="#" class="add add_grape_w"><?php echo $this->translate('Add a grape grown')?></a></div>
+		<div class="oneLine">
+			<label for=""><?php echo $this->translate('Wine Type')?>:</label>
+			<select name="wines[type][]" id="type_w">
+				<option value="" label="<?php echo $this->translate('Select Wine Type')?>"><?php echo $this->translate('Select Wine Type')?></option>
+				<option value="Wine red" label="<?php echo $this->translate('Wine red')?>"><?php echo $this->translate('Wine red')?></option>
+				<option value="Wine rose" label="<?php echo $this->translate('Wine rose')?>"><?php echo $this->translate('Wine rose')?></option>
+				<option value="Wine white" label="<?php echo $this->translate('Wine white')?>"><?php echo $this->translate('Wine white')?></option>
+				<option value="Fortified dessert wine" label="<?php echo $this->translate('Fortified dessert wine')?>"><?php echo $this->translate('Fortified dessert wine')?></option>
+				<option value="Fortified Port" label="<?php echo $this->translate('Fortified Port')?>"><?php echo $this->translate('Fortified Port')?></option>
+				<option value="Fortified sherry" label="<?php echo $this->translate('Fortified sherry')?>"><?php echo $this->translate('Fortified sherry')?></option>
+				<option value="Fortified sherry-style" label="<?php echo $this->translate('Fortified sherry-style')?>"><?php echo $this->translate('Fortified sherry-style')?></option>
+				<option value="Fortified vin doux naturel" label="<?php echo $this->translate('Fortified vin doux naturel')?>"><?php echo $this->translate('Fortified vin doux naturel')?></option>
+				<option value="Champange red" label="<?php echo $this->translate('Champange red')?>"><?php echo $this->translate('Champange red')?></option>
+				<option value="Champange rose" label="<?php echo $this->translate('Champange rose')?>"><?php echo $this->translate('Champange rose')?></option>
+				<option value="Champange white" label="<?php echo $this->translate('Champange white')?>"><?php echo $this->translate('Champange white')?></option>
+			</select>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please select wine type')?></span></div>
+		</div>
+<!--		<div class="oneLine year">
+			<label for=""><?php // echo $this->translate('Vintage')?>:</label>
+			<?php // echo $this->form->vintage_w ?>
+		</div>-->
+		<div class="oneLine">
+			<label for=""><?php echo $this->translate('Add Label Image')?></label>
+			<input id="root" type="file" name="image">
+			<div class="wine_image spiner"></div>
+			<div class="image"></div>
+		</div>
+		<a href="#" rel="wine1" class="delete_wine redButton"><?php echo $this->translate('Delete Wine')?></a>
+	</div>
+</div>

@@ -1,0 +1,31 @@
+<div id="view-content">
+	<h2><?php echo $this->message ?></h2>
+	<form id="add_user" action="" method="post">
+		<div class="control">
+			<?php echo $this->form->name ?>
+		</div>
+		<div class="control">
+			<?php echo $this->form->firstname ?>
+		</div>
+		<div class="control">
+			<?php echo $this->form->email ?>
+		</div>
+		<div class="control">
+			<?php echo $this->form->status ?>
+		</div>
+		<div class="control">
+			<?php echo $this->form->role ?>
+		</div>
+<!--		<div class="control">
+			<label>Parter Regions</label>
+			<div class="input">
+				<select name="regions[]" id="regions" multiple="multiple">
+					<?php // foreach($this->regions as $region) :?>
+						<option value="<?php // echo $region->id?>" label="<?php // echo $region->name?>"><?php // echo $region->name?></option>
+					<?php // endforeach;?>
+				</select>
+			</div>	
+		</div>			-->
+		<?php echo $this->form->getElement('submit')?>
+	</form>	
+</div>

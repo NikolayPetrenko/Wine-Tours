@@ -1,0 +1,46 @@
+<div id="view-content">
+	<h2><?php echo $this->message ?></h2>
+	<form name="type_filter" action="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/managechanges" id="type_filter" class="jNice" method="post">
+		<h4>Filter By Type:</h4>
+		<select name="type" id="type">
+			<option value="all" <?php echo $this->type == 'all' ? 'selected' : ''?>><?php echo $this->translate('All Types')?></option>
+			<option value="verif" <?php echo $this->type == 'verif' ? 'selected' : ''?>><?php echo $this->translate('Verfied Changes')?></option>
+			<option value="unverif" <?php echo $this->type == 'unverif' ? 'selected' : ''?>><?php echo $this->translate('Unverfied Changes')?></option>
+			<option value="reject" <?php echo $this->type == 'reject' ? 'selected' : ''?>><?php echo $this->translate('Rejected Changes')?></option>
+		</select>
+	</form>	
+	<?php if(count($this->paginator)) :?>
+		<table class="table table-bordered table-striped">
+			<?php $user_mod = new Application_Model_Users();?>
+			<?php $vin_mod = new Application_Model_Vineyards();?>
+			<thead>
+				<tr>
+					<th class="span2"><?php echo $this->translate('Vineyard Name')?></th>
+					<th class=""><?php echo $this->translate('User Name')?></th>
+					<th class=""><?php echo $this->translate('Comment')?></th>
+					<th class=""><?php echo $this->translate('Status')?></th>
+					<th class="option-th"><?php echo $this->translate('Options')?></th>
+				</tr>
+			</thead>
+			<tbody>
+			<?php foreach($this->paginator as $correct):?>
+				<tr>
+					<td><?php echo $vin_mod->getVineyardById($correct['listing'])->name ?></td>
+					<td><?php echo $user_mod->getUserById($correct['user'])->name ?></td>
+					<td><?php echo $correct['comment'] ?></td>
+					<td><?php echo $correct['status'] == 0 ? $this->translate('Unverfied Changes') : ($correct['status'] == 1 ? $this->translate('Verfied Changes') : $this->translate('Rejected Changes')) ?></td>
+					<td class="options-td">
+						<a href="<?php echo $this->baseUrl()?>/<?php echo $_SESSION['lang']?>/vineyards/correctvineyard/<?php echo $correct['id']?>"><?php echo $this->translate('View')?></a>
+					</td>
+				</tr>
+			<?php endforeach;?>
+			</tbody>
+		</table>
+	<?php echo $this->paginationControl($this->paginator,
+                                    'Sliding',
+                                    'main/pagination_listings.phtml',
+					array('type' => $this->type)); ?>
+	<?php else:?>
+		<p><?php echo $this->translate('No Listings')?></p>
+	<?php endif;?>
+</div>

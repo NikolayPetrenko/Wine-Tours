@@ -1,0 +1,533 @@
+<script>
+	var lang = '<?php echo $_SESSION['lang']?>';
+</script>
+<?php $vin_mod = new Application_Model_Vineyards();?>
+<?php $grape_mod = new Application_Model_Grapes();?>
+<form name="filter" id="filter" method="get" action="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/search/list" class="jNice">
+<div class="leftSidebar">
+	<div class="grayBox">
+		<h3 class="title noBg"><?php echo $this->translate('Filter') ?></h3>
+			<div class="filterBox">
+				<div class="oneLine"><input type="checkbox" name="type[all]" value="all" id="all" <?php echo !empty($this->type['all']) ? 'checked' : ""?>><label for="all"><?php echo $this->translate('All Listings')?></label></div>
+				<div class="oneLine"><input type="checkbox" name="type[reg]" value="reg" id="reg" <?php echo !empty($this->type['reg']) || !empty($this->type['all']) ? 'checked' : ""?> class="type"><label for="reg"><?php echo $this->translate('Wine Regions')?></label></div>
+				<div class="oneLine"><input type="checkbox" name="type[vin]" value="vin" id="vin" <?php echo !empty($this->type['vin']) || !empty($this->type['all']) ? 'checked' : ""?> class="type"><label for="vin"><?php echo $this->translate('Vineyards/Wineries')?></label></div>
+				<div class="oneLine"><input type="checkbox" name="type[win]" value="win" id="win" <?php echo !empty($this->type['win']) || !empty($this->type['all']) ? 'checked' : ""?> class="type"><label for="win"><?php echo $this->translate('Wines')?></label></div>
+			</div>
+			<h3 class="title noPaddingTop"></h3>
+			<h3 class="title noBg"><?php echo $this->translate('Filter Vineyards') ?></h3>		
+			<div class="filterBox">
+				<div class="oneLine"><input type="checkbox" name="status[verif]" value="verif" id="verif" class="status"  <?php echo empty($_GET) || !empty($this->status['verif']) ? 'checked' : ""?>><label for="verif"><?php echo $this->translate('Verified Listings')?></label></div>
+				<div class="oneLine"><input type="checkbox" name="status[unver]" value="unver" id="unver" class="status"  <?php echo empty($_GET) || !empty($this->status['unver']) ? 'checked' : ""?>><label for="unver"><?php echo $this->translate('Unverified Listings')?></label></div>
+			</div>
+			<?php if(!empty($this->word)):?>
+				<input type="hidden" name="word" value="<?php echo $this->word?>">
+			<?php endif;?>
+		<div class="shadow"></div>
+	</div>
+</div>
+<div class="content showAsList">
+	<div class="chooseRegion">
+		<div class="oneLine">
+			<label for="continent" class="label1 required"><?php echo $this->translate('Continent')?></label>
+			<select name="continent" id="continent">
+			<?php $continentes = new Application_Model_Continents();?>
+				<option value=""><?php echo $this->translate('Select Continent')?></option>
+				<?php foreach ($continentes->getContinents(true) as $continent) :?>
+					<option value="<?php echo $continent->id?>" <?php echo !empty($this->continent) && $continent->id == $this->continent ? 'selected="selected"' : ''?>><?php echo $continent->name?></option>
+				<?php endforeach;?>
+			</select>
+		</div>
+		<div class="oneLine">
+			<label for="country" class="label1 required"><?php echo $this->translate('Country')?></label>
+			<select name="country" id="country" <?php echo !empty($this->country) || !empty($this->continent) ? '' : 'disabled="disabled"'?>>
+			<?php $countries = new Application_Model_Countries();?>
+				<option value=""><?php echo $this->translate('Select Country')?></option>
+				<?php if(!empty($this->continent)) :?>
+					<?php foreach ($countries->getCountriesByContinentId($this->continent) as $country) :?>
+						<option value="<?php echo $country->code?>" <?php echo !empty($this->country) && $country->code == $this->country ? 'selected="selected"' : ''?>><?php echo $country->name_en?></option>
+					<?php endforeach;?>
+				<?php endif;?>	
+			</select>
+		</div>
+		<div class="oneLine">
+			<label for="ass_region" class="label1 required"><?php echo $this->translate('Region')?></label>
+			<select name="ass_region" id="ass_region" <?php echo !empty($this->region) || !empty($this->country) ? '' : 'disabled="disabled"'?>>
+			<?php $regions = new Application_Model_Assregions();?>
+				<option value=""><?php echo $this->translate('Select Associated Region')?></option>
+				<?php if(!empty($this->country)) :?>
+					<?php foreach ($regions->getAssregionsByCountryId($this->country) as $region) :?>
+						<option value="<?php echo $region->id?>" <?php echo !empty($this->region) && $region->id == $this->region ? 'selected="selected"' : ''?>><?php echo $region->name?></option>
+					<?php endforeach;?>
+				<?php endif;?>	
+			</select>
+		</div>
+		<a href="#" id="loc" class="filter-show floatRight"><?php echo $this->translate('Show')?></a>
+	</div>
+		<ul class="tabs">
+			<li class="<?php echo $this->type1 == 'list' ? 'active' : ''?>"><a href="<?php echo $this->baseUrl()?>/<?php echo $_SESSION['lang']?>/search/list?type%5Ball%5D=all&amp;status%5Bverif%5D=verif&amp;status%5Bunver%5D=unver&amp;status%5Bclaim%5D=claim&amp;continent="><?php echo $this->translate('Show as List')?></a></li>
+			<li class="<?php echo $this->type1 == 'map' ? 'active' : ''?>"><a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/search/map"><?php echo $this->translate('Show on Map')?></a></li>
+		</ul>
+		<?php if(empty($this->search)):?>
+			<?php echo $this->paginationControl($this->paginator, 'Sliding', 'search/pagination_search.phtml', array('get' => $this->get)); ?>
+			<ul class="listRegion borderTop">
+				<?php if(!empty($this->result)) :?>
+					<?php $v_sp = new Application_Model_VineyardSpokens()?>
+					<?php $reg_mod = new Application_Model_Assregions();?>
+					<?php foreach($this->result as $item) :?>
+						<?php $i = 0;?>
+						<?php if(!empty($item['VINEYARD'])):?>
+							<li class="listRegionItem">
+								<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/view-vineyard/<?php echo $item['country_alias']?>/<?php echo main::getParent1($item['reg_alias'])?>/<?php echo $item['alias'] ?>"><img src="<?php echo !empty($item['logo']) ? '/images/vineyard/logo/' . $item['logo'] : '/images/vineyard/logo/default.jpg'?>" class="foto" alt="Vineyard <?php echo $item['name']?>" /></a>
+								<img src="/images/icon2.png" alt="Vineyard Image" class="icon" />
+								<div class="descr">
+									<a class="nameRegion" href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/view-vineyard/<?php echo $item['country_alias']?>/<?php echo main::getParent1($item['reg_alias'])?>/<?php echo $item['alias'] ?>"><?php echo $item['name']?></a>
+									<?php if($item['status'] == 0) :?>
+										<span class="status blue"><?php echo $this->translate('Unverified Listing')?></span>
+									<?php else:?>
+										<span class="status"><?php echo $this->translate('Verified Listing')?></span>
+									<?php endif;?>	
+									<ul class="listRegionBreadcrumbs">
+										<?php $par_alias = Main::getAliasParent($item['reg_alias']);?>
+										<li><a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-country/<?php echo $item['country_alias']?>"><?php echo $item['country']?></a></li>
+										<?php echo !empty($par_alias) ? '<li class="sep"></li>' : ''?> 
+										<li><a href="<?php echo !empty($par_alias) ? $this->baseUrl() . '/' . $_SESSION['lang'] . '/main/view-region/' . $reg_mod ->getRegionByAlias($par_alias['alias'])->country_alias . '/' . main::getParent1($par_alias['alias']) : ''?>"><?php echo !empty($par_alias) ? $par_alias['name'] : ''?></a></li>
+										<li class="sep"></li>
+										<li><a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-region/<?php echo $reg_mod ->getRegionByAlias($item['reg_alias'])->country_alias?>/<?php echo main::getParent1($item['reg_alias']) ?>"><?php echo $item['ass_region'] ?></a></li>
+									</ul>
+									<div class="marginBottom"><span class="greenText bold" ><?php echo $this->translate('Principle grapes grown') ?>:</span>
+										<?php $grapes[$i] = $vin_mod->getGrapesVineyard($item['list_id'])->toArray(); ?>
+										<?php if(!empty($grapes[$i])):?>
+											<?php foreach($grapes[$i] as $grape) :?>
+												<?php echo $grape == $grapes[$i][count($grapes[$i])-1 ] ? $grape['name'] : $grape['name'] .' / ' ?>
+											<?php endforeach;?>
+										<?php else:?>
+											<span><?php echo $this->translate("Don't know")?></span>
+										<?php endif;?>
+									</div>
+									<span><span class="greenText bold" ><?php echo $this->translate('Languages Spoken') ?>:</span>
+									<?php $spokens[$i] = $v_sp->getSpokenByVineardId($item['list_id']); ?>
+									<?php if(!empty($spokens[$i])):?>
+										<?php foreach($spokens[$i] as $spoken) :?>
+											<?php echo $spoken == $spokens[$i][count($spokens[$i])-1 ] ? $spoken['spoken'] : $spoken['spoken'] .' / ' ?>
+										<?php endforeach;?>
+									<?php else:?>
+										<span><?php echo $this->translate("Don't know")?></span>
+									<?php endif;?>
+									</span>									
+									<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/search/map#vin<?php echo $item['list_id']?>" class="showOnMap"><?php echo $this->translate('Show on Map')?></a>
+									<?php if($item['claim'] == '0' && $item['user_claim'] == '0') :?>
+									<a data-listing="<?php echo $item['list_id']?>" href="#myModal" class="various_claim claimListing" id="claim_click<?php echo $item['list_id']?>"><?php echo $this->translate("Claim this Listing")?></a>
+									<?php endif;?>
+								</div>
+							</li>
+						<?php endif;?>
+						<?php if(!empty($item['WINE'])):?>
+							<?php $i = 0;?>
+							<li class="listRegionItem">
+								<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/view-vineyard/<?php echo $item['country_alias']?>/<?php echo main::getParent1($item['reg_alias'])?>/<?php echo $item['alias'] ?>#wines"><img src="<?php echo !empty($item['image']) ? '/images/wine/'. $item['image'] : '/images/wine/default_wine.png'?>" class="foto" alt="Wine <?php echo $item['name']?>" /></a>
+								<img src="/images/icon3.png" alt="Wine Image" class="icon" />
+								<div class="descr">
+									<a class="nameRegion" href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/view-vineyard/<?php echo $item['country_alias']?>/<?php echo main::getParent1($item['reg_alias'])?>/<?php echo $item['alias'] ?>#wines"><?php echo $item['name']?></a>
+									<ul class="listRegionBreadcrumbs">
+										<?php $par_alias = Main::getAliasParent($item['reg_alias']);?>
+										<li><a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-country/<?php echo $item['country_alias']?>"><?php echo $item['country']?></a></li>
+										<?php echo !empty($par_alias) ? '<li class="sep"></li>' : ''?> 
+										<li><a href="<?php echo !empty($par_alias) ? $this->baseUrl() . '/' . $_SESSION['lang'] . '/main/view-region/' . $reg_mod ->getRegionByAlias($par_alias['alias'])->country_alias . '/' . main::getParent1($par_alias['alias']) : ''?>"><?php echo !empty($par_alias) ? $par_alias['name'] : ''?></a></li>
+										<li class="sep"></li>
+										<li><a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-region/<?php echo $reg_mod ->getRegionByAlias($item['reg_alias'])->country_alias?>/<?php echo main::getParent1($item['reg_alias']) ?>"><?php echo $item['ass_region'] ?></a></li>
+										<li class="sep"></li>
+										<li><a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/view-vineyard/<?php echo $item['country_alias']?>/<?php echo main::getParent1($item['reg_alias'])?>/<?php echo $item['alias'] ?>"><?php echo $item['vineyard_name']?></a></li>
+									</ul>
+									<?php if(!empty($item['type'])):?>
+										<div class="marginBottom"><span class="greenText bold" ><?php echo $this->translate('Wine Type') ?>:</span>					
+											<span><?php echo $item['type']?></span>
+										</div>
+									<?php endif;?>
+									<span><span class="greenText bold" ><?php echo $this->translate('Principle Grapes') ?>:</span>
+									<?php $grapes_wine[$i] = unserialize($item['grapes'])?>
+									<?php if(is_array($grapes_wine[$i]) && !empty($grapes_wine[$i]) && !empty($grapes_wine[$i][0])):?>
+										<?php foreach($grapes_wine[$i] as $grape_wine) :?>
+											<?php echo $grape_wine == $grapes_wine[$i][count($grapes_wine[$i])-1 ] ? $grape_mod->getGrapeById($grape_wine)->name : $grape_mod->getGrapeById($grape_wine)->name .' / ' ?>
+										<?php endforeach;?>
+									<?php else:?>
+										<span><?php echo $this->translate("Don't know")?></span>
+									<?php endif;?>
+									</span>									
+									<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/search/map#win<?php echo $item['id']?>" class="showOnMap"><?php echo $this->translate('Show on Map')?></a>
+								</div>
+							</li>
+						<?php endif;?>
+						<?php if(!empty($item['REGION'])):?>
+							<?php $i = 0?>
+							<?php if(empty($_GET['ass_region']) || (!empty($_GET['ass_region']) && $_GET['ass_region'] != $item['id'])):?>
+								<li class="listRegionItem">
+									<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-region/<?php echo $item['country_alias']?>/<?php echo main::getParent1($item['alias'])?>"><img src="/images/region/<?php echo !empty($item['image']) ? $item['image']  :  'default_region.png'?>" class="foto" alt="Region <?php echo $item['name']?>" /></a>
+									<img src="/images/icon1.png" alt="Region Image" class="icon" />
+									<div class="descr">
+										<a class="nameRegion" href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-region/<?php echo $item['country_alias']?>/<?php echo main::getParent1($item['alias'])?>"><?php echo $item['name']?> <?php echo $this->translate('wine region')?></a>
+										<ul class="listRegionBreadcrumbs">
+											<li><a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-country/<?php echo $item['country_alias']?>"><?php echo $item['country_name']?></a></li>
+											<?php if($item['pid'] != 0):?>
+												<?php $pid = $regions->getRegionById($item['pid'])?>
+												<li class="sep"></li>
+												<li><a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-region/<?php echo $item['country_alias']?>/<?php echo $pid->alias?>"><?php echo $pid->name?></a></li>
+											<?php endif;?>
+											<li class="sep"></li>	
+											<li><a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-region/<?php echo $item['country_alias']?>/<?php echo main::getParent1($item['alias']) ?>"><?php echo $item['name'] ?></a></li>
+										</ul>
+										<span><span class="greenText bold" ><?php echo $this->translate('Principle Grapes') ?>:</span>
+										<?php $grapes_reg[$i] = unserialize($item['grapes'])?>
+										<?php if(is_array($grapes_reg[$i]) && !empty($grapes_reg[$i]) && !empty($grapes_reg[$i][0])):?>
+											<?php foreach($grapes_reg[$i] as $grape_reg) :?>
+												<?php echo $grape_reg == $grapes_reg[$i][count($grapes_reg[$i])-1 ] ? $grape_mod->getGrapeById($grape_reg)->name : $grape_mod->getGrapeById($grape_wine)->name .' / ' ?>
+											<?php endforeach;?>
+										<?php else:?>
+											<span><?php echo $this->translate("Don't know")?></span>
+										<?php endif;?>
+										</span>										
+										<?php // if($item['pid'] == 0) :?>
+											<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/search/map#reg<?php echo $item['id']?>" class="showOnMap"><?php echo $this->translate('Show on Map')?></a>
+										<?php // endif;?>
+									</div>
+								</li>
+							<?php endif;?>
+						<?php endif;?>						
+					<?php endforeach;?>	
+				<?php else:?>
+					<p class="greenText bold results-list">No results</p>
+				<?php endif;?>
+			</ul>
+			<?php echo $this->paginationControl($this->paginator, 'Sliding', 'search/pagination_search.phtml', array('get' => $this->get)); ?>	
+		<?php else:?>
+			<?php $reg_mod = new Application_Model_Assregions();?>
+			<?php $claim_mod = new Application_Model_Claimes();?>
+			<?php $v_sp = new Application_Model_VineyardSpokens();?>
+			<?php $i = 0;?>
+			<?php if(!isset($this->badsearch)) :?>
+				<div class="search_query">
+					<h2><span class="greenText bold"><?php echo $this->translate('Search results for query')?></span> <u><?php echo $this->search?></u>:</h2>
+				</div>
+			<?php endif;?>
+			<?php if(!empty($this->altr_countries[0]) || !empty($this->altr_regions[0]) || !empty($this->altr_vineyards[0]) || !empty($this->altr_wines[0])):?>
+					<h4>No search results</h4>
+					<div class="search_alternative">
+						<h4><span class="greenText bold"><?php echo $this->translate('Alternate search')?></span> <u><?php echo $this->altr_search?></u>:</h4>
+					</div>
+				<ul class="listRegion borderTop">
+					<?php if(!empty($this->altr_vineyards[0])):?>
+						<?php foreach($this->altr_vineyards as $altr_vineyard) :?>
+							<li class="listRegionItem">
+								<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/view-vineyard/<?php echo $altr_vineyard->country_alias?>/<?php echo main::getParent1($altr_vineyard->region_alias)?>/<?php echo $altr_vineyard->alias?>"><img src="<?php echo !empty($altr_vineyard->logo) ? '/images/vineyard/logo/' . $altr_vineyard->logo : '/images/vineyard/logo/default.jpg'?>" class="foto" alt="Vineyard <?php echo $altr_vineyard->name?>" /></a>
+								<img src="/images/icon2.png" alt="Vineyard Image" class="icon" />
+								<div class="descr">
+									<a class="nameRegion" href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/view-vineyard/<?php echo $altr_vineyard->country_alias?>/<?php echo main::getParent1($altr_vineyard->region_alias)?>/<?php echo $altr_vineyard->alias?>"><?php echo $altr_vineyard->name?></a>
+									<?php if($altr_vineyard->status == 0) :?>
+										<span class="status blue"><?php echo $this->translate('Unverified Listing')?></span>
+									<?php else:?>
+										<span class="status"><?php echo $this->translate('Verified Listing')?></span>
+									<?php endif;?>	
+									<ul class="listRegionBreadcrumbs">
+										<?php $par_alias = Main::getAliasParent($altr_vineyard->region_alias);?>
+										<li><a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-country/<?php echo $altr_vineyard->country_alias?>"><?php echo $altr_vineyard->country_name?></a></li>
+										<?php echo !empty($par_alias) ? '<li class="sep"></li>' : ''?> 
+										<li><a href="<?php echo !empty($par_alias) ? $this->baseUrl() . '/' . $_SESSION['lang'] . '/main/view-region/' . $reg_mod ->getRegionByAlias($par_alias['alias'])->country_alias . '/' . main::getParent1($par_alias['alias']) : ''?>"><?php echo !empty($par_alias) ? $par_alias['name'] : ''?></a></li>
+										<li class="sep"></li>
+										<li><a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-region/<?php echo $reg_mod ->getRegionByAlias($altr_vineyard->region_alias)->country_alias?>/<?php echo main::getParent1($altr_vineyard->region_alias) ?>"><?php echo $altr_vineyard->region_name?></a></li>
+									</ul>
+									<div class="marginBottom"><span class="greenText bold" ><?php echo $this->translate('Principle grapes grown') ?>:</span>
+										<?php $grapes[$i] = $vin_mod->getGrapesVineyard($altr_vineyard->ind)->toArray(); ?>
+										<?php if(!empty($grapes[$i])):?>
+											<?php foreach($grapes[$i] as $grape) :?>
+												<?php echo $grape == $grapes[$i][count($grapes[$i])-1 ] ? $grape['name'] : $grape['name'] .' / ' ?>
+											<?php endforeach;?>
+										<?php else:?>
+											<span><?php echo $this->translate("Don't know")?></span>
+										<?php endif;?>
+									</div>
+									<span><span class="greenText bold" ><?php echo $this->translate('Languages Spoken') ?>:</span>
+										<?php $spokens[$i] = $v_sp->getSpokenByVineardId($altr_vineyard->ind); ?>
+										<?php if(!empty($spokens[$i])):?>
+											<?php foreach($spokens[$i] as $spoken) :?>
+												<?php echo $spoken == $spokens[$i][count($spokens[$i])-1 ] ? $spoken['spoken'] : $spoken['spoken'] .' / ' ?>
+											<?php endforeach;?>
+										<?php else:?>
+											<span><?php echo $this->translate("Don't know")?></span>
+										<?php endif;?>
+									</span>
+									<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/search/map#vin<?php echo $altr_vineyard->ind?>" class="showOnMap"><?php echo $this->translate('Show on Map')?></a>
+									<?php if($altr_vineyard->claim == '0' && $claim_mod->ClaimByUser($altr_vineyard->ind) == '0') :?>
+										<a data-listing="<?php echo $altr_vineyard->ind?>" href="#myModal" class="various_claim claimListing" id="claim_click<?php echo $altr_vineyard->ind?>"><?php echo $this->translate("Claim this Listing")?></a>
+									<?php endif;?>
+								</div>
+							</li>	
+						<?php endforeach;?>
+					<?php endif;?>
+
+					<?php if(!empty($this->altr_wines[0])):?>	
+						<?php foreach($this->altr_wines as $altr_wine) :?>
+							<li class="listRegionItem">
+								<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/view-vineyard/<?php echo $altr_wine->country_alias?>/<?php echo main::getParent1($altr_wine->region_alias)?>/<?php echo $altr_wine->alias?>#wines"><img src="<?php echo !empty($altr_wine->image) ? '/images/wine/'. $altr_wine->image : '/images/wine/default_wine.png'?>" class="foto" alt="Wine <?php echo $altr_wine->name?>" /></a>
+								<img src="/images/icon3.png" alt="Wine Image" class="icon" />
+								<div class="descr">
+									<a class="nameRegion" href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/view-vineyard/<?php echo $altr_wine->country_alias?>/<?php echo main::getParent1($altr_wine->region_alias)?>/<?php echo $altr_wine->alias ?>#wines"><?php echo $altr_wine->name?></a>
+									<ul class="listRegionBreadcrumbs">
+										<?php $par_alias = Main::getAliasParent($altr_wine->region_alias);?>
+										<li><a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-country/<?php echo $altr_wine->country_alias?>"><?php echo $altr_wine->country_name?></a></li>
+										<?php echo !empty($par_alias) ? '<li class="sep"></li>' : ''?> 
+										<li><a href="<?php echo !empty($par_alias) ? $this->baseUrl() . '/' . $_SESSION['lang'] . '/main/view-region/' . $reg_mod ->getRegionByAlias($par_alias['alias'])->country_alias . '/' . main::getParent1($par_alias['alias']) : ''?>"><?php echo !empty($par_alias) ? $par_alias['name'] : ''?></a></li>
+										<li class="sep"></li>
+										<li><a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-region/<?php echo $reg_mod ->getRegionByAlias($altr_wine->region_alias)->country_alias?>/<?php echo main::getParent1($altr_wine->region_alias) ?>"><?php echo $altr_wine->region_name ?></a></li>
+										<li class="sep"></li>
+										<li><a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/view-vineyard/<?php echo $altr_wine->country_alias?>/<?php echo main::getParent1($altr_wine->region_alias)?>/<?php echo $altr_wine->alias?>"><?php echo $altr_wine->vineyard_name?></a></li>									
+									</ul>
+									<?php if($altr_wine->type !=''):?>
+										<div class="marginBottom"><span class="greenText bold" ><?php echo $this->translate('Wine Type') ?>:</span>					
+											<span><?php echo $altr_wine->type?></span>
+										</div>
+									<?php endif;?>
+									<span><span class="greenText bold" ><?php echo $this->translate('Principle Grapes') ?>:</span>
+									<?php $grapes_wine[$i] = unserialize($altr_wine->grapes_wine)?>
+									<?php if(is_array($grapes_wine[$i]) && !empty($grapes_wine[$i]) && !empty($grapes_wine[$i][0])):?>
+										<?php foreach($grapes_wine[$i] as $grape_wine) :?>
+											<?php echo $grape_wine == $grapes_wine[$i][count($grapes_wine[$i])-1 ] ? $grape_mod->getGrapeById($grape_wine)->name : $grape_mod->getGrapeById($grape_wine)->name .' / ' ?>
+										<?php endforeach;?>
+									<?php else:?>
+										<span><?php echo $this->translate("Don't know")?></span>
+									<?php endif;?>
+									</span>
+									<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/search/map#win<?php echo $altr_wine->ind?>" class="showOnMap"><?php echo $this->translate('Show on Map')?></a>
+								</div>
+							</li>							
+						<?php endforeach;?>
+					<?php endif;?>					
+					<?php if(!empty($this->altr_regions[0])):?>
+						<?php foreach($this->altr_regions as $altr_region) :?>
+							<li class="listRegionItem">
+								<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-region/<?php echo $altr_region->country_alias?>/<?php echo main::getParent1($altr_region->alias)?>"><img src="/images/region/<?php echo !empty($altr_region->image) ? $altr_region->image  :  'default_region.png'?>" class="foto" alt="Region <?php echo $altr_region->name?>" /></a>
+								<img src="/images/icon1.png" alt="Region Image" class="icon" />
+								<div class="descr">
+									<a class="nameRegion" href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-region/<?php echo $altr_region->country_alias?>/<?php echo main::getParent1($altr_region->alias)?>"><?php echo $altr_region->name?> <?php echo $this->translate('wine region')?></a>
+									<ul class="listRegionBreadcrumbs">
+										<li><a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-country/<?php echo $altr_region->country_alias?>"><?php echo $altr_region->country_name?></a></li>
+											<?php if($altr_region->pid != 0):?>
+												<?php $pid = $regions->getRegionById($altr_region->pid)?>
+												<li class="sep"></li>
+												<li><a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-region/<?php echo $altr_region->country_alias?>/<?php echo $pid->alias?>"><?php echo $pid->name?></a></li>
+											<?php endif;?>
+											<li class="sep"></li>	
+											<li><a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-region/<?php echo $altr_region->country_alias?>/<?php echo main::getParent1($altr_region->alias) ?>"><?php echo $altr_region->name?></a></li>									
+									</ul>
+									<span><span class="greenText bold" ><?php echo $this->translate('Principle Grapes') ?>:</span>
+									<?php $grapes_reg[$i] = unserialize($altr_region->grapes_reg)?>
+									<?php if(is_array($grapes_reg[$i]) && !empty($grapes_reg[$i]) && !empty($grapes_reg[$i][0])):?>
+										<?php foreach($grapes_reg[$i] as $grape_reg) :?>
+											<?php echo $grape_reg == $grapes_reg[$i][count($grapes_reg[$i])-1 ] ? $grape_mod->getGrapeById($grape_reg)->name : $grape_mod->getGrapeById($grape_reg)->name .' / ' ?>
+										<?php endforeach;?>
+									<?php else:?>
+										<span><?php echo $this->translate("Don't know")?></span>
+									<?php endif;?>
+									</span>
+									<?php // if($altr_region->pid == 0) :?>
+										<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/search/map#reg<?php echo $altr_region->ind?>" class="showOnMap"><?php echo $this->translate('Show on Map')?></a>
+									<?php // endif;?>
+								</div>
+							</li>
+						<?php endforeach;?>
+					<?php endif;?>
+					<?php if(!empty($this->altr_countries[0])):?>
+						<?php foreach($this->altr_countries as $altr_country) :?>
+							<li class="listRegionItem">
+								<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-country/<?php echo $altr_country->alias ?>"><img src="/images/country/<?php echo !empty($altr_country->image) ? $altr_country->image  :  'default_region.png'?>" class="foto"  alt="Country <?php echo $altr_country->name?>"/></a>
+								<img src="/images/icon1.png" alt="Country Image" class="icon" />
+								<div class="descr">
+									<a class="nameRegion" href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-country/<?php echo $altr_country->alias ?>"><?php echo $altr_country->name?></a>
+									<ul class="listRegionBreadcrumbs">
+										<li>Continent: <?php echo $altr_country->continent?></li>
+									</ul>
+								</div>
+							</li>
+						<?php endforeach;?>
+					<?php endif;?>							
+				</ul>			
+			<?php elseif(!empty($this->countries[0]) || !empty($this->regions[0]) || !empty($this->vineyards[0]) || !empty($this->wines[0])) :?>
+			<ul class="listRegion borderTop">
+				<?php if(!empty($this->vineyards[0])):?>
+					<?php foreach($this->vineyards as $vineyard) :?>
+						<li class="listRegionItem">
+							<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/view-vineyard/<?php echo $vineyard->country_alias?>/<?php echo main::getParent1($vineyard->region_alias)?>/<?php echo $vineyard->alias?>"><img src="<?php echo !empty($vineyard->logo) ? '/images/vineyard/logo/' . $vineyard->logo : '/images/vineyard/logo/default.jpg'?>" class="foto" alt="Vineyard <?php echo $vineyard->name?>" /></a>
+							<img src="/images/icon2.png" alt="Vineyard Image" class="icon" />
+							<div class="descr">
+								<a class="nameRegion" href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/view-vineyard/<?php echo $vineyard->country_alias?>/<?php echo main::getParent1($vineyard->region_alias)?>/<?php echo $vineyard->alias?>"><?php echo $vineyard->name?></a>
+								<?php if($vineyard->status == 0) :?>
+									<span class="status blue"><?php echo $this->translate('Unverified Listing')?></span>
+								<?php else:?>
+									<span class="status"><?php echo $this->translate('Verified Listing')?></span>
+								<?php endif;?>	
+								<ul class="listRegionBreadcrumbs">
+									<?php $par_alias = Main::getAliasParent($vineyard->region_alias);?>
+									<li><a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-country/<?php echo $vineyard->country_alias?>"><?php echo $vineyard->country_name?></a></li>
+									<?php echo !empty($par_alias) ? '<li class="sep"></li>' : ''?> 
+									<li><a href="<?php echo !empty($par_alias) ? $this->baseUrl() . '/' . $_SESSION['lang'] . '/main/view-region/' . $reg_mod ->getRegionByAlias($par_alias['alias'])->country_alias . '/' . main::getParent1($par_alias['alias']) : ''?>"><?php echo !empty($par_alias) ? $par_alias['name'] : ''?></a></li>
+									<li class="sep"></li>
+									<li><a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-region/<?php echo $reg_mod ->getRegionByAlias($vineyard->region_alias)->country_alias?>/<?php echo main::getParent1($vineyard->region_alias) ?>"><?php echo $vineyard->region_name?></a></li>
+								</ul>
+								<div class="marginBottom"><span class="greenText bold" ><?php echo $this->translate('Principle grapes grown') ?>:</span>
+									<?php $grapes[$i] = $vin_mod->getGrapesVineyard($vineyard->ind)->toArray(); ?>
+									<?php if(!empty($grapes[$i])):?>
+										<?php foreach($grapes[$i] as $grape) :?>
+											<?php echo $grape == $grapes[$i][count($grapes[$i])-1 ] ? $grape['name'] : $grape['name'] .' / ' ?>
+										<?php endforeach;?>
+									<?php else:?>
+										<span><?php echo $this->translate("Don't know")?></span>
+									<?php endif;?>
+								</div>								
+								<span><span class="greenText bold" ><?php echo $this->translate('Languages Spoken') ?>:</span>
+									<?php $spokens[$i] = $v_sp->getSpokenByVineardId($vineyard->ind); ?>
+										<?php if(!empty($spokens[$i])):?>
+											<?php foreach($spokens[$i] as $spoken) :?>
+												<?php echo $spoken == $spokens[$i][count($spokens[$i])-1 ] ? $spoken['spoken'] : $spoken['spoken'] .' / ' ?>
+											<?php endforeach;?>
+										<?php else:?>
+											<span><?php echo $this->translate("Don't know")?></span>
+										<?php endif;?>
+								</span>
+								<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/search/map#vin<?php echo $vineyard->ind?>" class="showOnMap"><?php echo $this->translate('Show on Map')?></a>
+								<?php if($vineyard->claim == '0' && $claim_mod->ClaimByUser($vineyard->ind) == '0') :?>
+									<a data-listing="<?php echo $vineyard->ind?>" href="#myModal" class="various_claim claimListing" id="claim_click<?php echo $vineyard->ind?>"><?php echo $this->translate("Claim this Listing")?></a>
+								<?php endif;?>
+							</div>
+						</li>
+					<?php endforeach;?>
+				<?php endif;?>
+				<?php if(!empty($this->wines[0])):?>		
+					<?php foreach($this->wines as $wine) :?>
+						<li class="listRegionItem">
+							<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/view-vineyard/<?php echo $wine->country_alias?>/<?php echo main::getParent1($wine->region_alias)?>/<?php echo $wine->alias?>#wines"><img src="<?php echo !empty($wine->image) ? '/images/wine/'. $wine->image : '/images/wine/default_wine.png'?>" class="foto" alt="Wine <?php echo $wine->name?>" /></a>
+							<img src="/images/icon3.png" alt="Wine Image" class="icon" />
+							<div class="descr">
+								<a class="nameRegion" href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/view-vineyard/<?php echo $wine->country_alias?>/<?php echo main::getParent1($wine->region_alias)?>/<?php echo $wine->alias ?>#wines"><?php echo $wine->name?></a>
+								<ul class="listRegionBreadcrumbs">
+									<?php $par_alias = Main::getAliasParent($wine->region_alias);?>
+									<li><a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-country/<?php echo $wine->country_alias?>"><?php echo $wine->country_name?></a></li>
+									<?php echo !empty($par_alias) ? '<li class="sep"></li>' : ''?> 
+									<li><a href="<?php echo !empty($par_alias) ? $this->baseUrl() . '/' . $_SESSION['lang'] . '/main/view-region/' . $reg_mod ->getRegionByAlias($par_alias['alias'])->country_alias . '/' . main::getParent1($par_alias['alias']) : ''?>"><?php echo !empty($par_alias) ? $par_alias['name'] : ''?></a></li>
+									<li class="sep"></li>
+									<li><a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-region/<?php echo $reg_mod ->getRegionByAlias($wine->region_alias)->country_alias?>/<?php echo main::getParent1($wine->region_alias) ?>"><?php echo $wine->region_name ?></a></li>
+									<li class="sep"></li>
+									<li><a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/view-vineyard/<?php echo $wine->country_alias?>/<?php echo main::getParent1($wine->region_alias)?>/<?php echo $wine->alias?>"><?php echo $wine->vineyard_name?></a></li>								
+								</ul>
+								<?php if($wine->type !=''):?>
+									<div class="marginBottom"><span class="greenText bold" ><?php echo $this->translate('Wine Type') ?>:</span>					
+										<span><?php echo $wine->type?></span>
+									</div>
+								<?php endif;?>
+								<span><span class="greenText bold" ><?php echo $this->translate('Principle Grapes') ?>:</span>
+								<?php $grapes_wine[$i] = unserialize($wine->grapes_wine)?>
+								<?php if(is_array($grapes_wine[$i]) && !empty($grapes_wine[$i]) && !empty($grapes_wine[$i][0])):?>
+									<?php foreach($grapes_wine[$i] as $grape_wine) :?>
+										<?php echo $grape_wine == $grapes_wine[$i][count($grapes_wine[$i])-1 ] ?  $grape_mod->getGrapeById($grape_wine)->name : $grape_mod->getGrapeById($grape_wine)->name .' / ' ?>
+									<?php endforeach;?>
+								<?php else:?>
+									<span><?php echo $this->translate("Don't know")?></span>
+								<?php endif;?>
+								</span>								
+								<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/search/map#win<?php echo $wine->ind?>" class="showOnMap"><?php echo $this->translate('Show on Map')?></a>
+							</div>
+						</li>
+					<?php endforeach;?>
+				<?php endif;?>
+				<?php if(!empty($this->regions[0])):?>		
+					<?php foreach($this->regions as $region) :?>
+						<li class="listRegionItem">
+							<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-region/<?php echo $region->country_alias?>/<?php echo main::getParent1($region->alias)?>"><img src="/images/region/<?php echo !empty($region->image) ? $region->image  :  'default_region.png'?>" class="foto" alt="Region <?php echo $region->name?>" /></a>
+							<img src="/images/icon1.png" alt="Region Image" class="icon" />
+							<div class="descr">
+								<a class="nameRegion" href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-region/<?php echo $region->country_alias?>/<?php echo main::getParent1($region->alias)?>"><?php echo $region->name?> <?php echo $this->translate('wine region')?></a>
+								<ul class="listRegionBreadcrumbs">
+									<li><a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-country/<?php echo $region->country_alias?>"><?php echo $region->country_name?></a></li>
+									<?php if($region->pid != 0):?>
+										<?php $pid = $regions->getRegionById($region->pid)?>
+										<li class="sep"></li>
+										<li><a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-region/<?php echo $region->country_alias?>/<?php echo $pid->alias?>"><?php echo $pid->name?></a></li>
+									<?php endif;?>
+									<li class="sep"></li>	
+									<li><a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-region/<?php echo $region->country_alias?>/<?php echo main::getParent1($region->alias) ?>"><?php echo $region->name?></a></li>
+								</ul>
+								<span><span class="greenText bold" ><?php echo $this->translate('Principle Grapes') ?>:</span>
+								<?php $grapes_reg[$i] = unserialize($region->grapes_reg)?>
+								<?php if(is_array($grapes_reg[$i]) && !empty($grapes_reg[$i]) && !empty($grapes_reg[$i][0])):?>
+									<?php foreach($grapes_reg[$i] as $grape_reg) :?>
+										<?php echo $grape_reg == $grapes_reg[$i][count($grapes_reg[$i])-1 ] ? $grape_mod->getGrapeById($grape_reg)->name : $grape_mod->getGrapeById($grape_reg)->name .' / ' ?>
+									<?php endforeach;?>
+								<?php else:?>
+									<span><?php echo $this->translate("Don't know")?></span>
+								<?php endif;?>
+								</span>								
+								<?php // if($region->pid == 0) :?>
+									<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/search/map#reg<?php echo $region->ind?>" class="showOnMap"><?php echo $this->translate('Show on Map')?></a>
+								<?php // endif;?>
+							</div>
+						</li>						
+					<?php endforeach;?>
+				<?php endif;?>
+				<?php if(!empty($this->countries[0])):?>
+					<?php foreach($this->countries as $country) :?>
+						<li class="listRegionItem">
+							<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-country/<?php echo $country->alias ?>"><img src="/images/country/<?php echo !empty($country->image) ? $country->image  :  'default_region.png'?>" class="foto" alt="Country <?php echo $country->name?>" /></a>
+							<img src="/images/icon1.png" alt="Country Image" class="icon" />
+							<div class="descr">
+								<a class="nameRegion" href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-country/<?php echo $country->alias ?>"><?php echo $country->name?></a>
+								<ul class="listRegionBreadcrumbs">
+									<li>Continent: <?php echo $country->continent?></li>
+								</ul>
+							</div>
+						</li>						
+					<?php endforeach;?>
+				<?php endif;?>						
+			</ul>
+<!--					NWTT001-->
+			<?php else:?>
+					<h4><?php echo $this->translate('No search results')?></h4>
+			<?php endif;?>
+		<?php endif;?>
+	</div>
+	</form>
+	<div class="clear"></div>
+<div class="popUpWrapper" id="myModal" style="display: none">
+	<div class="popUp">
+		<form name="claim" action="#" method="post" id="form_claim" class="jNice form">
+			<input type="hidden" name="listing" id="claim_list" value="">
+			<h3 class="title"><?php echo $this->translate('Claim Listing')?></h3>
+			<div class="flw borderBottom formSection">
+				<div class="oneLine">
+					<?php if(Zend_Auth::getInstance()->hasIdentity()):?>
+						<?php $user_mod = new Application_Model_Users();?>
+						<?php $user = $user_mod->getUserById(Zend_Auth::getInstance()->getIdentity()->id)?>
+						<?php $full_name = $user->name?>
+					<?php else:?>
+						<?php $full_name = '';?>
+					<?php endif;?>
+					<label for="name"><?php echo $this->translate('Full Name')?>*:</label>
+					<div class="wrapperInput"><?php echo $this->form1->getElement('name')->setValue($full_name)?></div>
+					<span id="name_error" class="error error_claim"><?php echo $this->translate('This information is required')?></span>
+				</div>
+				<div class="oneLine">
+					<label for="number"><?php echo $this->translate('Contact Number')?>*:</label>
+					<div class="wrapperInput"><?php echo $this->form1->number?></div>
+					<span id="number_error" class="error error_claim"><?php echo $this->translate('This information is required')?></span>
+				</div>
+				<div class="oneLine">
+					<label for="position"><?php echo $this->translate('Position in Business')?>*:</label>
+					<div class="wrapperInput"><?php echo $this->form1->position?></div>
+					<span id="position_error" class="error error_claim"><?php echo $this->translate('This information is required')?></span>
+				</div>
+				<div class="oneLine">
+					<label for="comment"><?php echo $this->translate('Comments')?>*:</label>
+					<div class="wrapperInput texarea"><?php echo $this->form1->comment?></div>
+					<div id="comment_error" class="error error_claim error_claim_comment"><?php echo $this->translate('This information is required')?></div>
+				</div>
+			</div>
+			<div class="textAlignCenter"><input type="submit" class="redSubmitBg" value="<?php echo $this->translate('Send Claim')?>" id="send_claim"/></div>
+		</form>
+	</div>
+</div>

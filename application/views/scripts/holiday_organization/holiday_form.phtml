@@ -1,0 +1,69 @@
+<div id="myModules" style="display: none;">
+<div class="popUpWrapper">
+		<?php if(Zend_Auth::getInstance()->hasIdentity()):?>
+			<?php $user = Zend_Auth::getInstance()->getIdentity();?>
+		<?php endif;?>
+		<div class="popUp orgHoliday">
+			<form action="#" class="jNice form">
+				<h3 class="title"><?php echo $this->translate('Organise Your Wine Holiday Now')?></h3>
+				<span class="popUpText"><?php echo $this->translate("For the best experience, less headaches and to have somebody else transport you.  We recommend that you book through a local guide.  Complete the form below and we'll put you in touch with them")?>:</span>
+				<div class="flw borderBottom formSection">
+					<div class="oneLine">
+						<label for="mod_name"><?php echo $this->translate('Full Name')?>*:</label>
+						<div class="wrapperInput mod_input">
+							<div class="rounded tl"></div>
+							<div class="rounded tr"></div>
+							<div class="rounded br"></div>
+							<div class="rounded bl"></div>
+							<input type="text" name="mod_name" id="mod_name" value="<?php echo !empty($user) ? $user->name : ''?>" class="inputBox" />
+						</div>
+						<div class="errors_mod" id="mod_name_error" style="display: none;"><?php echo $this->translate('Please enter a name')?></div>
+					</div>
+					<div class="oneLine">
+						<label for="mod_email"><?php echo $this->translate('Email Address')?>*:</label>
+						<div class="wrapperInput mod_input">
+							<div class="rounded tl"></div>
+							<div class="rounded tr"></div>
+							<div class="rounded br"></div>
+							<div class="rounded bl"></div>
+							<input type="text" name="mod_email" id="mod_email" value="<?php echo !empty($user) ? $user->email : ''?>" class="inputBox" />
+						</div>
+						<div class="errors_mod" id="mod_email_error" style="display: none;"><?php echo $this->translate('Please enter a email')?></div>
+					</div>
+					<div class="oneLine">
+						<label for="mod_telephone"><?php echo $this->translate('Telephone')?>:</label>
+						<div class="wrapperInput mod_input">
+							<div class="rounded tl"></div>
+							<div class="rounded tr"></div>
+							<div class="rounded br"></div>
+							<div class="rounded bl"></div>
+							<input type="text" name="mod_telephone" id="mod_telephone" value="" class="inputBox" />
+						</div>
+					</div>
+					<div class="oneLine number">
+						<label for="mod_peoples"><?php echo $this->translate('Number of People Travelling')?>:</label>
+						<div class="wrapperInput mod_input">
+							<div class="rounded tl"></div>
+							<div class="rounded tr"></div>
+							<div class="rounded br"></div>
+							<div class="rounded bl"></div>
+							<input type="text" name="mod_peoples" id="mod_peoples" value="" class="inputBox" />
+						</div>
+					</div>
+					<span class="popUpText marginTop"><?php echo $this->translate('I want to contact a wine tour operator focused on the following')?>:</span>
+					<div class="oneLine">
+						<label for="mod_message"><?php echo $this->translate('Comments')?>:</label>
+						<div class="wrapperInput mod_input texarea">
+							<div class="rounded tl"></div>
+							<div class="rounded tr"></div>
+							<div class="rounded br"></div>
+							<div class="rounded bl"></div>
+							<textarea  name="mod_message" id="mod_message" cols="30" rows="10" class="inputBox"></textarea>
+						</div>
+					</div>
+				</div>
+				<div class="textAlignCenter"><input type="button" id="mod_ok" class="redSubmitBg" value="<?php echo $this->translate('Organise Wine Holiday')?>"></div>
+			</form>
+		</div>
+	</div>
+</div>

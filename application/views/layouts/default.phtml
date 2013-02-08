@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr" itemscope itemtype="http://schema.org/LocalBusiness">
+	<head>
+		<meta name="google-site-verification" content="ppIU6A2SdyobPqmriq1WnsZZUFigRzQYIrYWuyrfRIE" />
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+		<script type="text/javascript" src="<?php echo $this->baseUrl().'/jquery/js/jquery-1.7.1.min.js'?>"></script>
+		<script type="text/javascript" src="<?php echo $this->baseUrl().'/jquery/js/jquery-ui-1.8.18.custom.min.js'?>"></script>
+		<script type="text/javascript" src="<?php echo $this->baseUrl().'/jquery/timepicker/js/jquery.timePicker.min.js'?>"></script>
+		<!-- Update your html tag to include the itemscope and itemtype attributes -->
+		<!-- Add the following three tags inside head -->
+		<?php if($this->vineyard) :?>
+			<meta itemprop="name" content="Vineyard <?php echo $this->vineyard->name?>">
+			<meta itemprop="description" content="The vineyards around the world">
+		<?php endif;?>
+		<?php $this->headLink()	->prependStylesheet($this->baseUrl().'/jquery/css/jquery-ui-1.8.18.custom.css')
+								->prependStylesheet($this->baseUrl().'/css/changes.css')
+								->prependStylesheet($this->baseUrl().'/stylesheets/screen.css')
+								->prependStylesheet($this->baseUrl().'/fancybox/jquery.fancybox.css')
+								->prependStylesheet($this->baseUrl().'/jquery/timepicker/css/timePicker.css')
+								; 
+		?>
+		<?php $this->headScript()	->appendFile($this->baseUrl().'/js/autoclear.js')
+									->appendFile($this->baseUrl().'/js/jquery.mousewheel-3.0.4.pack.js')
+									->appendFile($this->baseUrl().'/js/jquery.fancybox.js')
+									->appendFile($this->baseUrl().'/js/custom.js')
+									->appendFile($this->baseUrl().'/js/markermanager.js')
+									->appendFile($this->baseUrl().'/js/z-index.js')
+									->appendFile($this->baseUrl().'/js/jquery.jNice.js')
+									->appendFile($this->baseUrl() . '/js/jvalidate.js')				
+									->appendFile($this->baseUrl().'/js/common.js')
+									; 
+		?>
+		<?php echo $this->magicHeadScript(); ?>
+		
+		<?php echo $this->magicHeadLink()?>
+		
+		<!--[if IE]>	<?php $this->headLink()->prependStylesheet($this->baseUrl().'/stylesheets/ie.css') ?><![endif]-->
+		<!--[if IE 7]>	<?php $this->headLink()->prependStylesheet($this->baseUrl().'/stylesheets/ie7.css') ?><![endif]-->
+		<?php echo $this->headMeta()?>
+		
+		<?php echo $this->headTitle()?>
+		
+		<!--[if IE]><link rel="stylesheet" type="text/css" href="stylesheets/ie.css" media="all" /><![endif]-->
+		<!--[if IE 7]><link rel="stylesheet" type="text/css" href="stylesheets/ie7.css" media="all" /><![endif]-->	
+
+		<script type="text/javascript">
+			var SYS = {
+					siteUrl: '<?php echo $this->baseUrl()?>'
+				}
+
+			var LANG  = <?php echo json_encode($this->translate->getAdapter()->getMessages()); ?>;
+
+			function translate(text)
+			{
+				if(LANG[text]) {
+					return LANG[text];
+				} else {
+					return text;
+				}
+			}
+
+		</script>
+		<!--[if IE]>
+		<script>
+		  document.createElement('header');
+		  document.createElement('nav');
+		  document.createElement('section');
+		  document.createElement('article');
+		  document.createElement('aside');
+		  document.createElement('footer');
+		</script>
+		<![endif]-->
+	</head>
+	<body>
+		<div id="fb-root"></div>
+		<script>(function(d, s, id) {
+		  var js, fjs = d.getElementsByTagName(s)[0];
+		  if (d.getElementById(id)) return;
+		  js = d.createElement(s); js.id = id;
+		  js.src = "//connect.facebook.net/en_GB/all.js#xfbml=1";
+		  fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));</script>
+		<script type="text/javascript">
+		(function() {
+		var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+		po.src = 'https://apis.google.com/js/plusone.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+		})();
+		</script>
+		<div class="wrapper">
+			<section class="headerWrapper">
+				<header>
+					<div class="logoWrapper">
+						<span class="glow"></span>
+						<h1 class="logo">
+							<a href="<?php echo $this->baseUrl()?>/<?php echo $_SESSION['lang']?>/main">Vintlas</a>
+						</h1>
+					</div>
+					<div class="floatRight">
+						<div class="top">
+							<h2><?php echo $this->translate('Welcome to Vintlas')?>. </h2>
+							<?php if(!Zend_Auth::getInstance()->hasIdentity()) :?>
+								<ul>
+									<li class="noBorder paddingRightNone"><a href="<?php echo $this->baseUrl()?>/<?php echo $_SESSION['lang']?>/vineyards/addlisting" title="Add a Vineyard"><?php echo $this->translate('Add a Vineyard')?></a> &nbsp;</li>
+									<li class=""><a href="" id="log">Log in</a>
+										<div class="loginDropdown grayBox">
+											<div class="arrow"></div>					
+											<form action="<?php echo $this->baseUrl() . '/' . $_SESSION['lang'] ?>/auth/login" method="post" id="login1">
+												<div class="oneLine bottom-login">
+													<label for="email1"><?php echo $this->translate('Email:') ?></label>
+													<div class="wrapperInput">
+														<div class="rounded tl"></div>
+														<div class="rounded tr"></div>
+														<div class="rounded br"></div>
+														<div class="rounded bl"></div>
+														<input type="text" id="email1" name="email" class="inputBox"/>
+													</div>
+												</div>
+												<div class="oneLine bottom-login">
+													<label for="password1"><?php echo $this->translate('Password:') ?></label>
+													<div class="wrapperInput">
+														<div class="rounded tl"></div>
+														<div class="rounded tr"></div>
+														<div class="rounded br"></div>
+														<div class="rounded bl"></div>
+														<input type="password" id="password1" name="password" class="inputBox" />
+													</div>
+												</div>
+												<div class="flw">
+													<div class="floatLeft">
+<!--														<input type="hidden" name="rememberMe" value="0">-->
+														<div class="flw"><input type="checkbox" value="1" name="rememberMe" id="rememberMe1" class="checkbox"><label class="checkboxLabel" for="rememberMe1"><?php echo $this->translate('Remember me') ?></label></div>
+														<a class="forgotPassword" href="<?php echo $this->baseUrl()?>/<?php echo $_SESSION['lang']?>/users/forgotpassword"><?php echo $this->translate('Forgot your password?') ?></a>
+													</div>
+													<input type="submit" name="login" class="button" value="<?php echo $this->translate('Log In') ?>"/>
+												</div>
+											</form>
+											<a class="loginName" href="<?php echo $this->baseUrl()?>/<?php echo $_SESSION['lang']?>/reg/index"><?php echo $this->translate('Join Vintlas') ?></a>	
+										</div>
+									</li>
+									<li class="paddingRightNone"><a href="<?php echo $this->baseUrl()?>/<?php echo $_SESSION['lang']?>/reg/index"><?php echo $this->translate('Join Vintlas') ?></a></li>
+								</ul>
+							<?php else :?>
+								<ul>
+									<?php if(Zend_Auth::getInstance()->getIdentity()->role == 'admin') : ?>
+									<li class="noBorder"><a href="<?php echo $this->baseUrl()?>/<?php echo $_SESSION['lang']?>/users/manageuser"><?php echo $this->translate('Admin Panel')?></a></li>
+									<li class="paddingRightNone"><a href="<?php echo $this->baseUrl()?>/<?php echo $_SESSION['lang']?>/vineyards/addlisting" title="Add a Vineyard"><?php echo $this->translate('Add a Vineyard')?></a> &nbsp;</li>
+									<?php else:?>
+									<li class="noBorder paddingRightNone"><a href="<?php echo $this->baseUrl()?>/<?php echo $_SESSION['lang']?>/vineyards/addlisting" title="Add a Vineyard"><?php echo $this->translate('Add a Vineyard')?></a> &nbsp;</li>
+									<?php endif;?>
+									<li><a href="<?php echo $this->baseUrl()?>/<?php echo $_SESSION['lang']?>/users/profile" title="Account"><?php echo $this->translate('Account')?></a></li>
+									<li class="paddingRightNone"><a href="<?php echo $this->baseUrl()?>/<?php echo $_SESSION['lang']?>/auth/logout"><?php echo $this->translate('Log Out')?></a></li>
+								</ul>
+							<?php endif;?>
+						</div>
+						<span><?php echo $this->translate('Search the world’s wine locations &amp; create your own independent or guided wine travel experiences')?>.</span>
+						<form class="searchForm" id="form_search" method="post" action="<?php echo $this->baseUrl()?>/<?php echo $_SESSION['lang']?>/search/list?type%5Ball%5D=all&amp;status%5Bverif%5D=verif&amp;status%5Bunver%5D=unver&amp;status%5Bclaim%5D=claim&amp;continent=">
+<!--							<input type="hidden" name="continent" value="">-->
+							<?php if(empty($this->word)):?>
+								<div class="inputWrapper"><input type="text" class="inputBox" id="searchbox" autocomplete="off" name="q" value="<?php echo !empty($this->search) ? $this->search : 'Find Vineyards/Regions/Wines'?>"></div>
+							<?php else:?>
+								<div class="inputWrapper"><input type="text" class="inputBox" id="searchbox" autocomplete="off" name="q" value="<?php echo $this->word?>"></div>
+							<?php endif;?>	
+							<input type="submit" class="searchButton " value="Search"/>
+						</form>
+					</div>
+				</header>
+				<div class="shadowBox">
+					<div class="shadow"></div>
+				</div>
+<!--				<div class="shadow"></div>-->
+			</section>		
+			<section class="contentWrapper">
+				<div class="container">
+					<?php echo $this->layout()->content; ?>
+				</div>	
+			</section>
+			<div class="push"></div>
+		</div>
+		<section class="footerWrapper">
+			<footer>
+				<nav>
+					<ul>
+						<li class="first"><a href="<?php echo $this->baseUrl()?>/<?php echo $_SESSION['lang']?>/main" title="Home"><?php echo $this->translate('Home')?></a></li>
+						<?php if(Zend_Auth::getInstance()->hasIdentity()) :?>
+							<li class="sep"></li>
+							<li><a href="<?php echo $this->baseUrl()?>/<?php echo $_SESSION['lang']?>/vineyards/addlisting" title="Add a Vineyard"><?php echo $this->translate('Add a Vineyard')?></a></li>
+						<?php endif;?>	
+						<li class="sep"></li>
+						<li><a href="<?php echo $this->baseUrl()?>/<?php echo $_SESSION['lang']?>/main/aboutus" title="About Us"><?php echo $this->translate('About Us')?></a></li>
+						<li class="sep"></li>
+						<li><a href="<?php echo $this->baseUrl()?>/<?php echo $_SESSION['lang']?>/main/contactus" title="Contact Us"><?php echo $this->translate('Contact Us')?></a></li>
+					</ul>
+				</nav>
+				<p class="copyright"><?php echo $this->translate('Vintlas © 2012. All rights reserved')?></p>
+				<ul class="info">
+					<li class="first"><a href="<?php echo $this->baseUrl()?>/<?php echo $_SESSION['lang']?>/main/termsofuse"><?php echo $this->translate('Terms of use')?></a></li>
+					<li><a href="<?php echo $this->baseUrl()?>/<?php echo $_SESSION['lang']?>/main/privacystatement"><?php echo $this->translate('Privacy statement')?></a></li>
+				</ul>
+			</footer>
+		</section>	
+		<script type="text/javascript">
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-31939736-1']);
+			_gaq.push(['_trackPageview']);
+			(function() {
+				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			})();
+		</script>
+	</body>
+</html>

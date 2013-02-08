@@ -1,0 +1,28 @@
+<div id="view-content">
+	<h2><?php echo $this->message ?></h2>
+	<?php if(count($this->paginator)) :?>
+		<table class="table table-bordered table-striped">
+			<thead>
+				<tr>
+					<th class="span1">User Name</th>
+					<th class="span1">Email Address</th>
+					<th class="">Subject</th>
+					<th class="">Comment</th>
+				</tr>
+			</thead>
+			<tbody>
+			<?php foreach($this->paginator as $contact):?>
+				<tr>
+					<td><?php echo $this->escape($contact['name']) ?></td>
+					<td><?php echo $this->escape($contact['email']) ?></td>
+					<td><?php echo $this->escape($contact['subject']) ?></td>
+					<td><?php echo $this->escape($contact['comment']) ?></td>
+				</tr>
+			<?php endforeach;?>
+			</tbody>
+		</table>
+	<?php echo $this->paginationControl($this->paginator, 'Sliding', 'users/pagination_users.phtml'); ?>
+	<?php else:?>
+		<p>No Grapes</p>
+	<?php endif;?>
+</div>

@@ -1,0 +1,745 @@
+<script>
+	var loc_y = <?php echo $this->loc_y?>;
+	var loc_z = <?php echo $this->loc_z?>;
+</script>
+<?php if(!empty($this->flash_message)) :?>
+	<span class="flash_message"><?php echo $this->translate($this->flash_message)?></span>
+<?php endif;?>
+<form enctype="multipart/form-data" action="<?php echo $this->form->getAction()?>" method="post" id="edit_vineyard" class="form jNice">
+	<input type="hidden" name="id" value="<?php echo $this->id?>">
+	<h2 class="title borderBottom noBg"><?php echo $this->translate('Edit a Vineyard/Winery')?></h2>
+	<div class="flw borderBottom formSection">
+		<div class="oneLine">
+			<label for="name"><?php echo $this->translate('Vineyard Name*')?>:</label>
+			<div class="wrapperInput">
+				<?php echo $this->form->getElement('name')->setLabel('')->setAttrib('class', 'inputBox') ?>
+			</div>
+		</div>
+		<div class="oneLine">
+			<label for="location"><?php echo $this->translate('Vineyard Name in local Language (if different)')?>:</label>
+			<div class="wrapperInput">
+				<?php echo $this->form->nameloc->setLabel('')->setAttrib('class', 'inputBox') ?>
+			</div>
+		</div>
+		<div class="oneLine">
+			<label for=""><?php echo $this->translate('I am the Owner/Manager')?>:</label>
+			<div class="radioBox">
+				<input type="radio" name="owner" id="owner-1" value="1" checked="checked"/>
+				<span class="radoiLabel"><?php echo $this->translate('Yes')?></span>
+			</div>
+			<div class="radioBox">
+				<input type="radio" name="owner" id="owner-0" value="0"/>
+				<span class="radoiLabel"><?php echo $this->translate('No')?></span>
+			</div>
+		</div>
+		<div class="oneLine div_prop">
+			<label for="proprietor"><?php echo $this->translate('Proprietor')?>:</label>
+			<div class="wrapperInput">
+				<?php echo $this->form->proprietor->setLabel('')->setAttrib('class', 'inputBox') ?>
+			</div>
+		</div>		
+	</div>
+	<div class="flw borderBottom formSection">
+		<br>
+		<h5 class="sectionTitle"><?php echo $this->translate('Other Facilities')?></h5>
+		<div class="oneLine">
+			<label for="continent"><?php echo $this->translate('Continent')?>*:</label>
+			<br>
+			<?php echo $this->form->continent ?>
+		</div>
+		<div class="oneLine">
+			<label for="country"><?php echo $this->translate('Country')?>*:</label>
+			<br>
+			<?php $country_mod = new Application_Model_Countries();?>
+			<select name="country" id="country">
+				<option value="" label="Select country"><?php echo $this->translate('Select country')?></option>
+				<?php foreach($country_mod->getCountries() as  $item):?>
+					<option value="<?php echo $item->code?>" <?php echo $item->code == $this->form->getElement('country')->getValue() ? 'selected="selected"' : ''?>><?php echo $item->name_en?></option>
+				<?php endforeach;?>				
+			</select>
+		</div>
+		<div class="oneLine">
+			<label for="region"><?php echo $this->translate('Associated Wine Region')?>*:</label>
+			<br>
+			<?php $reg_mod = new Application_Model_Assregions();?>
+			<select name="ass_region" id="ass_region">
+				<option value="" label="Select Associated Region"><?php echo $this->translate('Select Associated Region')?></option>
+				<?php foreach($reg_mod->getAssregionsByCountryId($this->form->getElement('country')->getValue()) as  $item):?>
+				<option value="<?php echo $item->id?>" <?php echo $item->id == $this->form->getElement('ass_region')->getValue() ? 'selected="selected"' : ''?>><?php echo $item->name?></option>
+				<?php endforeach;?>				
+			</select>
+		</div>		
+	</div>	
+	<div class="flw borderBottom formSection">
+		<br>
+		<h5 class="sectionTitle"><?php echo $this->translate('Pinpoint Exact location on the Map OR Enter GPS Co-ordinates')?></h5>
+		<div class="mapBox">
+			<div id="edit_listing" style="width: 781px; height: 521px; border: 1px solid #DDDFE1; margin: 19px 0 15px;"></div>
+			<h5 class="sectionTitle textAlignCenter"><?php echo $this->translate('OR')?></h5>
+		</div>
+		<div class="oneLine">
+			<label for="gpsOne"><?php echo $this->translate('GPS Long')?>:</label>
+			<div class="wrapperInput">
+				<?php echo $this->form->loc_y ?>
+			</div>
+		</div>
+		<div class="oneLine">
+			<label for="gpsTwo"><?php echo $this->translate('GPS Lat')?>:</label>
+			<div class="wrapperInput">
+				<?php echo $this->form->loc_z ?>
+			</div>
+		</div>
+	</div>	
+	<div class="flw borderBottom formSection">
+		<br>
+		<h5 class="sectionTitle"><?php echo $this->translate('Address Details')?></h5>
+		<div class="oneLine">
+			<label for="addres1"><?php echo $this->translate('Address 1')?>:</label>
+			<div class="wrapperInput">
+				<?php echo $this->form->address1 ?>
+			</div>
+		</div>
+		<div class="oneLine">
+			<label for="addres2"><?php echo $this->translate('Address 2')?>:</label>
+			<div class="wrapperInput">
+				<?php echo $this->form->address2 ?>
+			</div>
+		</div>
+		<div class="oneLine">
+			<label for="city"><?php echo $this->translate('City/Town')?>*:</label>
+			<div class="wrapperInput">
+				<?php echo $this->form->city ?>
+			</div>
+		</div>
+		<div class="oneLine">
+			<label for="state"><?php echo $this->translate('Province/Region/State')?>:</label>
+			<div class="wrapperInput">
+				<?php echo $this->form->region ?>
+			</div>
+		</div>
+		<div class="oneLine">
+			<label for="code"><?php echo $this->translate('Zip/Postal Code')?>:</label>
+			<div class="wrapperInput">
+				<?php echo $this->form->zip ?>
+				</div>
+		</div>
+	</div>
+	<div class="flw borderBottom formSection">
+		<br>
+		<h5 class="sectionTitle"><?php echo $this->translate('Contact Information')?></h5>
+		<div class="oneLine">
+			<label for="telephone"><?php echo $this->translate('Telephone Number')?>*:</label>
+			<div class="wrapperInput">
+				<?php echo $this->form->getElement('country_code')->setAttrib('style', 'width: 40px') ?>
+				<?php echo $this->form->city_code->setAttrib('style', 'width: 50px') ?>
+				<?php echo $this->form->telephone->setAttrib('style', 'width: 92px') ?>
+			</div>
+		</div>
+		<div class="oneLine">
+			<label for="fax"><?php echo $this->translate('Fax')?>:</label>
+			<div class="wrapperInput">
+				<?php echo $this->form->fax ?>
+			</div>
+		</div>
+		<div class="oneLine">
+			<label for="email"><?php echo $this->translate('E-mail address')?>:</label>
+			<div class="wrapperInput">
+				<?php echo $this->form->email ?>
+			</div>
+		</div>
+		<div class="oneLine">
+			<label for="web"><?php echo $this->translate('Web address')?>:</label>
+			<div class="wrapperInput">
+				<?php echo $this->form->web ?>
+			</div>
+		</div>
+	</div>	
+	<div class="flw borderBottom formSection">
+		<br>
+		<h5 class="sectionTitle"><?php echo $this->translate('Images')?></h5>
+		<div class="oneLine">
+			<label for="logo"><?php echo $this->translate('Vineyard Logo')?>:</label>
+			<br>
+			<input id="root9" type="file" name="logo">
+			<div  class="spiner" id="logo"></div>
+		</div>
+		<br>
+		<div id="vineyard_logo"><?php echo !empty($this->logo) ? '<img src="' . $this->baseUrl() . '/images/vineyard/logo/' . $this->logo . '"></img><input type="hidden" name="logo" value="' . $this->logo . '">' : ''?></div>
+		<div class="oneLine">
+			<label for="images"><?php echo $this->translate('Images of Property')?>:</label>
+			<br>
+			<input id="root10" type="file" name="photo[]" multiple="">
+			<div  class="spiner" id="photos"></div>
+		</div>
+		<div class="fileupload-loading"></div>
+		<table class="table table-striped">
+			<tbody id="vineyard_photos" class="files" data-toggle="modal-gallery" data-target="#modal-gallery">
+			<?php if(!empty($this->photos)) :?>
+			<?php foreach($this->photos as $photo) :?>
+			<tr>
+				<td>
+					<img src="/images/vineyard/photos/small/small_<?php echo $photo->name?>" alt="<?php echo $photo->name?>" title="<?php echo $photo->name?>">
+					<input class="input-file" value="<?php echo $photo->name?>" name="photos[]" type="hidden">
+				</td>
+				<td>
+					<button type="button" class="btn btn-danger delete"><i class="icon-trash icon-white"></i><span>Delete</span></button>
+				</td>
+			</tr>
+			<?php endforeach;?>
+			<?php endif;?>
+			</tbody>
+		</table>
+	</div>
+	<div class="flw borderBottom formSection">
+		<h5 class="sectionTitle"><?php echo $this->translate('Visiting this Vineyard/Winery')?></h5>
+		<div class="oneLine">
+			<label><?php echo $this->translate('Welcomes Visits?')?></label>
+			<div class="radioBox">
+				<input type="radio" name="visits" value="1" <?php echo $this->form->getElement('visits')->getValue() == '1' ? 'checked="checked"' : ''?>/>
+				<span class="radoiLabel"><?php echo $this->translate('Yes')?></span>
+			</div>
+			<div class="radioBox">
+				<input type="radio" name="visits" value="0" <?php echo $this->form->getElement('visits')->getValue() == '0' ? 'checked="checked"' : ''?>/>
+				<span class="radoiLabel"><?php echo $this->translate('No')?></span>
+			</div>
+			<div class="radioBox">
+				<input type="radio" name="visits" value="2" <?php echo $this->form->getElement('visits')->getValue() == '2' ? 'checked="checked"' : ''?>/>
+				<span class="radoiLabel"><?php echo $this->translate('Don`t know')?></span>
+			</div>
+		</div>
+		<div class="oneLine">
+			<label ><?php echo $this->translate('From Individuals')?>:</label>
+			<div class="radioBox">
+				<input type="radio" name="individuals" value="1" <?php echo $this->form->getElement('individuals')->getValue() == '1' ? 'checked="checked"' : ''?>/>
+				<span class="radoiLabel"><?php echo $this->translate('Yes')?></span>
+			</div>
+			<div class="radioBox">
+				<input type="radio" name="individuals" value="0" <?php echo $this->form->getElement('individuals')->getValue() == '0' ? 'checked="checked"' : ''?>/>
+				<span class="radoiLabel"><?php echo $this->translate('No')?></span>
+			</div>
+			<div class="radioBox">
+				<input type="radio" name="individuals" value="2" <?php echo $this->form->getElement('individuals')->getValue() == '2' ? 'checked="checked"' : ''?>/>
+				<span class="radoiLabel"><?php echo $this->translate('Don`t know')?></span>
+			</div>
+		</div>
+		<div class="oneLine">
+			<label for=""><?php echo $this->translate('From Groups')?>:</label>
+			<div class="radioBox">
+				<input type="radio" name="groups" value="1" <?php echo $this->form->getElement('groups')->getValue() == '1' ? 'checked="checked"' : ''?>/>
+				<span class="radoiLabel"><?php echo $this->translate('Yes')?></span>
+			</div>
+			<div class="radioBox">
+				<input type="radio" name="groups" value="0" <?php echo $this->form->getElement('groups')->getValue() == '0' ? 'checked="checked"' : ''?>/>
+				<span class="radoiLabel"><?php echo $this->translate('No')?></span>
+			</div>
+			<div class="radioBox">
+				<input type="radio" name="groups" value="2" <?php echo $this->form->getElement('groups')->getValue() == '2' ? 'checked="checked"' : ''?>/>
+				<span class="radoiLabel"><?php echo $this->translate('Don`t know')?></span>
+			</div>							
+		</div>
+	</div>	
+	<div class="flw borderBottom formSection">
+		<br>
+		<h5 class="sectionTitle"><?php echo $this->translate('Opening Hours &amp; Seasons')?></h5>
+		<div class="seasons">
+			<?php if(!empty($this->seasons[0])):?>
+				<?php $i = 0;?>
+				<?php foreach($this->seasons as $season) :?>
+					<?php $i++;?>
+					<?php $e = $i - 1;?>
+					<div class="season" id="season<?php echo $i?>">
+						<div class="oneLine">
+							<label for="seasonName"><?php echo $this->translate('Season Name')?>:</label>
+							<div class="wrapperInput">
+								<?php echo $this->form->getElement("seasons")->setValue($season->name)?>
+							</div>
+						</div>
+						<div class="oneLine">
+							<label for=""><?php echo $this->translate('Need a appointment?')?></label>
+							<div class="radioBox">
+								<input id="appointment-yes<?php echo $i?>" type="radio" name="season[appointment][<?php echo $e?>]" value="1" <?php echo $season->appointment == 1 ? 'checked="checked"' : ''?>/>
+								<span class="radoiLabel"><?php echo $this->translate('Yes')?></span>
+							</div>
+							<div class="radioBox">
+								<input id="appointment-no<?php echo $i?>" type="radio" name="season[appointment][<?php echo $e?>]" value="0" <?php echo $season->appointment == 0 ? 'checked="checked"' : ''?>/>
+								<span class="radoiLabel"><?php echo $this->translate('No')?></span>
+							</div>
+							<div class="radioBox">
+								<input id="appointment-dont<?php echo $i?>" type="radio" name="season[appointment][<?php echo $e?>]" value="2" <?php echo $season->appointment == 2 ? 'checked="checked"' : ''?>/>
+								<span class="radoiLabel"><?php echo $this->translate('Don`t know')?></span>
+							</div>
+						</div>						
+						<div class="oneLine">
+							<label for="startEnd"><?php echo $this->translate('Start &amp; End Dates')?>:</label>
+						</div>	
+						<div class="oneLine">
+							<label for="start"><?php echo $this->translate('Start Date')?>:</label>
+							<div class="wrapperInput datapickerWrapper">
+								<?php echo $this->form->date1->setValue(!empty($season->date1) ? date('j F', $season->date1) : '') ?>
+							</div>
+						</div>
+						<div class="oneLine">
+							<label for="end"><?php echo $this->translate('End Date')?>:</label>
+							<div class="wrapperInput datapickerWrapper">
+								<?php echo $this->form->date2->setValue(!empty($season->date2) ? date('j F', $season->date2) : '') ?>
+							</div>
+						</div>
+						<div class="oneLine">
+							<label for="days"><?php echo $this->translate('Days of week')?>:</label>
+							<?php $weeks = unserialize($season->weeks);?>
+							<div class="checkboxBox"><input type="checkbox" name="season[weeks][<?php echo $e?>][]" id="weeks-Monday" value="Monday"<?php echo in_array('Monday', $weeks) ? 'checked="checked"' : ''?>/><span class="checkboxLabel"><?php echo $this->translate('Mo')?></span></div>
+							<div class="checkboxBox"><input type="checkbox" name="season[weeks][<?php echo $e?>][]" id="weeks-Tuesday" value="Tuesday"<?php echo in_array('Tuesday', $weeks) ? 'checked="checked"' : ''?>/><span class="checkboxLabel"><?php echo $this->translate('Tu')?></span></div>
+							<div class="checkboxBox"><input type="checkbox" name="season[weeks][<?php echo $e?>][]" id="weeks-Wednesday" value="Wednesday"<?php echo in_array('Wednesday', $weeks) ? 'checked="checked"' : ''?>/><span class="checkboxLabel"><?php echo $this->translate('We')?></span></div>
+							<div class="checkboxBox"><input type="checkbox" name="season[weeks][<?php echo $e?>][]" id="weeks-Thursday" value="Thursday"<?php echo in_array('Thursday', $weeks) ? 'checked="checked"' : ''?>/><span class="checkboxLabel"><?php echo $this->translate('Th')?></span></div>
+							<div class="checkboxBox"><input type="checkbox" name="season[weeks][<?php echo $e?>][]" id="weeks-Friday" value="Friday"<?php echo in_array('Friday', $weeks) ? 'checked="checked"' : ''?>/><span class="checkboxLabel"><?php echo $this->translate('Fr')?></span></div>
+							<div class="checkboxBox"><input type="checkbox" name="season[weeks][<?php echo $e?>][]" id="weeks-Saturday" value="Saturday"<?php echo in_array('Saturday', $weeks) ? 'checked="checked"' : ''?>/><span class="checkboxLabel"><?php echo $this->translate('Sa')?></span></div>
+							<div class="checkboxBox"><input type="checkbox" name="season[weeks][<?php echo $e?>][]" id="weeks-Sunday" value="Sunday"<?php echo in_array('Sunday', $weeks) ? 'checked="checked"' : ''?>/><span class="checkboxLabel"><?php echo $this->translate('Su')?></span></div>
+						</div>		
+						<div class="oneLine hours">
+							<label for="hours"><?php echo $this->translate('Opening Hours')?>:</label>
+							<br>
+							<span class="label"><?php echo $this->translate('From')?></span>
+							<div class="wrapperInput">
+								<div class="rounded tl"></div>
+								<div class="rounded tr"></div>
+								<div class="rounded br"></div>
+								<div class="rounded bl"></div>
+								<?php echo $this->form->time1->setValue($season->time1) ?>
+							</div>
+							<br>
+							<span class="label to"><?php echo $this->translate('to')?></span>
+							<div class="wrapperInput">
+								<?php echo $this->form->time2->setValue($season->time2) ?>
+							</div>
+						</div>
+						<div class="oneLine">
+							<label for="notes"><?php echo $this->translate('Season 1 Notes')?>:</label>
+							<div class="wrapperInput texarea">
+								<textarea name="season[notes][]" id="notes" cols="30" rows="10" class="inputBox"><?php echo $season->notes?></textarea>
+							</div>
+						</div>
+						<a href="#" rel="season<?php echo $i?>" class="delete_season redButton"><?php echo $this->translate('Delete Season')?></a>
+					</div>
+				<?php endforeach;?>
+			<?php else:?>
+				<div class="season" id="season1">
+					<div class="oneLine">
+						<label for="seasonName"><?php echo $this->translate('Season Name')?>:</label>
+						<div class="wrapperInput">
+							<?php echo $this->form->getElement("seasons")->setValue('')?>
+						</div>
+					</div>
+					<div class="oneLine">
+						<label for=""><?php echo $this->translate('Need a appointment?')?></label>
+						<div class="radioBox">
+							<input id="appointment-yes1" type="radio" name="season[appointment][0]" value="1"/>
+							<span class="radoiLabel"><?php echo $this->translate('Yes')?></span>
+						</div>
+						<div class="radioBox">
+							<input id="appointment-no1" type="radio" name="season[appointment][0]" value="0"/>
+							<span class="radoiLabel"><?php echo $this->translate('No')?></span>
+						</div>
+						<div class="radioBox">
+							<input id="appointment-dont1" type="radio" name="season[appointment][0]" value="2" checked="checked"/>
+							<span class="radoiLabel"><?php echo $this->translate('Don`t know')?></span>
+						</div>
+						<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please select need to make appointment of the vineyard season')?></span></div>
+					</div>					
+					<div class="oneLine">
+						<label for="startEnd"><?php echo $this->translate('Start &amp; End Dates')?>:</label>
+					</div>	
+					<div class="oneLine">
+						<label for="start"><?php echo $this->translate('Start Date')?>:</label>
+						<div class="wrapperInput datapickerWrapper">
+							<?php echo $this->form->date1->setValue('') ?>
+						</div>
+					</div>
+					<div class="oneLine">
+						<label for="end"><?php echo $this->translate('End Date')?>:</label>
+						<div class="wrapperInput datapickerWrapper">
+							<?php echo $this->form->date2->setValue('') ?>
+						</div>
+					</div>
+					<div class="oneLine week_days">
+						<label for="days"><?php echo $this->translate('Days of week')?>:</label>
+							<div class="checkboxBox"><input type="checkbox" name="season[weeks][0][]" id="weeks-Monday" value="Monday"/><span class="checkboxLabel"><?php echo $this->translate('Mo')?></span></div>
+							<div class="checkboxBox"><input type="checkbox" name="season[weeks][0][]" id="weeks-Tuesday" value="Tuesday"/><span class="checkboxLabel"><?php echo $this->translate('Tu')?></span></div>
+							<div class="checkboxBox"><input type="checkbox" name="season[weeks][0][]" id="weeks-Wednesday" value="Wednesday"/><span class="checkboxLabel"><?php echo $this->translate('We')?></span></div>
+							<div class="checkboxBox"><input type="checkbox" name="season[weeks][0][]" id="weeks-Thursday" value="Thursday"/><span class="checkboxLabel"><?php echo $this->translate('Th')?></span></div>
+							<div class="checkboxBox"><input type="checkbox" name="season[weeks][0][]" id="weeks-Friday" value="Friday"/><span class="checkboxLabel"><?php echo $this->translate('Fr')?></span></div>
+							<div class="checkboxBox"><input type="checkbox" name="season[weeks][0][]" id="weeks-Saturday" value="Saturday"/><span class="checkboxLabel"><?php echo $this->translate('Sa')?></span></div>
+							<div class="checkboxBox"><input type="checkbox" name="season[weeks][0][]" id="weeks-Sunday" value="Sunday"/><span class="checkboxLabel"><?php echo $this->translate('Su')?></span></div>
+					</div>		
+					<div class="oneLine hours">
+						<label for="hours"><?php echo $this->translate('Opening Hours')?>:</label>
+						<br>
+						<span class="label"><?php echo $this->translate('From')?></span>
+						<div class="wrapperInput">
+							<?php echo $this->form->time1->setValue('') ?>
+						</div>
+						<br>
+						<span class="label to"><?php echo $this->translate('to')?></span>
+						<div class="wrapperInput">
+							<?php echo $this->form->time2->setValue('') ?>
+						</div>
+					</div>
+					<div class="oneLine">
+						<label for="notes"><?php echo $this->translate('Season Notes')?>:</label>
+						<div class="wrapperInput texarea">
+							<textarea name="season[notes][]" id="notes" cols="30" rows="10" class="inputBox"></textarea>
+						</div>
+					</div>
+					<a href="#" rel="season1" class="delete_season redButton"><?php echo $this->translate('Delete Season')?></a>
+				</div>			
+			<?php endif;?>
+		</div>	
+		<a href="#" class="add_season redButton"><?php echo $this->translate('Add Another Season')?></a>
+	</div>
+	<div class="flw borderBottom formSection">
+		<br>
+		<h5 class="sectionTitle"><?php echo $this->translate('Wine Tasting/Tours')?></h5>
+		<div class="oneLine addBox">
+			<label for="languages"><?php echo $this->translate('Languages Spoken')?>:</label>
+			<div class="spokens">
+				<?php $languages = new Application_Model_Spokens();?>
+				<?php if($this->form->spoken->getValue() != '') :?>
+					<?php foreach($this->form->spoken->getValue() as $spoken) :?>
+						<div class="addedBox">
+							<select name="spoken[]" id="spoken">
+								<option value=""><?php $this->translate('Don`t know')?></option>
+								<?php foreach ($languages->getSpokens() as $language) :?>
+								<option value="<?php echo $language->id?>" <?php echo $language->id == $spoken ? 'selected="selected"' : ''?>><?php echo $language->name?></option>
+								<?php endforeach;?>
+							</select>	
+						</div>
+					<?php endforeach;?>
+				<?php else:?>
+					<select name="spoken[]" id="spoken">
+						<option value=""><?php echo $this->translate('Don`t know')?></option>
+						<?php foreach ($languages->getSpokens() as $language) :?>
+							<option value="<?php echo $language->id?>"><?php echo $language->name?></option>
+						<?php endforeach;?>
+					</select>				
+				<?php endif;?>
+			</div>
+			<a href="#" class="add" id="add_spoken"><?php echo $this->translate('Add a Language')?></a>
+		</div>
+		<div id="spoken_tmp" style="display:none;">
+			<div class="addedBox">
+				<select name="spoken[]" id="spoken">
+					<option value=""><?php echo $this->translate('Don`t know')?></option>
+					<?php foreach ($languages->getSpokens() as $language) :?>
+					<option value="<?php echo $language->id?>"><?php echo $language->name?></option>
+					<?php endforeach;?>
+				</select>
+			</div>
+		</div>
+		<div class="oneLine">
+			<label for=""><?php echo $this->translate('Wine Tasting')?>:</label>
+			<br>
+			<?php echo $this->form->tasting ?>
+		</div>
+		<div class="oneLine">
+			<label for=""><?php echo $this->translate('Wine Tours')?>:</label>
+			<br>
+			<?php echo $this->form->tour ?>
+		</div>
+		<div class="oneLine">
+			<label for=""><?php echo $this->translate('Wines Sales')?>:</label>
+			<br>
+			<div class="radioBox"><input type="radio" name="sales" value="1" <?php echo $this->form->getElement('sales')->getValue() == '1' ? 'checked="checked"' : ''?>/><span class="radoiLabel"><?php echo $this->translate('Yes')?></span></div>
+			<div class="radioBox"><input type="radio" name="sales" value="0" <?php echo $this->form->getElement('sales')->getValue() == '0' ? 'checked="checked"' : ''?>/><span class="radoiLabel"><?php echo $this->translate('No')?></span></div>
+			<div class="radioBox"><input type="radio" name="sales" value="2"  <?php echo $this->form->getElement('sales')->getValue() == '2' ? 'checked="checked"' : ''?>/><span class="radoiLabel"><?php echo $this->translate('Don`t know')?></span></div>
+		</div>
+		<div class="oneLine">
+			<label for=""><?php echo $this->translate('Wine Workshops')?>:</label>
+			<br>
+			<div class="radioBox"><input type="radio" name="workshops" value="1" <?php echo $this->form->getElement('workshops')->getValue() == '1' ? 'checked="checked"' : ''?>/><span class="radoiLabel"><?php echo $this->translate('Yes')?></span></div>
+			<div class="radioBox"><input type="radio" name="workshops" value="0" <?php echo $this->form->getElement('workshops')->getValue() == '0' ? 'checked="checked"' : ''?>/><span class="radoiLabel"><?php echo $this->translate('No')?></span></div>
+			<div class="radioBox"><input type="radio" name="workshops" value="2" <?php echo $this->form->getElement('workshops')->getValue() == '2' ? 'checked="checked"' : ''?>/><span class="radoiLabel"><?php echo $this->translate('Don`t know')?></span></div>
+		</div>
+	</div>
+	<div class="flw borderBottom formSection">
+		<br>
+		<h5 class="sectionTitle"><?php echo $this->translate('Other Facilities')?></h5>
+		<div class="oneLine">
+			<label for=""><?php echo $this->translate('Restaurant')?>:</label>
+			<div class="radioBox"><input type="radio" name="restaurant" value="1" <?php echo $this->form->getElement('restaurant')->getValue() == '1' ? 'checked="checked"' : ''?>/><span class="radoiLabel"><?php echo $this->translate('Yes')?></span></div>
+			<div class="radioBox"><input type="radio" name="restaurant" value="0" <?php echo $this->form->getElement('restaurant')->getValue() == '0' ? 'checked="checked"' : ''?>/><span class="radoiLabel"><?php echo $this->translate('No')?></span></div>
+			<div class="radioBox"><input type="radio" name="restaurant" value="2" <?php echo $this->form->getElement('restaurant')->getValue() == '2' ? 'checked="checked"' : ''?>/><span class="radoiLabel"><?php echo $this->translate('Don`t know')?></span></div>
+		</div>
+		<div class="oneLine">
+			<label for=""><?php echo $this->translate('Accommodation Available On Site')?>:</label>
+			<div class="radioBox"><input type="radio" name="accommodation" value="1" <?php echo $this->form->getElement('accommodation')->getValue() == '1' ? 'checked="checked"' : ''?>/><span class="radoiLabel"><?php echo $this->translate('Yes')?></span></div>
+			<div class="radioBox"><input type="radio" name="accommodation" value="0" <?php echo $this->form->getElement('accommodation')->getValue() == '0' ? 'checked="checked"' : ''?>/><span class="radoiLabel"><?php echo $this->translate('No')?></span></div>
+			<div class="radioBox"><input type="radio" name="accommodation" value="2" <?php echo $this->form->getElement('accommodation')->getValue() == '2' ? 'checked="checked"' : ''?>/><span class="radoiLabel"><?php echo $this->translate('Don`t know')?></span></div>
+		</div>
+		<div class="oneLine">
+			<label for=""><?php echo $this->translate('Weddings')?>:</label>
+			<div class="radioBox"><input type="radio" name="weddings" value="1" <?php echo $this->form->getElement('weddings')->getValue() == '1' ? 'checked="checked"' : ''?>/><span class="radoiLabel"><?php echo $this->translate('Yes')?></span></div>
+			<div class="radioBox"><input type="radio" name="weddings" value="0" <?php echo $this->form->getElement('weddings')->getValue() == '0' ? 'checked="checked"' : ''?>/><span class="radoiLabel"><?php echo $this->translate('No')?></span></div>
+			<div class="radioBox"><input type="radio" name="weddings" value="2" <?php echo $this->form->getElement('weddings')->getValue() == '2' ? 'checked="checked"' : ''?>/><span class="radoiLabel"><?php echo $this->translate('Don`t know')?></span></div>
+		</div>
+		<div class="oneLine">
+			<label for=""><?php echo $this->translate('Corporate Seminars')?>:</label>
+			<div class="radioBox"><input type="radio" name="seminars" value="1" <?php echo $this->form->getElement('seminars')->getValue() == '1' ? 'checked="checked"' : ''?>/><span class="radoiLabel"><?php echo $this->translate('Yes')?></span></div>
+			<div class="radioBox"><input type="radio" name="seminars" value="0" <?php echo $this->form->getElement('seminars')->getValue() == '0' ? 'checked="checked"' : ''?>/><span class="radoiLabel"><?php echo $this->translate('No')?></span></div>
+			<div class="radioBox"><input type="radio" name="seminars" value="2" <?php echo $this->form->getElement('seminars')->getValue() == '2' ? 'checked="checked"' : ''?>/><span class="radoiLabel"><?php echo $this->translate('Don`t know')?></span></div>
+		</div>
+	</div>
+	<div class="flw borderBottom formSection">
+		<br>
+		<h5 class="sectionTitle"><?php echo $this->translate('About the Grapes &amp; Wines Produced')?></h5>
+		<div class="oneLine addBox">
+			<label for=""><?php echo $this->translate('Grapes Grown')?>:</label>
+			<div class="grapes">
+				<div class="addedBox">
+				<?php $gr_mod = new Application_Model_Grapes();?>
+				<?php if($this->form->grapes->getValue() != '') :?>	
+					<?php foreach($this->form->grapes->getValue() as $grape) :?>
+						<div class="addedBox">
+							<select name="grapes[]" id="grapes">
+								<option value=""><?php echo $this->translate('Don`t know')?></option>
+								<?php foreach ($gr_mod->getGrapes() as $item) :?>
+								<option value="<?php echo $item->id?>" <?php echo $item->id == $grape ? 'selected="selected"' : ''?>><?php echo $item->name?></option>
+								<?php endforeach;?>
+							</select>	
+						</div>
+					<?php endforeach;?>					
+				<?php else:?>
+					<select name="grapes[]" id="grapes">
+						<option value=""><?php echo $this->translate('Don`t know')?></option>
+						<?php foreach ($gr_mod->getGrapes() as $item) :?>
+						<option value="<?php echo $item->id?>"><?php echo $item->name?></option>
+						<?php endforeach;?>
+					</select>					
+				<?php endif;?>	
+				</div>
+			</div>
+		</div>
+		<div class="oneLine addBox"><a href="#" class="add" id="add_grape"><?php echo $this->translate('Add a grape grown')?></a></div>
+		<div id="grape_tmp" style="display: none;">
+			<div class="addedBox">
+				<select name="grapes[]" id="grapes">
+					<option value=""><?php echo $this->translate('Don`t know')?></option>
+					<?php foreach ($gr_mod->getGrapes() as $item) :?>
+					<option value="<?php echo $item->id?>"><?php echo $item->name?></option>
+					<?php endforeach;?>
+				</select>
+			</div>
+		</div>
+	</div>
+	<div class="flw borderBottom formSection">
+		<br>
+		<h5 class="sectionTitle"><?php echo $this->translate('Add Related Wines')?></h5>
+		<div class="wines">
+			<?php if(!empty($this->wines[0])):?>
+				<?php $i = 0;?>
+				<?php foreach($this->wines as $wine):?>
+					<?php $i++;?>
+					<div class="wine" id="wine<?php echo $i?>">
+						<div class="oneLine">
+							<label for=""><?php echo $this->translate('Wine Name')?>:</label>
+							<div class="wrapperInput">
+								<?php echo $this->form->name_w->setValue($wine->name)?>
+							</div>
+						</div>
+						<div class="oneLine">
+							<?php $e = $i - 1?>
+							<label for=""><?php echo $this->translate('Grapes')?>:</label>
+							<?php echo $this->form->grapes_w->setValue(unserialize($wine->grapes))->setAttrib('name', 'wines[grapes][' . $e . '][]')->setAttrib('class', 'wines-grape-multiple') ?>
+						</div>
+						<div class="oneLine">
+							<label for=""><?php echo $this->translate('Wine Type')?>:</label>
+							<br>
+							<select name="wines[type][]" id="type_w">
+								<option value="" label="<?php echo $this->translate('Select Wine Type')?>"><?php echo $this->translate('Select Wine Type')?></option>
+								<option value="Wine red" label="<?php echo $this->translate('Wine red')?>" <?php echo $wine->type == 'Wine red' ? 'selected="selected"' : ''?>><?php echo $this->translate('Wine red')?></option>
+								<option value="Wine rose" label="<?php echo $this->translate('Wine rose')?>" <?php echo $wine->type == 'Wine rose' ? 'selected="selected"' : ''?>><?php echo $this->translate('Wine rose')?></option>
+								<option value="Wine white" label="<?php echo $this->translate('Wine white')?>" <?php echo $wine->type == 'Wine white' ? 'selected="selected"' : ''?>><?php echo $this->translate('Wine white')?></option>
+								<option value="Fortified dessert wine" label="<?php echo $this->translate('Fortified dessert wine')?>" <?php echo $wine->type == 'Fortified dessert wine' ? 'selected="selected"' : ''?>><?php echo $this->translate('Fortified dessert wine')?></option>
+								<option value="Fortified Port" label="<?php echo $this->translate('Fortified Port')?>" <?php echo $wine->type == 'Fortified Port' ? 'selected="selected"' : ''?>><?php echo $this->translate('Fortified Port')?></option>
+								<option value="Fortified sherry" label="<?php echo $this->translate('Fortified sherry')?>" <?php echo $wine->type == 'Fortified sherry' ? 'selected="selected"' : ''?>><?php echo $this->translate('Fortified sherry')?></option>
+								<option value="Fortified sherry-style" label="<?php echo $this->translate('Fortified sherry-style')?>" <?php echo $wine->type == 'Fortified sherry-style' ? 'selected="selected"' : ''?>><?php echo $this->translate('Fortified sherry-style')?></option>
+								<option value="Fortified vin doux naturel" label="<?php echo $this->translate('Fortified vin doux naturel')?>" <?php echo $wine->type == 'Fortified vin doux naturel' ? 'selected="selected"' : ''?>><?php echo $this->translate('Fortified vin doux naturel')?></option>
+								<option value="Champange red" label="<?php echo $this->translate('Champange red')?>" <?php echo $wine->type == 'Champange red' ? 'selected="selected"' : ''?>><?php echo $this->translate('Champange red')?></option>
+								<option value="Champange rose" label="<?php echo $this->translate('Champange rose')?>" <?php echo $wine->type == 'Champange rose' ? 'selected="selected"' : ''?>><?php echo $this->translate('Champange rose')?></option>
+								<option value="Champange white" label="<?php echo $this->translate('Champange white')?>" <?php echo $wine->type == 'Champange white' ? 'selected="selected"' : ''?>><?php echo $this->translate('Champange white')?></option>
+							</select>
+						</div>
+						<div class="oneLine">
+							<label for=""><?php echo $this->translate('Add Label Image')?></label>
+							<br>
+							<input id="root<?php echo $i - 1?>" type="file" name="image">
+							<div  class="wine_image spiner">
+								<img src="/images/wine/<?php echo !empty($wine->image) ? $wine->image : 'default_wine.png'?>">
+								<?php echo !empty($wine->image) ? '<input type="hidden" name="wines[image][]" value ="'.$wine->image.'">' : ''?>
+							</div>
+							<div class="image"></div>
+						</div>
+						<a href="#" rel="wine<?php echo $i?>" class="delete_wine redButton"><?php echo $this->translate('Delete Wine')?></a>
+					</div>
+				<?php endforeach;?>
+			<?php else:?>
+				<div class="wine" id="wine1">
+					<div class="oneLine">
+						<label for=""><?php echo $this->translate('Wine Name')?>:</label>
+						<div class="wrapperInput">
+							<?php echo $this->form->name_w ?>
+						</div>
+					</div>
+					<div class="oneLine">
+						<label for=""><?php echo $this->translate('Grapes')?>:</label>
+						<?php echo $this->form->grapes_w->setAttrib('class', 'wines-grape-multiple') ?>
+					</div>
+					<div class="oneLine">
+						<label for=""><?php echo $this->translate('Wine Type')?>:</label>
+						<select name="wines[type][]" id="type_w">
+							<option value="" label="<?php echo $this->translate('Select Wine Type')?>"><?php echo $this->translate('Select Wine Type')?></option>
+							<option value="Wine red" label="<?php echo $this->translate('Wine red')?>"><?php echo $this->translate('Wine red')?></option>
+							<option value="Wine rose" label="<?php echo $this->translate('Wine rose')?>"><?php echo $this->translate('Wine rose')?></option>
+							<option value="Wine white" label="<?php echo $this->translate('Wine white')?>"><?php echo $this->translate('Wine white')?></option>
+							<option value="Fortified dessert wine" label="<?php echo $this->translate('Fortified dessert wine')?>"><?php echo $this->translate('Fortified dessert wine')?></option>
+							<option value="Fortified Port" label="<?php echo $this->translate('Fortified Port')?>"><?php echo $this->translate('Fortified Port')?></option>
+							<option value="Fortified sherry" label="<?php echo $this->translate('Fortified sherry')?>"><?php echo $this->translate('Fortified sherry')?></option>
+							<option value="Fortified sherry-style" label="<?php echo $this->translate('Fortified sherry-style')?>"><?php echo $this->translate('Fortified sherry-style')?></option>
+							<option value="Fortified vin doux naturel" label="<?php echo $this->translate('Fortified vin doux naturel')?>"><?php echo $this->translate('Fortified vin doux naturel')?></option>
+							<option value="Champange red" label="<?php echo $this->translate('Champange red')?>"><?php echo $this->translate('Champange red')?></option>
+							<option value="Champange rose" label="<?php echo $this->translate('Champange rose')?>"><?php echo $this->translate('Champange rose')?></option>
+							<option value="Champange white" label="<?php echo $this->translate('Champange white')?>"><?php echo $this->translate('Champange white')?></option>
+						</select>
+					</div>
+					<div class="oneLine">
+						<label for=""><?php echo $this->translate('Add Label Image')?></label>
+						<input id="root0" type="file" name="image">
+						<div class="wine_image spiner"></div>
+						<div class="image"></div>
+
+					</div>
+					<a href="#" rel="wine1" class="delete_wine redButton"><?php echo $this->translate('Delete Wine')?></a>
+				</div>				
+			<?php endif;?>
+		</div>
+		<a href="#" class="add_wine redButton"><?php echo $this->translate('Add Wine')?></a>
+	</div>
+	<div class="textAlignCenter">
+		<?php echo $this->form->getElement('add')->setAttrib('class', 'btn btn-danger')?>
+		<a href="<?php echo $this->baseUrl()?>/<?php echo $_SESSION['lang'] . $this->cancel?>" class="btn"><?php echo $this->translate('Back')?></a>
+	</div>
+</form>
+<div id="season-tmp" style="display:none">
+	<div class="season" id="">
+		<div class="oneLine">
+			<label for="seasonName"><?php echo $this->translate('Season Name')?>:</label>
+			<div class="wrapperInput">
+				<?php echo $this->form->getElement("seasons")->setValue('')?>
+			</div>
+		</div>
+		<div class="oneLine">
+			<label for=""><?php echo $this->translate('Need a appointment?')?></label>
+			<div class="radioBox">
+				<input id="appointment-yes0" type="radio" name="season[appointment][0]" value="1"/>
+				<span class="radoiLabel"><?php echo $this->translate('Yes')?></span>
+			</div>
+			<div class="radioBox">
+				<input id="appointment-no0" type="radio" name="season[appointment][0]" value="0"/>
+				<span class="radoiLabel"><?php echo $this->translate('No')?></span>
+			</div>
+			<div class="radioBox">
+				<input id="appointment-dont0" type="radio" name="season[appointment][0]" value="2"/>
+				<span class="radoiLabel"><?php echo $this->translate('Don`t know')?></span>
+			</div>
+			<div class="helpWrapper"><span class="helpInfo"><?php echo $this->translate('Please select need to make appointment of the vineyard season')?></span></div>
+		</div>
+		<div class="oneLine">
+			<label for="startEnd"><?php echo $this->translate('Start &amp; End Dates')?>:</label>
+		</div>	
+		<div class="oneLine">
+			<label for="start"><?php echo $this->translate('Start Date')?>:</label>
+			<div class="wrapperInput datapickerWrapper">
+				<?php echo $this->form->date1->setValue('') ?>
+			</div>
+		</div>
+		<div class="oneLine">
+			<label for="end"><?php echo $this->translate('End Date')?>:</label>
+			<div class="wrapperInput datapickerWrapper">
+				<?php echo $this->form->date2->setValue('') ?>
+			</div>
+		</div>
+		<div class="oneLine week_days">
+			<label for="days"><?php echo $this->translate('Days of week')?>:</label>
+				<div class="checkboxBox"><input type="checkbox" name="season[weeks][0][]" id="weeks-Monday" value="Monday"/><span class="checkboxLabel"><?php echo $this->translate('Mo')?></span></div>
+				<div class="checkboxBox"><input type="checkbox" name="season[weeks][0][]" id="weeks-Tuesday" value="Tuesday"/><span class="checkboxLabel"><?php echo $this->translate('Tu')?></span></div>
+				<div class="checkboxBox"><input type="checkbox" name="season[weeks][0][]" id="weeks-Wednesday" value="Wednesday"/><span class="checkboxLabel"><?php echo $this->translate('We')?></span></div>
+				<div class="checkboxBox"><input type="checkbox" name="season[weeks][0][]" id="weeks-Thursday" value="Thursday"/><span class="checkboxLabel"><?php echo $this->translate('Th')?></span></div>
+				<div class="checkboxBox"><input type="checkbox" name="season[weeks][0][]" id="weeks-Friday" value="Friday"/><span class="checkboxLabel"><?php echo $this->translate('Fr')?></span></div>
+				<div class="checkboxBox"><input type="checkbox" name="season[weeks][0][]" id="weeks-Saturday" value="Saturday"/><span class="checkboxLabel"><?php echo $this->translate('Sa')?></span></div>
+				<div class="checkboxBox"><input type="checkbox" name="season[weeks][0][]" id="weeks-Sunday" value="Sunday"/><span class="checkboxLabel"><?php echo $this->translate('Su')?></span></div>
+		</div>		
+		<div class="oneLine hours">
+			<label for="hours"><?php echo $this->translate('Opening Hours')?>:</label>
+			<br>
+			<span class="label"><?php echo $this->translate('From')?></span>
+			<div class="wrapperInput">
+				<?php echo $this->form->time1->setValue('') ?>
+			</div>
+			<span class="label to"><?php echo $this->translate('to')?></span>
+			<div class="wrapperInput">
+				<?php echo $this->form->time2->setValue('') ?>
+			</div>
+		</div>
+		<div class="oneLine">
+			<label for="notes"><?php echo $this->translate('Season Notes')?>:</label>
+			<div class="wrapperInput texarea">
+				<textarea name="season[notes][]" id="notes" cols="30" rows="10" class="inputBox"></textarea>
+			</div>
+		</div>
+		<a href="#" rel="season1" class="delete_season redButton"><?php echo $this->translate('Delete Season')?></a>
+	</div>
+
+</div>
+<div id="wine-tmp" style="display: none">
+	<div class="wine" id="">
+		<div class="oneLine">
+			<label for=""><?php echo $this->translate('Wine Name')?>:</label>
+			<div class="wrapperInput">
+				<?php echo $this->form->name_w->setValue('') ?>
+			</div>
+		</div>
+		<div class="oneLine">
+			<label for=""><?php echo $this->translate('Grapes')?>:</label>
+			<?php echo $this->form->grapes_w->setValue('')->setAttrib('class', 'wines-grape-multiple') ?>
+		</div>
+		<div class="oneLine">
+			<label for=""><?php echo $this->translate('Wine Type')?>:</label>
+			<br>
+			<select name="wines[type][]" id="type_w">
+				<option value="" label="<?php echo $this->translate('Select Wine Type')?>"><?php echo $this->translate('Select Wine Type')?></option>
+				<option value="Wine red" label="<?php echo $this->translate('Wine red')?>"><?php echo $this->translate('Wine red')?></option>
+				<option value="Wine rose" label="<?php echo $this->translate('Wine rose')?>"><?php echo $this->translate('Wine rose')?></option>
+				<option value="Wine white" label="<?php echo $this->translate('Wine white')?>"><?php echo $this->translate('Wine white')?></option>
+				<option value="Fortified dessert wine" label="<?php echo $this->translate('Fortified dessert wine')?>"><?php echo $this->translate('Fortified dessert wine')?></option>
+				<option value="Fortified Port" label="<?php echo $this->translate('Fortified Port')?>"><?php echo $this->translate('Fortified Port')?></option>
+				<option value="Fortified sherry" label="<?php echo $this->translate('Fortified sherry')?>"><?php echo $this->translate('Fortified sherry')?></option>
+				<option value="Fortified sherry-style" label="<?php echo $this->translate('Fortified sherry-style')?>"><?php echo $this->translate('Fortified sherry-style')?></option>
+				<option value="Fortified vin doux naturel" label="<?php echo $this->translate('Fortified vin doux naturel')?>"><?php echo $this->translate('Fortified vin doux naturel')?></option>
+				<option value="Champange red" label="<?php echo $this->translate('Champange red')?>"><?php echo $this->translate('Champange red')?></option>
+				<option value="Champange rose" label="<?php echo $this->translate('Champange rose')?>"><?php echo $this->translate('Champange rose')?></option>
+				<option value="Champange white" label="<?php echo $this->translate('Champange white')?>"><?php echo $this->translate('Champange white')?></option>
+			</select>
+		</div>
+<!--		<div class="oneLine year">
+			<label for=""><?php // echo $this->translate('Vintage')?>:</label>
+			<br>
+			<?php // echo $this->form->vintage_w->setValue('') ?>
+		</div>-->
+		<div class="oneLine">
+			<label for=""><?php echo $this->translate('Add Label Image')?></label>
+			<br>
+			<input id="root" type="file" name="image">
+			<div class="wine_image spiner"></div>
+			<div class="image"></div>
+		</div>
+		<a href="#" rel="wine1" class="delete_wine redButton"><?php echo $this->translate('Delete Wine')?></a>
+	</div>
+</div>

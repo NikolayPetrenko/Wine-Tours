@@ -1,0 +1,65 @@
+<script>
+	var loc_y = <?php echo !empty($this->country->loc_y) ? $this->country->loc_y : "''"?>;
+	var loc_z = <?php echo !empty($this->country->loc_z) ? $this->country->loc_z : "''"?>;
+	var country = '<?php echo $this->country->name_en?>';
+</script>
+<div class="articleWrapper">
+	<div class="content">
+		<div class="borderBottom flw">
+			<h2 class="title noBg"><?php echo $this->translate('Wine Tours in')?>: <?php echo $this->country->name_en?></h2>
+			<?php $con_mod = new Application_Model_Countries();?>
+			<?php if($con_mod->isExistVineyard($this->country->code)) :?>
+				<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/search/list?type%5Bvin%5D=vin&amp;status%5Bverif%5D=verif&amp;status%5Bunver%5D=unver&amp;status%5Bclaim%5D=claim&amp;continent=<?php echo $this->country->continent?>&amp;country=<?php echo $this->country->code?>" class="redSubmitBg findInThisRegion"><?php echo $this->translate('Find Vineyards in this country')?></a>
+			<?php endif;?>	
+		</div>
+		<div class="articleBox">
+			<?php $continent = new Application_Model_Continents();?>
+			<div class="oneLine locations"><span class="greenText"><?php echo $this->translate('Continent')?>:</span><span><?php echo $continent->getContinent($this->country->continent)->name?></span></div>
+				<article class="borderBottom" style="min-height: 200px;">
+					<h4 class="titleArticle"><?php echo $this->translate('Summary')?></h4>
+					<?php if(!empty($this->country->description)) :?>
+						<p><?php echo $this->country->description?></p>
+					<?php else:?>
+						<p><?php echo $this->translate('No summary')?></p>
+					<?php endif;?>
+				</article>
+			<div class="links">
+				<?php $reg_mod = new Application_Model_Assregions();?>
+				<?php $sub_regs = $reg_mod->getMainRegionsByCountry($this->country->code)?>
+				<?php if(!empty($sub_regs[0])) :?>				
+					<div class="oneLine">
+						<span class="greenText"><?php echo $this->translate('Main Wine Regions')?>:</span>
+						<ul style="width: 544px !important;">
+							<?php $i = 0;?>
+							<?php foreach($sub_regs as $sub_reg) :?>
+								<li><a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-region/<?php echo $sub_reg->country_alias?>/<?php echo main::getParent1($sub_reg->alias)?>" class="borderRight"><?php echo $sub_reg->name?></a></li>
+								<?php if($i != count($sub_regs) - 1) :?>
+									<li class="sep"></li>
+								<?php endif;?>
+							<?php $i++?>
+							<?php endforeach;?>
+						</ul>
+					</div>
+				<?php endif;?>
+			</div>			
+		</div>
+	</div>
+	<aside>
+		<?php echo $this->render('holiday_organization/holiday_box.phtml');?>
+		<div class="mapBox">
+			<h3 class="title noBg"><?php echo $this->translate('Location of Country')?></h3>
+			<div id="view_country" style="width: 358px; height: 350px;"></div>
+			<div class="shadow"></div>
+		</div>		
+		<?php if(!empty($this->country->acknowledgements)) :?>
+			<div class="grayBox acknowledgments">
+				<h3 class="title">Acknowledgments</h3>
+					<ul>
+						<li><?php echo $this->country->acknowledgements?></li>
+					</ul>
+				<div class="shadow"></div>
+			</div>
+		<?php endif;?>
+	</aside>	
+</div>
+<?php echo $this->render('holiday_organization/holiday_form.phtml');?>

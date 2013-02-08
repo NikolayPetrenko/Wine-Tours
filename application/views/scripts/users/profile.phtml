@@ -1,0 +1,79 @@
+	<?php $par_mod = new Application_Model_Partners();?>
+	<li><a class="link" href="<?php echo $this->baseUrl()?>/<?php echo $_SESSION['lang']?>/main/listingchanges"><?php echo $this->translate('My Listings Changes')?></a></li>
+	<li><a class="link" href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/userlistings"><?php echo $this->translate('My Listings')?></a></li>
+	<?php if($par_mod->isExistUser() || Zend_Auth::getInstance()->getIdentity()->role == 'admin') :?>
+	<li><a class="link" href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/managelistings"><?php echo $this->translate('Partners Listings')?></a></li>
+	<li><a class="link" href="<?php echo $this->baseUrl()?>/<?php echo $_SESSION['lang']?>/main/managechanges"><?php echo $this->translate('Partners Listings Changes')?></a></li>
+	<?php endif;?>
+<form action="" class="jNice form profile">
+	<h2 class="title borderBottom noBg"><?php echo $this->translate('Your Profile')?></h2>
+	<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/users/editprofile" class="editLink"><?php echo $this->translate('Edit Your Profile')?></a>
+	<div class="flw borderBottom formSection">
+		<h5 class="sectionTitle"><?php echo $this->translate('Your LogIn &amp; Contact Details')?></h5>
+		<div class="oneLine">
+			<label for="email"><?php echo $this->translate('Display Name/Username')?>*:</label>
+			<span class="userName"><?php echo $this->user['name']?></span>
+		</div>
+		<div class="oneLine">
+			<label for="email"><?php echo $this->translate('E-mail Address')?>*:</label>
+			<span class="userName"><?php echo $this->user['email']?></span>
+		</div>
+		<div class="oneLine">
+			<label for="firstName"><?php echo $this->translate('First Name')?>*:</label>
+			<span class="userName"><?php echo $this->user['firstname']?></span>
+		</div>
+		<div class="oneLine">
+			<label for="surname"><?php echo $this->translate('Surname')?>*:</label>
+			<span class="userName"><?php echo $this->user['surname']?></span>
+		</div>
+		<div class="oneLine">
+			<label for="companyName"><?php echo $this->translate('Company Name')?>:</label>
+			<span class="userName"><?php echo $this->user['company']?></span>
+		</div>
+		<div class="oneLine">
+			<?php $countr = new Application_Model_Countries()?>
+			<label for="country"><?php echo $this->translate('Country of Residence')?>*:</label>
+			<span class="userName"><?php echo $countr->getCountryByCode($this->user['country'])->name_en ?></span>
+		</div>
+	</div>
+	<div class="flw borderBottom formSection interest">
+		<h5 class="sectionTitle"><?php echo $this->translate('What is your interest in Vintlas?')?></h5>
+		<span class="caption"><?php echo $this->translate('Please select one option only')?></span>
+		<?php if($this->user['involve'] ==  1) :?>
+			<div class="oneLine">
+				<label for="tourist"><?php echo $this->translate('Are a wine tourist/interested in wine/planning to visit a vineyard?')?></label>
+				<span class="userName"><?php echo $this->translate('Yes')?></span>
+			</div>		
+		<?php else:?>
+			<div class="oneLine">
+				<label for="tourist"><?php echo $this->translate('Are involved in the wine/wine tourism industry?')?></label>
+				<span class="userName"><?php echo $this->translate('Yes')?></span>
+			</div>		
+			<div class="oneLine select">
+				<label for="country"><?php echo $this->translate('Please select the your role in the industry')?>:</label>
+				<?php foreach (unserialize($this->user['involve']) as $involve): ?>
+					<span class="userName"><?php echo $involve == 'Other' ? '' : $involve ?></span><?php echo $involve != 'Other' ? ', ' : ''?>
+				<?php endforeach;?>
+			</div>
+		<?php endif;?>
+	</div>
+	<div class="flw borderBottom formSection privacyContacting">
+		<h5 class="sectionTitle"><?php echo $this->translate('Your Privacy Controls &amp; Contacting You')?></h5>
+		<span class="caption"><?php echo $this->translate('We do not share your data to third parties. You can view our full Privacy Policy')?> <a href="#">here</a>.</span>
+		<span class="bold"><?php echo $this->translate('New Features &amp; Updates from Vintlas')?></span>
+		<div class="oneLine">
+			<label class="label-privacy" for="email_update"><?php echo $this->translate('Please send me occasional email updates about new features and special offers from Vintlas.com.')?></label>
+			<div class="radioBox">
+				<span class="radoiLabel"><?php echo $this->user['email_update'] == 1 ? $this->translate('Yes') : $this->translate('No')?></span>
+			</div>
+		</div>
+		<span class="bold"><?php echo $this->translate('Sponsor Offers')?></span>
+		<div class="oneLine">
+			<label class="label-privacy" for="email_ofers"><?php echo $this->translate("Please send me relevant &amp; targeted email offers from Vintlas.com's affiliated web sites &amp; carefully selected companies (Maximum 2 permonth)")?></label>
+			<div class="radioBox">
+				<span class="radoiLabel"><?php echo $this->user['email_ofers'] == 1 ? $this->translate('Yes') : $this->translate('No')?></span>
+			</div>
+		</div>
+		<span class="caption lastCaption"><?php echo $this->translate('By completing registration you acknowledge our')?>  <a href="#"><?php echo $this->translate('Privacy Policy ')?></a><?php echo $this->translate('and agree')?> <a href="#"><?php echo $this->translate('Terms and Conditions')?></a>.</span>
+	</div>
+</form>

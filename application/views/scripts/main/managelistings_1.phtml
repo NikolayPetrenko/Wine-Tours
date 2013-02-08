@@ -1,0 +1,105 @@
+<div id="content">
+	<h2 class="title"><?php echo $this->message ?></h2>
+	<form name="type_filter" action="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/managelistings" id="type_filter" class="jNice user-listing" method="post">
+		<h4>Filter By Type:</h4>
+		<select name="type" id="type">
+			<option value="all" <?php echo $this->type == 'all' ? 'selected' : ''?>><?php echo $this->translate('All Types')?></option>
+			<option value="verif" <?php echo $this->type == 'verif' ? 'selected' : ''?>><?php echo $this->translate('Verfied Listing')?></option>
+			<option value="unverif" <?php echo $this->type == 'unverif' ? 'selected' : ''?>><?php echo $this->translate('Unverfied Listing')?></option>
+		</select>
+	</form>	
+	<?php if(count($this->paginator)) :?>
+		<table class="table table-bordered table-striped">
+			<?php $claim_mod = new Application_Model_Claimes();?>
+			<?php $cor_mod = new Application_Model_Corrects();?>
+			<thead>
+				<tr>
+					<th class="span2"><?php echo $this->translate('Vineyard Name')?></th>
+					<th class=""><?php echo $this->translate('Country')?></th>
+					<th class=""><?php echo $this->translate('Ass Region')?></th>
+					<th class=""><?php echo $this->translate('City')?></th>
+					<th class=""><?php echo $this->translate('Status')?></th>
+					<th class=""><?php echo $this->translate('Onwer')?></th>
+					<th class=""><?php echo $this->translate('Claim')?></th>
+					<th class=""><?php echo $this->translate('Remove')?></th>
+					<th class=""><?php echo $this->translate('Data last change')?></th>
+					<th class="option-th span3"><?php echo $this->translate('Options')?></th>
+				</tr>
+			</thead>
+			<tbody>
+			<?php foreach($this->paginator as $vineyard):?>
+				<tr>
+					<td><?php echo $this->escape($vineyard['name']) ?></td>
+					<td><?php echo $this->escape($vineyard['country']) ?></td>
+					<td><?php echo $vineyard['ass_region'] ?></td>
+					<td><?php echo $this->escape($vineyard['city']) ?></td>
+					<td><?php echo $vineyard['claim'] == 1 ? $this->translate('Yes') : 'No'?></td>
+					<td><?php echo $vineyard['status'] == 0 ? $this->translate('Unverified Listing') : $this->translate('Verified Listing') ?></td>
+					<?php $cl = $claim_mod->claimByListing($vineyard['list_id']);?>
+					<?php if(Zend_Auth::getInstance()->getIdentity()->role == 'admin') :?>
+					<td><?php echo $cl ? '<a data-toggle="modal" href="#myModal1" class="claim" data-id="'.$cl->id.'">See</a>' : '' ?></td>
+					<?php else:?>
+					<td><?php echo $cl ? '<a href="#myModal2" class="claim" data-id="'.$cl->id.'">See</a>' : '' ?></td>
+					<?php endif;?>
+					<td><?php echo $vineyard['remove'] == 0 ? 'No': 'Yes' ?></td>
+					<td><?php echo $this->escape(date("d.m.Y H:i:s",$vineyard['update'])) ?></td>
+					<td class="options-td">
+						<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/editvineyard/<?php echo $vineyard['alias']?>">Edit</a>
+						<?php if(Zend_Auth::getInstance()->getIdentity()->role == 'admin') :?>
+						 - 
+							<?php if($vineyard['remove'] == 0) :?>
+								<a class="remove1" href="#" rel="listing_<?php echo $vineyard['list_id']?>">Delete</a>
+							<?php else:?>
+								<a class="recover" href="#" rel="listing_<?php echo $vineyard['list_id']?>">Recover</a>
+							<?php endif;?>
+						<?php endif;?>
+						<?php if($vineyard['status'] == 0) :?>
+						 - <a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/verifyvineyard/<?php echo $vineyard['alias']?>">Verify</a>
+						<?php endif;?>
+					</td>
+				</tr>
+			<?php endforeach;?>
+			</tbody>
+		</table>
+	<?php echo $this->paginationControl($this->paginator,
+                                    'Sliding',
+                                    'main/pagination_listings.phtml',
+					array('type' => $this->type)); ?>
+	<?php else:?>
+		<p>No Listings</p>
+	<?php endif;?>
+</div>
+<?php if(Zend_Auth::getInstance()->getIdentity()->role == 'admin') :?>
+	<div id="myModal1" class="modal hide fade">
+		<div class="modal-header">
+			<a class="close" data-dismiss="modal" >&times;</a>
+			<h3>Claimed Listing</h3>
+		</div>
+		<div class="modal-body popup">
+			<input type="hidden" name="claim_list" id="claim_list" value="">
+			<input type="hidden" name="id" id="id" value="">
+			<input type="hidden" name="user" id="user" value="">
+			<div class="claim_body"></div>
+			<input type="button" id="claim_ok" class="btn btn-danger" value="Claim">
+			<input type="button" id="claim_rej" class="btn" value="Reject">
+		</div>
+	</div>
+<?php else:?>
+	<div id="myModal2" style="display: none;">
+		<div class="popUpWrapper">
+			<div class="popUp orgHoliday">
+				<h3 class="title">Claimed Listing</h3>
+				<div class="claim-body">
+					<input type="hidden" name="claim_list" id="claim_list" value="">
+					<input type="hidden" name="id" id="id" value="">
+					<input type="hidden" name="user" id="user" value="">
+					<div class="claim_body"></div>
+				</div>
+				<div class="claim-footer">
+					<input type="button" id="claim_ok" class="redSubmitBg" value="Claim">
+					<input type="button" id="claim_rej" class="grayLink claim-footer-reject" value="Reject">
+				</div>	
+			</div>
+		</div>
+	</div>
+<?php endif;?>

@@ -1,0 +1,72 @@
+<div id="view-content">
+	<h2><?php echo $this->message ?></h2>
+	<form id="edit_seo" action="<?php echo $this->baseUrl()?>/<?php echo $_SESSION['lang']?>/admin/editseo/<?php echo $this->id?>" method="post">
+		<input type="hidden" name="id" value="<?php echo $this->id?>">
+		<div class="control seo">
+			<label for="title">Title:</label>
+			<input type="text" name="title" id="title" value="<?php echo $this->seo->title?>" style="width: 500px;">
+		</div>
+		<?php if(in_array($this->id, array(1, 4, 5, 7, 10, 11))):?>
+			<div class="control seo">
+				<label for="keywords">Keywords:</label>
+				<textarea name="keywords" id="keywords" rows="12" cols="40" style="width: 500px;" ><?php echo $this->seo->keywords?></textarea>
+			</div>
+			<div class="control seo">
+				<label for="description">Description:</label>
+				<textarea name="description" id="description" rows="12" cols="40" style="width: 500px;" ><?php echo $this->seo->description?></textarea>
+			</div>
+		<?php endif;?>
+		<?php if(in_array($this->id, array(7, 10, 11))):?>
+			<div class="control seo">
+				<label for="img">Image File Name:</label>
+				<input type="text" name="img" id="img" value="<?php echo $this->seo->img?>" style="width: 500px;">
+			</div>
+		<?php endif;?>
+		<?php if(in_array($this->id, array(7, 10, 11))):?>
+			<div class="control seo">
+				<label for="alts">Image Alt Tag:</label>
+				<input type="text" name="alts" id="alts" value="<?php echo $this->seo->alts?>" style="width: 500px;">
+			</div>
+		<?php endif;?>
+		<?php if($this->id == 1):?>
+			<div class="control seo">
+				<label for="keywords">Spotlight Text:</label>
+				<textarea name="intro_text" id="intro_text" rows="12" cols="40" style="width: 500px;" ><?php echo $this->seo->intro_text?></textarea>
+			</div>
+			<div class="control seo">
+				<label for="spotlight_title">Spotlight Title:</label>
+				<input type="text" name="spotlight_title" id="spotlight_title" value="<?php echo $this->seo->spotlight_title?>" style="width: 500px;">
+			</div>
+			<div class="control seo">
+				<label for="image">Spotlight Image:</label>
+				<div id="spotl_image"></div>
+				<div id="spotlight_image">
+					<?php echo !empty($this->seo->spotlight_image) ? '<img src="' . $this->baseUrl() . '/images/' . $this->seo->spotlight_image . '"></img><input type="hidden" name="spotlight_image" id="sp_image" value="' . $this->seo->spotlight_image . '">' : ''?>
+				</div>
+				<span class="btn btn-success fileinput-button">
+					<i class="icon-plus icon-white"></i>
+					<span>Change the image...</span>
+					<input id="root" type="file" name="image">
+					<div id="image">
+					</div>
+				</span>
+			</div>
+			<br>
+			<br>
+		<?php endif;?>
+		<?php if(in_array($this->id, array(1, 7, 10, 11))):?>
+			<div class="control seo">
+				<label for="h1">H1:</label>
+				<input type="text" name="h1" id="h1" value="<?php echo $this->seo->h1?>" style="width: 500px;">
+			</div>
+			<div class="control seo">
+				<label for="h2">H2:</label>
+				<input type="text" name="h2" id="h2" value="<?php echo $this->seo->h2?>" style="width: 500px;">
+			</div>
+		<?php endif;?>
+		<div class="template-submit">
+			<input type="submit" class="btn btn-danger" value="Edit SEO">
+			<a href="<?php echo $this->baseUrl()?>/<?php echo $_SESSION['lang']?>/admin/manageseo" class="btn">Cancel</a>
+		</div>
+	</form>
+</div>

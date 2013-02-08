@@ -1,0 +1,45 @@
+<?php if ($this->pageCount && $this->pageCount > 1) :?>
+	<?php if(Zend_Auth::getInstance()->getIdentity()->role != 'admin') :?>
+		<div class="textAlignCenter">
+			<ul class="paginator">
+				<?php if (isset($this->previous)) :?>
+					<li><a href="<?php echo $this->url(array('type' => $this->type, 'page' => $this->previous)); ?>">« Prev</a></li>
+				<?php else :?>
+					<li class="inactive"><a href="<?php echo $this->url(array('type' => $this->type, 'page' => $this->previous)); ?>">« Prev</a></li>
+				<?php endif;?>
+				<?php foreach ($this->pagesInRange as $page) :?>
+					<?php if ($page != $this->current) :?>
+						<li><a href="<?php echo $this->url(array('type' => $this->type, 'page' => $page)); ?>"><?php echo $page; ?></a></li>
+					<?php else :?>
+						<li class="inactive"><?php echo $page; ?></li>
+					<?php endif;?>
+				<?php endforeach;?>  
+				<?php if (isset($this->next)) :?>
+					<li class="marginRightNone"><a href="<?php echo $this->url(array('type' => $this->type, 'page' => $this->next)); ?>">Next »</a></li>
+				<?php else :?>
+					<li class="marginRightNone inactive"><a href="<?php echo $this->url(array('type' => $this->type, 'page' => $this->next)); ?>">Next »</a></li>
+				<?php endif;?>
+			</ul>	
+		</div>
+	<?php else:?>
+		<div class="paginationControl">
+			<?php if (isset($this->previous)) :?>
+				<a href="<?php echo $this->url(array('type' => $this->type, 'page' => $this->previous)); ?>">&lt;</a> |
+			<?php else :?>
+				<span class="disabled">&lt;</span> |
+			<?php endif;?>
+			<?php foreach ($this->pagesInRange as $page) :?>
+				<?php if ($page != $this->current) :?>
+					<a href="<?php echo $this->url(array('type' => $this->type, 'page' => $page)); ?>"><?php echo $page; ?></a> |
+				<?php else :?>
+					<?php echo $page; ?> |
+				<?php endif;?>
+			<?php endforeach;?>  
+			<?php if (isset($this->next)) :?>
+				<a href="<?php echo $this->url(array('type' => $this->type, 'page' => $this->next)); ?>">&gt;</a>
+			<?php else :?>
+				<span class="disabled">&gt;</span>
+			<?php endif;?>
+		</div>
+	<?php endif;?>
+<?php endif;?>

@@ -1,0 +1,123 @@
+<div id="view-content">
+	<form enctype="multipart/form-data" action="" method="post" id="add_listing">
+		<?php echo $this->form->name ?>
+		<?php echo $this->form->nameloc ?>
+		<?php echo $this->form->address1 ?>
+		<?php echo $this->form->address2 ?>
+		<?php echo $this->form->zip ?>
+		<?php echo $this->form->telephone ?>
+		<?php echo $this->form->fax ?>
+		<?php echo $this->form->email ?>
+		<?php echo $this->form->web ?>		
+		<?php echo $this->form->continent ?>
+		<?php echo $this->form->country ?>
+		<?php echo $this->form->ass_region ?>
+		<label>Location:</label>
+		<div id="map_canvas" style="width: 600px; height: 500px; margin-bottom: 8px;"></div>
+		<div id="location" style="margin-bottom:8px;">	
+			<div id="for_y"  style="float:left; margin-right:30px;">
+				<b>Longitude:</b>
+				<?php echo $this->form->loc_y ?>
+			</div>
+			<div id="for_z">
+				<b>Latitude:</b>
+				<?php echo $this->form->loc_z ?>
+			</div>		
+		</div>
+		<?php echo $this->form->region ?>
+		<?php echo $this->form->city ?>
+		<label for="logo">Vineyard Logo:</label>
+		<div id="vineyard_logo">
+		</div>
+		<span class="btn btn-success fileinput-button">
+			<i class="icon-plus icon-white"></i>
+			<span>Select a picture...</span>
+			<input id="root" type="file" name="logo">
+		</span>
+		<div id="logo">
+		</div>
+		<?php echo $this->form->proprietor ?>
+		<?php echo $this->form->viziting ?>
+		<?php echo $this->form->visits ?>
+		<?php echo $this->form->individuals ?>
+		<?php echo $this->form->groups ?>
+		<?php echo $this->form->appointment ?>
+		<fieldset class="fieldset">
+			 <legend>Open Hours & Seasons</legend>
+			 <div class="seasons">
+				 <a href="#" class="add_season"><img src="<?php echo $this->baseUrl()?>/images/+.png">Add Season</a>
+				<div class="season" id="season1">
+					<?php echo $this->form->getElement("seasons")?>
+					<?php echo $this->form->date ?>
+					<?php echo $this->form->date1 ?>
+					<?php echo $this->form->date2 ?>
+					<div class="week_days"><?php echo $this->form->weeks ?></div>
+					<?php echo $this->form->time ?>
+					<?php echo $this->form->time1 ?>
+					<?php echo $this->form->time2 ?>
+					<?php echo $this->form->notes ?>
+				<a href="#" rel="season1" class="delete_season"><img src="<?php echo $this->baseUrl()?>/images/-.png">Delete Season</a>	
+				</div>
+			 </div>
+		</fieldset>
+		<fieldset class="fieldset">
+			<legend>Wine Tasting/Tours</legend>
+			<?php echo $this->form->tours ?>
+			<?php echo $this->form->spoken ?>
+			<?php echo $this->form->tasting ?>
+			<?php echo $this->form->tour ?>
+			<?php echo $this->form->sales ?>
+			<?php echo $this->form->workshops ?>
+		</fieldset>	
+		<fieldset class="fieldset">
+			 <legend>Other Facilities</legend>
+			 <?php echo $this->form->restaurant ?>
+			 <?php echo $this->form->accommodation ?>
+			 <?php echo $this->form->weddings ?>
+			 <?php echo $this->form->seminars ?>
+		</fieldset>
+		<fieldset class="fieldset">
+			 <legend>Add Photos</legend>
+			<div class="fileupload-loading"></div>
+			<table class="table table-striped">
+        		<tbody id="vineyard_photos" class="files" data-toggle="modal-gallery" data-target="#modal-gallery">
+				</tbody>
+			</table>			 
+			<span class="btn btn-success fileinput-button">
+				<i class="icon-plus icon-white"></i>
+				<span>Add pictures...</span>
+				<input id="root" type="file" name="photo[]" multiple="">
+			</span>
+           	<!-- The global progress bar -->
+          	<div class="progress progress-success progress-striped active fade">
+           		<div class="bar" style="width: 0%; "></div>
+           	</div>
+			<div id="photos">
+			</div>		 
+		</fieldset>
+		<fieldset class="fieldset">
+			 <legend>About the Grapes & Wines Produced</legend>
+			 <?php echo $this->form->grapes ?>
+			 <?php echo $this->form->wines ?>
+		</fieldset>
+		<?php echo $this->form->notes_chang ?>
+		<br>
+		<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main" class="btn pull-left">Cancel</a>
+		<?php echo $this->form->add ?>
+	</form>
+	<div id="season-tmp" style="display:none">
+		<div class="season" id="">
+			<?php echo $this->form->seasons ?>
+			<?php echo $this->form->date ?>
+			<?php echo $this->form->date1 ?>
+			<?php echo $this->form->date2 ?>
+			<div class="week_days"><?php echo $this->form->weeks ?></div>
+			<?php echo $this->form->time ?>
+			<?php echo $this->form->time1 ?>
+			<?php echo $this->form->time2 ?>
+			<?php echo $this->form->notes ?>
+			<?php echo $this->form->tours ?>
+			<a href="#" rel="season1" class="delete_season"><img src="<?php echo $this->baseUrl()?>/images/-.png">Delete Season</a>
+		</div>
+	</div>
+</div>

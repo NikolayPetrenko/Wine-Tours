@@ -1,0 +1,33 @@
+	<div class="organiseHoliday grayBox">
+		<h3 class="title"><?php echo $this->translate('Organise your Wine Holiday Now')?></h3>
+		<form action="#" class="jNice">
+			<span class="descr"><?php echo $this->translate('For the best experience, less headaches and to have somebody else transport you')?>.</span>
+			<div class="flw">
+				<div class="floatLeft">
+					<label for="country_c"><?php echo $this->translate('Country')?></label>
+					<?php $country_mod = new Application_Model_Countries();?>
+					<select name="country_c"  id="country_c">
+						<option value="">Select Country</option>
+						<?php foreach($country_mod->getCountriesIsExVineyards() as  $item):?>
+						<option value="<?php echo $item->code?>" <?php echo $item->code == $this->country_loc ? 'selected="selected"' : ''?>><?php echo $item->name_en?></option>
+						<?php endforeach;?>
+					</select>
+				</div>
+				<div class="floatRight">
+					<label for="region_c"><?php echo $this->translate('Region')?></label>
+					<?php $reg_mod = new Application_Model_Assregions();?>
+					<select name="region_c"  id="region_c">
+						<option value="">Select Associated Region</option>
+						<?php if(!empty($this->country_loc)) :?>
+							<?php foreach($reg_mod->getAssregionsByCountryIdIsExistVineyards($this->country_loc) as  $item):?>
+							<option value="<?php echo $item->id?>" <?php echo $item->id == $this->reg_loc ? 'selected="selected"' : ''?>><?php echo $item->name?></option>
+							<?php endforeach;?>
+						<?php endif;?>
+					</select>
+				</div>
+			</div>
+			<div class="errors_mod country-error" id="mod_country_error" style="display: none;"><?php echo $this->translate('Please select country')?></div>
+			<div class="textAlignCenter"><a  class="various redSubmitBg" id="mod_click" href="#myModules"><?php echo $this->translate('Find a Local Tour Operator')?></a></div>
+		</form>
+		<div class="shadow"></div>
+	</div>

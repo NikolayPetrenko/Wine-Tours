@@ -1,0 +1,43 @@
+<div id="view-content">
+	<h2><?php echo $this->message ?></h2>
+	<form name="continent_filter" action="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/admin/managecountries" id="continent_filter" method="post">
+		<h4>Filter By Continent:</h4>
+		<select name="continents" id="continents">
+			<option value="all" <?php echo $this->continent == 'all' ? 'selected' : ''?>>All Continents</option>
+			<?php foreach($this->continents as $continent) :?>
+				<option value="<?php echo $continent->id?>" <?php echo $this->continent == $continent->id ? 'selected' : ''?>><?php echo $continent->name?></option>
+			<?php endforeach;?>
+		</select>
+	</form>
+	<?php if(count($this->paginator)) :?>
+		<table class="table table-bordered table-striped">
+			<thead>
+				<tr>
+					<th class="span1">Country Name</th>
+					<th class="">Continent</th>
+					<th class="">Data last change</th>
+					<th class="option-th span3">Options</th>
+				</tr>
+			</thead>
+			<tbody>
+			<?php $continent_mod = new Application_Model_Continents();?>
+			<?php foreach($this->paginator as $country):?>
+				<tr>
+					<td><?php echo $this->escape($country['name_en']) ?></td>
+					<td><?php echo $continent_mod->getContinent($country['continent'])->name ?></td>
+					<td><?php echo $this->escape(date("d.m.Y H:i:s",$country['update'])) ?></td>
+					<td class="options-td">
+						<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/admin/editcountry/<?php echo $country['alias']?>">Edit</a>
+					</td>
+				</tr>
+			<?php endforeach;?>
+			</tbody>
+		</table>
+	<?php echo $this->paginationControl($this->paginator,
+                                    'Sliding',
+                                    'admin/pagination_countries.phtml',
+				array('continent'=>$this->continent)); ?>
+	<?php else:?>
+		<p>No Countries</p>
+	<?php endif;?>
+</div>

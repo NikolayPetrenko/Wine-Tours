@@ -1,0 +1,60 @@
+	<?php if(!isset($this->badsearch)) :?>
+		<div class="search_query">
+			<h2><span class="greenText bold"><?php echo $this->translate('Search results for query')?></span> <u><?php echo $this->search?></u>:</h2>
+		</div>
+	<?php endif;?>
+	<?php if(!empty($this->altr_countries[0]) || !empty($this->altr_regions[0]) || !empty($this->altr_vineyards[0]) || !empty($this->altr_wines[0])):?>
+			<h4>No search results</h4>
+			<div class="search_alternative">
+				<h4><span class="greenText bold"><?php echo $this->translate('Alternate search')?></span> <u><?php echo $this->altr_search?></u>:</h4>
+			</div>
+			<?php if(!empty($this->altr_countries[0])):?>
+				<?php foreach($this->altr_countries as $altr_country) :?>
+					<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-country/<?php echo $altr_country->alias ?>"><?php echo $altr_country->name?></a> 
+				<?php endforeach;?>
+			<?php endif;?>
+			<?php if(!empty($this->altr_regions[0])):?>		
+				<?php foreach($this->altr_regions as $altr_region) :?>
+					<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-region/<?php echo $altr_region->country_alias?>/<?php echo main::getParent1($altr_region->alias)?>"><?php echo $altr_region->name?></a> 
+				<?php endforeach;?>
+			<?php endif;?>
+			<?php if(!empty($this->altr_vineyards[0])):?>
+				<?php foreach($this->altr_vineyards as $altr_vineyard) :?>
+					<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/view-vineyard/<?php echo $altr_vineyard->country_alias?>/<?php echo main::getParent1($altr_vineyard->region_alias)?>/<?php echo $altr_vineyard->alias ?>"><?php echo $altr_vineyard->name?></a> 
+				<?php endforeach;?>
+			<?php endif;?>
+
+			<?php if(!empty($this->altr_wines[0])):?>		
+				<?php foreach($this->altr_wines as $altr_wine) :?>
+					<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/view-vineyard/<?php echo $altr_wine->country_alias?>/<?php echo main::getParent1($altr_wine->region_alias)?>/<?php echo $altr_wine->alias ?>#wines"><?php echo $altr_wine->name?></a> 
+				<?php endforeach;?>
+			<?php endif;?>	
+	<?php elseif(!empty($this->countries[0]) || !empty($this->regions[0]) || !empty($this->vineyards[0]) || !empty($this->wines[0])) :?>
+		<?php if(!empty($this->countries[0])):?>
+			<?php foreach($this->countries as $country) :?>
+				<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-country/<?php echo $country->alias ?>"><p><?php echo $country->name?></p></a>
+			<?php endforeach;?>
+			<br>
+		<?php endif;?>
+
+		<?php if(!empty($this->regions[0])):?>		
+			<?php foreach($this->regions as $region) :?>
+				<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-region/<?php echo $region->country_alias?>/<?php echo main::getParent1($region->alias)?>"><p><?php echo $region->name?></p></a>
+			<?php endforeach;?>
+			<br>
+		<?php endif;?>
+		<?php if(!empty($this->vineyards[0])):?>
+			<?php foreach($this->vineyards as $vineyard) :?>
+				<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/view-vineyard/<?php echo $vineyard->country_alias?>/<?php echo main::getParent1($vineyard->region_alias)?>/<?php echo $vineyard->alias?>"><p><?php echo $vineyard->name?></p></a>
+			<?php endforeach;?>
+			<br>
+		<?php endif;?>
+		<?php if(!empty($this->wines[0])):?>		
+			<?php foreach($this->wines as $wine) :?>
+				<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/vineyards/view-vineyard/<?php echo $wine->country_alias?>/<?php echo main::getParent1($wine->region_alias)?>/<?php echo $wine->alias?>#wines"><p><?php echo $wine->name?></p></a>
+			<?php endforeach;?>
+			<br>
+		<?php endif;?>
+	<?php else:?>
+			<h4><?php echo $this->translate('No search results')?></h4>
+	<?php endif;?>		

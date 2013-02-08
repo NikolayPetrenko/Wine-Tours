@@ -1,0 +1,15 @@
+<div id="view-content">
+	<h2><?php echo $this->message ?></h2>
+	<p><span class="warning">Warning!</span> Under no circumstances must not change the words enclosed in braces {*word*}.</p>	
+	<form id="edit_template" action="<?php echo $this->baseUrl()?>/<?php echo $_SESSION['lang']?>/admin/edittemplate/templ/<?php echo $this->id?>" method="post">
+		<input type="hidden" name="id" value="<?php echo $this->id?>">
+		<textarea name="content" id="html" class="contentTemplate" rows="12" cols="40" ><?php echo $this->template->content?></textarea>
+		<?php if(!empty($this->error)) :?>
+			<p class="warning">The field must not be empty</p>
+		<?php endif;?>
+		<div class="template-submit">
+			<input type="submit" class="btn btn-danger" value="Edit Template">
+			<a href="<?php echo $this->baseUrl()?>/<?php echo $_SESSION['lang']?>/admin/managetemplates" class="btn">Cancel</a>
+		</div>
+	</form>
+</div>

@@ -1,0 +1,16 @@
+<div id="view-content">
+	<h2><?php echo $this->message ?></h2>
+	<form id="add_grape" action="<?php echo $this->form->getAction()?>" method="post">
+		<input type="hidden" name="id" value="<?php echo $this->id?>">
+		<div class="control">
+			<?php echo $this->form->name ?>
+		</div>
+		<div class="control">
+			<?php echo $this->form->other_name ?>
+		</div>
+		<div class="control textarea-redactor">
+			<?php echo $this->form->characteristics ?>
+		</div>
+		<?php echo $this->form->submit ?>
+	</form>	
+</div>

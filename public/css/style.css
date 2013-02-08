@@ -1,0 +1,311 @@
+body,html {
+    font-family: Verdana,sans-serif;
+}
+#conteiner {
+	width: 1024px;
+	margin: 0 auto;
+	overflow: hidden;
+}
+.errors {
+	front-size: 12pt;
+	color: red;
+}
+.succses {
+	front-size: 12pt;
+	color: green;
+}
+#menu {
+	height: 50px;
+	width: 100%;
+}
+#search {
+	height: 120px;
+	border: 4px solid black;
+}
+#search .logo {
+	margin: 0;
+	float: left;
+	padding: 20px 0 0 50px;
+	width: 200px;
+}
+#search .search {
+	margin: 0;
+	float: left;
+	padding: 25px 0 0 30px;
+	width: 730px;
+}
+#searchbox {
+	height: 50px;
+	width: 600px;
+}
+#menu .menu-left {
+	float: left;
+}
+#menu .menu-right {
+	width: 120px;
+	float: right;
+}
+.clear {
+	clear: left;
+}
+#view-content {
+	width: 712px;
+/*	padding: 60px 2px 3px 100px;*/
+}
+.fieldset {
+	width: 220px;
+}
+.seasons {
+	width: 1600px;
+}
+.season {
+	width: 212px;
+	margin-bottom: 20px;
+	margin-right: 50px;
+	float: left;
+}
+.add_season {
+	position: relative;
+	padding-top: 5px;
+}
+
+.tab-pane {
+	display: none;
+}
+
+#tab-content .active {
+	display: block;
+}
+
+img {
+ max-width: none !important; 
+ height: auto !important;
+}
+
+.red {
+	color: red;
+}
+
+/* Welcome to Compass.
+ * In this file you should write your main styles. (or centralize your imports)
+ * Import this file using the following HTML or equivalent:
+ * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
+/* line 17, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+/* line 20, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+body {
+  line-height: 1;
+}
+
+/* line 22, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+ol, ul {
+  list-style: none;
+}
+
+/* line 24, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* line 26, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+caption, th, td {
+  text-align: left;
+  font-weight: normal;
+  vertical-align: middle;
+}
+
+/* line 28, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+q, blockquote {
+  quotes: none;
+}
+/* line 101, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+q:before, q:after, blockquote:before, blockquote:after {
+  content: "";
+  content: none;
+}
+
+/* line 30, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+a img {
+  border: none;
+}
+
+/* line 114, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {
+  display: block;
+}
+
+/* line 10, ../sass/screen.scss */
+.flw:after, .popup .form:after, .popup .capcha:after {
+  display: block;
+  content: ".";
+  clear: both;
+  font-size: 0;
+  line-height: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+/* line 12, ../sass/screen.scss */
+.popup {
+/*  width: 431px;*/
+  padding: 15px;
+  border: 1px solid #dddfe1;
+/*  margin: 100px auto;*/
+}
+/* line 18, ../sass/screen.scss */
+.popup h3 {
+  color: #bf0404;
+  border-bottom: 1px solid #7f7f7f;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+/* line 25, ../sass/screen.scss */
+.popup .form {
+  margin-bottom: 10px;
+}
+/* line 29, ../sass/screen.scss */
+.popup .form label {
+  color: #1b7304;
+  font-size: 14px;
+  width: 130px;
+  display: block;
+  float: left;
+  line-height: 25px;
+}
+/* line 38, ../sass/screen.scss */
+.popup .form input {
+  width: 297px;
+  height: 25px;
+  line-height: 25px;
+  border: 1px solid #acadaf;
+  border-radius: 4px;
+}
+/* line 46, ../sass/screen.scss */
+.popup .form textarea {
+  border: 1px solid #acadaf;
+  border-radius: 4px;
+  width: 275px;
+  padding: 10px;
+  color: #7f8386;
+}
+/* line 54, ../sass/screen.scss */
+.popup .form div {
+  float: left;
+}
+/* line 57, ../sass/screen.scss */
+.popup .form div p {
+  color: #bf0404;
+  font-size: 10px;
+  background: url("../images/warning.png") no-repeat left;
+  height: 14px;
+  line-height: 14px;
+  padding-left: 20px;
+  padding-top: 5px;
+  margin-left: 5px;
+}
+/* line 70, ../sass/screen.scss */
+.popup .capcha {
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #7f7f7f;
+}
+/* line 76, ../sass/screen.scss */
+.popup .capcha label {
+  color: #1b7304;
+  font-size: 14px;
+  width: 130px;
+  display: block;
+  float: left;
+  line-height: 51px;
+}
+/* line 85, ../sass/screen.scss */
+.popup .capcha input {
+  width: 120px;
+  margin-right: 10px;
+  float: left;
+  height: 25px;
+  line-height: 25px;
+  border: 1px solid #acadaf;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+/* line 97, ../sass/screen.scss */
+.popup .submit {
+/*  width: 134px;
+  height: 43px;
+  background: url("../images/btn-claim.png") 0 43px;
+  border: none;
+  cursor: pointer;*/
+  margin: 15px auto 0 auto;
+/*  display: block;*/
+}
+/* line 106, ../sass/screen.scss */
+.popup .submit:hover {
+  background-position: 0 0;
+}
+
+#name_error, #number_error, #position_error, #comment_error {
+	color: red;
+	display: none;
+	margin-left: 130px;
+	margin-bottom: 10px;
+}
+
+.tab-pane table {
+  width: 100%;
+  background: url("../images/bg-map.jpg");
+}
+.tab-pane table tr {
+  font-family: Verdana, sans-serif;
+  font-size: 14px;
+  color: #35424a;
+}
+.tab-pane table tr td {
+  padding: 5px;
+}
+.tab-pane table tr td .selectBox-dropdown {
+  min-width: 70px;
+  width: 78px !important;
+  margin: 0 auto;
+  display: block !important;
+}
+.tab-pane table tr td .selectBox-dropdown .selectBox-label {
+  width: 35px !important;
+}
+.tab-pane table tr td img {
+  margin: 0 auto;
+  display: block;
+}
+.tab-pane table, .tab-pane td, .tab-pane tr {
+  border: 1px solid black;
+}
+.tab-pane .header-name {
+  color: #bf0404 !important;
+  font-size: 14px;
+  font-family: 'NeoSansRegular';
+}
+.box-shadow-570 {
+  height: 30px;
+  background: url("../images/shadow-570px.png") center;
+}

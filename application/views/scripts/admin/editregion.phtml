@@ -1,0 +1,105 @@
+<div id="view-content">
+	<h2><?php echo $this->message ?></h2>
+	<form id="add_region" action="<?php echo $this->form->getAction()?>" method="post">
+		<input type="hidden" name="id" value="<?php echo $this->region['id']?>" id="region_id">
+		<div class="control">
+			<?php echo $this->form->name ?>
+		</div>
+		<div class="control">
+			<?php echo $this->form->local_name ?>
+		</div>
+		<div class="control">
+			<?php echo $this->form->country ?>
+		</div>
+		<div class="control textarea-redactor">
+			<?php echo $this->form->getElement('description') ?>
+		</div>
+		<div class="control">
+			<label>Principle Grapes:</label>
+			<?php echo $this->form->grapes ?>
+		</div>
+		<label>Google Map Showing Center of Region:</label>
+		<div id="map_canvas" style="width: 500px; height: 400px;"></div>
+		<input type="hidden" name="loc_y" id="loc_y" value="<?php echo $this->region['loc_y']?>">
+		<input type="hidden" name="loc_z" id="loc_z" value="<?php echo $this->region['loc_z']?>">
+		<br>
+		<div class="control">
+			<?php $url = parse_url($this->image);?>
+			<label for="image">Map Showing - Region within Region:</label>
+			<div id="country_image">
+				<?php echo !empty($this->image) && empty($url['scheme']) ? '<img src="' . $this->baseUrl() . '/images/region/' . $this->image . '"></img><input type="hidden" name="image" id="count_image" value="' . $this->image . '">' : (!empty($this->image) &&!empty($url['scheme']) ? '<img src="' . $this->image . '"></img><input type="hidden" name="image" id="count_image" value="">': '<input type="hidden" name="image" id="count_image" value="">')?>
+				<?php if(!empty($this->image)):?>
+					<br>
+					<input type="button" value="Delete Image" class="btn btn-danger" id="delete-image">
+				<?php endif;?>
+			</div>
+			<br>
+			<span class="btn btn-success fileinput-button">
+				<i class="icon-plus icon-white"></i>
+				<span>Change the image...</span>
+				<input id="root" type="file" name="image">
+				<div id="image">
+				</div>
+			</span>
+			<br>
+			<br>
+			<label>or specify the link to an image:</label>
+			<div class="input">
+				<input id="link" type="text" name="link" value="<?php echo !empty($url['scheme']) ? $this->image : 'http://'?>">
+			</div>	
+		</div>		
+		<div class="links">
+			<div class="control">
+				<div class="links-region"style="float: left">
+					<label for="links" class="label1 optional">Useful links:</label>
+					<?php if(!empty($this->links)):?>
+						<?php foreach($this->links as $key => $link) :?>
+						<div class="link-region" style="margin-bottom: 5px;">
+							<label>Link:</label>
+							<input type="text" name="links[]" value="<?php echo $link?>">
+							<label>Text:</label>
+							<input type="text" name="texts[]" value="<?php echo $this->texts[$key]?>">
+						</div>
+						<?php endforeach; ?>
+					<?php else:?>
+						<div class="link-region" style="margin-bottom: 5px;">
+							<label>Link:</label>
+							<input type="text" name="links[]" value="http://">
+							<label>Text:</label>
+							<input type="text" name="texts[]" value="">
+						</div>
+					<?php endif;?>
+					<div class="link-region-tmp" style="margin-bottom: 5px; display: none;">
+						<label>Link:</label>
+						<input type="text" name="link[]" class="link_reg" value="http://">
+						<label>Text:</label>
+						<input type="text" name="text[]" class="text_reg" value="">
+					</div>					
+				</div>	
+				<div style="margin: 22px;">
+					<a href="#" class="add_link"><img src="<?php echo $this->baseUrl()?>/images/+.png"></a>
+				</div>
+				<div class="clear"></div>	
+			</div>
+		</div>
+		<div class="control textarea-redactor">
+			<?php echo $this->form->acknowledgements ?>
+		</div>
+		<div class="control">
+			<label>Partner Managers</label>
+			<div class="input">
+				<select name="partners" id="partners">
+					<option value="" label="none" <?php echo empty($this->partners) ? 'selected' : ''?>>None</option>
+					<?php $user_mod = new Application_Model_Users();?>
+					<?php foreach($user_mod->getUsers() as $partner) :?>
+						<option value="<?php echo $partner->id?>" label="<?php echo $partner->name?>" <?php echo in_array($partner->id, $this->partners) ? 'selected' : ''?>><?php echo $partner->name?></option>
+					<?php endforeach;?>
+				</select>
+			</div>	
+		</div>	
+		<div class="control">
+			<?php echo $this->form->notes ?>
+		</div>
+		<?php echo $this->form->submit ?>
+	</form>	
+</div>

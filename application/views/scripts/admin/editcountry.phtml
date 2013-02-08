@@ -1,0 +1,56 @@
+<div id="view-content">
+	<h2><?php echo $this->message ?></h2>
+	<form id="edit_country" action="<?php echo $this->form->getAction()?>" method="post">
+		<input type="hidden" name="code" value="<?php echo $this->code?>">
+		<input type="hidden" name="loc_y" id="loc_y" value="<?php echo $this->loc_y?>">
+		<input type="hidden" name="loc_z" id="loc_z" value="<?php echo $this->loc_z?>">
+		<div class="control">
+			<?php echo $this->form->name_en ?>
+		</div>
+		<div class="control">
+			<?php echo $this->form->description ?>
+		</div>
+		<br>
+		<label>Google Map Showing</label>
+		<div id="map_country" style="width: 600px; height: 500px;"></div>
+		<br>
+		<div class="control">
+			<?php $url = parse_url($this->image);?>
+			<label for="image">Map Showing Country and regions:</label>
+			<div id="countr_image"></div>
+			<div id="country_image">
+				<?php echo !empty($this->image) && empty($url['scheme']) ? '<img src="' . $this->baseUrl() . '/images/country/' . $this->image . '"></img><input type="hidden" name="image" id="count_image" value="' . $this->image . '">' : (!empty($this->image) &&!empty($url['scheme']) ? '<img src="' . $this->image . '"></img><input type="hidden" name="image" id="count_image" value="">': '<input type="hidden" name="image" id="count_image" value="">')?>
+			</div>
+			<span class="btn btn-success fileinput-button">
+				<i class="icon-plus icon-white"></i>
+				<span>Change the image...</span>
+				<input id="root" type="file" name="image">
+				<div id="image">
+				</div>
+			</span>
+			<label>or specify the link to an image:</label>
+			<div class="input">
+				<input id="link" type="text" name="link" value="<?php echo !empty($url['scheme']) ? $this->image : 'http://'?>">
+			</div>	
+		</div>
+		<?php if(!empty($this->regions[0])) :?>
+		<div class="control">
+			<label>List of Regions</label>
+			<div class="input">
+				<select name="regions[]" id="regions" multiple="multiple">
+					<?php foreach($this->regions as $region) :?>
+						<option value="<?php echo $region->id?>" label="<?php echo $region->name?>" selected ="selected"><?php echo $region->name?></option>
+					<?php endforeach;?>
+				</select>
+			</div>	
+		</div>		
+		<?php endif;?>
+		<div class="control">
+			<?php echo $this->form->acknowledgements ?>
+		</div>
+		<div class="control">
+			<?php echo $this->form->notes ?>
+		</div>		
+		<?php echo $this->form->submit ?>
+	</form>	
+</div>

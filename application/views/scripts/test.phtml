@@ -1,0 +1,16 @@
+<?php foreach($this->regions as $region) :?>
+	<div class="region" data-region="<?php echo $region['pid']?>" data-country="<?php echo $region['country']?>" data-continent="<?php echo $region['cont_id']?>">
+		<div class="image" style="float: left; width: 200px; margin: 10px;">
+			<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-region/<?php echo $region['country_alias']?>/<?php echo main::getParent1($region['alias'])?>"><img src="/images/region/<?php echo !empty($region['image']) ? $region['image']  :  'default_region.jpg'?>"></a>
+		</div>	
+		<div class="logo" style="float: left; width: 100px; padding: 53px">
+			<img src="/images/region/region.jpg" style="float: left; margin-right: 15px; margin-bottom: 15px;"></a>
+		</div>
+		<div class="text">
+			<h3>Wine Region:</h3>
+			<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-region/<?php echo $region['country_alias']?>/<?php echo main::getParent1($region['alias'])?>"><h4><?php echo $region['name']?></h4></a>
+			<a href="<?php echo $this->baseUrl() . '/' . $_SESSION['lang']?>/main/view-country/<?php echo $region['country_alias']?>"><?php echo $region['country_name']?></a> 
+		</div>
+	</div>
+	<div class="clear"></div>
+<?php endforeach;?>
